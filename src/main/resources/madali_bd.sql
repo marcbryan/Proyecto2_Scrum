@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 18-01-2019 a las 19:59:06
+-- Tiempo de generación: 18-01-2019 a las 20:28:01
 -- Versión del servidor: 10.1.37-MariaDB
 -- Versión de PHP: 7.3.0
 
@@ -140,6 +140,40 @@ ALTER TABLE `usuarios`
   ADD KEY `Usuarios_fk1` (`ID_Grupo`);
 
 --
+-- AUTO_INCREMENT de las tablas volcadas
+--
+
+--
+-- AUTO_INCREMENT de la tabla `especificaciones`
+--
+ALTER TABLE `especificaciones`
+  MODIFY `ID_Especificacion` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `grupos_usuarios`
+--
+ALTER TABLE `grupos_usuarios`
+  MODIFY `ID_Grupo` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `proyectos`
+--
+ALTER TABLE `proyectos`
+  MODIFY `ID_Proyecto` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `sprints`
+--
+ALTER TABLE `sprints`
+  MODIFY `ID_Sprint` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `usuarios`
+--
+ALTER TABLE `usuarios`
+  MODIFY `ID_Usuario` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- Restricciones para tablas volcadas
 --
 
@@ -160,9 +194,9 @@ ALTER TABLE `grupos_usuarios`
 -- Filtros para la tabla `proyectos`
 --
 ALTER TABLE `proyectos`
-  ADD CONSTRAINT `Proyectos_fk3` FOREIGN KEY (`Product_Owner_Proyecto`) REFERENCES `usuarios` (`ID_Usuario`),
   ADD CONSTRAINT `Proyectos_fk1` FOREIGN KEY (`ID_Grupo`) REFERENCES `grupos_usuarios` (`ID_Grupo`),
-  ADD CONSTRAINT `Proyectos_fk2` FOREIGN KEY (`Scrum_Master_Proyecto`) REFERENCES `usuarios` (`ID_Usuario`);
+  ADD CONSTRAINT `Proyectos_fk2` FOREIGN KEY (`Scrum_Master_Proyecto`) REFERENCES `usuarios` (`ID_Usuario`),
+  ADD CONSTRAINT `Proyectos_fk3` FOREIGN KEY (`Product_Owner_Proyecto`) REFERENCES `usuarios` (`ID_Usuario`);
 
 --
 -- Filtros para la tabla `sprints`

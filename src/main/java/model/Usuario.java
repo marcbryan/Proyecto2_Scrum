@@ -10,9 +10,9 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "usuarios")
 public class Usuario {
-	@Column (name = "id_usuario")
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id_usuario")
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id_usuario;
 	private String nombre_usuario;
 	private String password_usuario;
@@ -20,7 +20,11 @@ public class Usuario {
 	private String tipo_usuario;
 	private String correo_usuario;
 	private int id_grupo;
-	
+
+	public Usuario() {
+
+	}
+
 	public Usuario(int id_usuario, String nombre_usuario, String password_usuario, String nombre_apellidos,
 			String tipo_usuario, String correo_usuario, int id_grupo) {
 		this.id_usuario = id_usuario;
@@ -31,8 +35,8 @@ public class Usuario {
 		this.correo_usuario = correo_usuario;
 		this.id_grupo = id_grupo;
 	}
-	
-	//getters
+
+	// getters
 	public int getId_usuario() {
 		return id_usuario;
 	}
@@ -61,7 +65,7 @@ public class Usuario {
 		return id_grupo;
 	}
 
-	//setters
+	// setters
 	public void setId_usuario(int id_usuario) {
 		this.id_usuario = id_usuario;
 	}
@@ -89,5 +93,5 @@ public class Usuario {
 	public void setId_grupo(int id_grupo) {
 		this.id_grupo = id_grupo;
 	}
-		
+
 }
