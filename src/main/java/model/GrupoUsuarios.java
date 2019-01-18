@@ -1,6 +1,18 @@
 package model;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "grupos_usuarios")
 public class GrupoUsuarios {
+	@Column (name = "id_grupo")
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id_grupo;
 	private int id_proyecto;
 	
