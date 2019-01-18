@@ -1,6 +1,18 @@
 package model;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "usuarios")
 public class Usuario {
+	@Column (name = "id_usuario")
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id_usuario;
 	private String nombre_usuario;
 	private String password_usuario;

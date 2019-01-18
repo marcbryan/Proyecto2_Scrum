@@ -1,10 +1,20 @@
 package model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Entity
+@Table(name = "ESPECIFICACIONES")
 public class Especificacion {
+	@Column (name = "id_especificacion")
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id_especificacion;
+	
 	private int nombre_especificacion;
 	private String descricion_especificacion;
 	private String duracion_especificacion;

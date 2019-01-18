@@ -2,7 +2,19 @@ package model;
 
 import java.util.Date;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "sprints")
 public class Sprint {
+	@Column (name = "id_sprint")
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id_sprint;
 	private int id_proyecto;
 	private Date Fecha_Inicio_Sprint;
