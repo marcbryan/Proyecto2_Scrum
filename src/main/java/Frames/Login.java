@@ -17,6 +17,11 @@ import java.awt.event.KeyListener;
 
 
 import javax.swing.LayoutStyle.ComponentPlacement;
+
+import daoImpl.ScrumDAOImpl;
+import idao.IScrumConfig;
+import model.Usuario;
+
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
@@ -24,6 +29,7 @@ import javax.swing.JPasswordField;
 public class Login extends JInternalFrame {
 	private TextField tf_Usuario;
 	private JPasswordField passwordField;
+	private IScrumConfig dao;
 
 	/**
 	 * Launch the application.
@@ -45,6 +51,9 @@ public class Login extends JInternalFrame {
 	 * Create the frame.
 	 */
 	public Login() {
+		//DAO
+		dao = new ScrumDAOImpl();
+		
 		setMaximizable(true);
 		setResizable(true);
 		setClosable(true);
@@ -77,80 +86,131 @@ public class Login extends JInternalFrame {
 		lbl_Login.setFont(new Font("Tw Cen MT", Font.PLAIN, 21));
 		lbl_Login.setForeground(Color.white);
 		
-		tf_Usuario = new TextField();
+		tf_Usuario = new TextField("");
 		tf_Usuario.setColumns(10);
+		tf_Usuario.addKeyListener(new KeyListener() {
+			
+			public void keyTyped(KeyEvent e) {}
+			
+			public void keyReleased(KeyEvent e) {}
+			
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+					String pass = String.valueOf(passwordField.getPassword());
+					if(!tf_Usuario.getText().equals("") && !pass.equals("")) {
+						if (dao.bd_online()) {
+							Usuario user = dao.login(tf_Usuario.getText(), pass);
+							if (user != null) {
+								FramePrincipal.lblUsuario.setText("Usuario: "+tf_Usuario.getText());
+								tf_Usuario.setText("");
+								passwordField.setText("");
+								Login.this.setVisible(false);
+							} else {
+								JOptionPane.showMessageDialog(panel, "Introduce un nombre de usuario y contraseña validos", "Error", JOptionPane.ERROR_MESSAGE);
+							}
+						} else {
+							//si no hay conexión con la base de datos REMOTA, se insertarán los datos en la base de datos embebida (nosotros utilizaremos SQLite) 
+						}
+					}else {
+						JOptionPane.showMessageDialog(panel, "Introduce un nombre de usuario y contraseña validos", "Error", JOptionPane.ERROR_MESSAGE);
+					}
+				}
+			}
+		});
 		
 		
 		JButton btn_Entrar = new JButton("Entrar");
-		
 		btn_Entrar.setBackground(new Color(227,28,33));
 		btn_Entrar.setForeground(Color.white);
 		
 		btn_Entrar.addActionListener(new ActionListener() {
 			
 			public void actionPerformed(ActionEvent e) {
-				
 				String pass = String.valueOf(passwordField.getPassword());
-				
-				// TODO Auto-generated method stub
-				if(tf_Usuario.getText()!=null && pass!=null) {
-					
-					FramePrincipal.lblUsuario.setText("Usuario: "+tf_Usuario.getText());
-					
-					
-					
+				if(!tf_Usuario.getText().equals("") && !pass.equals("")) {
+					if (dao.bd_online()) {
+						Usuario user = dao.login(tf_Usuario.getText(), pass);
+						if (user != null) {
+							FramePrincipal.lblUsuario.setText("Usuario: "+tf_Usuario.getText());
+							tf_Usuario.setText("");
+							passwordField.setText("");
+							Login.this.setVisible(false);
+						} else {
+							JOptionPane.showMessageDialog(panel, "Introduce un nombre de usuario y contraseña validos", "Error", JOptionPane.ERROR_MESSAGE);
+						}
+					} else {
+						//si no hay conexión con la base de datos REMOTA, se insertarán los datos en la base de datos embebida (nosotros utilizaremos SQLite) 
+					}
 				}else {
-					
 					JOptionPane.showMessageDialog(panel, "Introduce un nombre de usuario y contraseña validos", "Error", JOptionPane.ERROR_MESSAGE);
-					
 				}
-				
-				
 			}
 		});
 		
-		passwordField = new JPasswordField();
+		btn_Entrar.addKeyListener(new KeyListener() {
+			
+			public void keyTyped(KeyEvent e) {}
+			
+			public void keyReleased(KeyEvent e) {}
+			
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+					String pass = String.valueOf(passwordField.getPassword());
+					if(!tf_Usuario.getText().equals("") && !pass.equals("")) {
+						if (dao.bd_online()) {
+							Usuario user = dao.login(tf_Usuario.getText(), pass);
+							if (user != null) {
+								FramePrincipal.lblUsuario.setText("Usuario: "+tf_Usuario.getText());
+								tf_Usuario.setText("");
+								passwordField.setText("");
+								Login.this.setVisible(false);
+							} else {
+								JOptionPane.showMessageDialog(panel, "Introduce un nombre de usuario y contraseña validos", "Error", JOptionPane.ERROR_MESSAGE);
+							}
+						} else {
+							//si no hay conexión con la base de datos REMOTA, se insertarán los datos en la base de datos embebida (nosotros utilizaremos SQLite) 
+						}
+					}else {
+						JOptionPane.showMessageDialog(panel, "Introduce un nombre de usuario y contraseña validos", "Error", JOptionPane.ERROR_MESSAGE);
+					}
+				}				
+			}
+		});
+		
+		passwordField = new JPasswordField("");
 		
 		
 		//Añadimos el listener de teclado para detectar el boton Enter cuando tenemos el focus en el campo de contraseña.
 		passwordField.addKeyListener(new KeyListener() {
 			
-			public void keyTyped(KeyEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
+			public void keyTyped(KeyEvent e) {}
 			
-			public void keyReleased(KeyEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
+			public void keyReleased(KeyEvent e) {}
 			
 			public void keyPressed(KeyEvent e) {
-				// TODO Auto-generated method stub
 				if(e.getKeyCode() == KeyEvent.VK_ENTER) {
-				     
 					String pass = String.valueOf(passwordField.getPassword());
-					
-					// TODO Auto-generated method stub
 					if(!tf_Usuario.getText().equals("") && !pass.equals("")) {
-						
-						
-						FramePrincipal.lblUsuario.setText("Usuario: "+tf_Usuario.getText());
-						
-						
+						if (dao.bd_online()) {
+							Usuario user = dao.login(tf_Usuario.getText(), pass);
+							if (user != null) {
+								FramePrincipal.lblUsuario.setText("Usuario: "+tf_Usuario.getText());
+								tf_Usuario.setText("");
+								passwordField.setText("");
+								Login.this.setVisible(false);
+							} else {
+								JOptionPane.showMessageDialog(panel, "Introduce un nombre de usuario y contraseña validos", "Error", JOptionPane.ERROR_MESSAGE);
+							}
+						} else {
+							//si no hay conexión con la base de datos REMOTA, se insertarán los datos en la base de datos embebida (nosotros utilizaremos SQLite) 
+						}
 					}else {
-						
 						JOptionPane.showMessageDialog(panel, "Introduce un nombre de usuario y contraseña validos", "Error", JOptionPane.ERROR_MESSAGE);
-						
 					}
-					
-					
-					
-					
-				   }
+				}
 			}
 		});
-		
+
 		
 		GroupLayout gl_panel = new GroupLayout(panel);
 		gl_panel.setHorizontalGroup(
@@ -191,9 +251,5 @@ public class Login extends JInternalFrame {
 		getContentPane().setLayout(groupLayout);
 		
 		setBackground(new Color(90,21,50));
-		
-		
-		
-
 	}
 }

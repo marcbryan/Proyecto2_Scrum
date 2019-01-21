@@ -73,6 +73,7 @@ public class ScrumDAOImpl implements IScrumConfig {
 		}
 	}
 	
+	/* Pruebas
 	public static void main(String[] args) {
 		IScrumConfig dao = new ScrumDAOImpl();
 		System.out.println("Online? -> "+dao.bd_online());
@@ -89,5 +90,5 @@ public class ScrumDAOImpl implements IScrumConfig {
 		usr2.setCorreo_usuario("hibernatemola@test.com");
 		usr2.setId_grupo(1);
 		dao.insertarUsuario(usr2);
-	}
+	}*/
 }

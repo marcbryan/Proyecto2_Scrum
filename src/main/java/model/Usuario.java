@@ -36,6 +36,17 @@ public class Usuario {
 		this.id_grupo = id_grupo;
 	}
 
+	public Usuario(String nombre_usuario, String password_usuario, String nombre_apellidos, String tipo_usuario,
+			String correo_usuario, int id_grupo) {
+		super();
+		this.nombre_usuario = nombre_usuario;
+		this.password_usuario = password_usuario;
+		this.nombre_apellidos = nombre_apellidos;
+		this.tipo_usuario = tipo_usuario;
+		this.correo_usuario = correo_usuario;
+		this.id_grupo = id_grupo;
+	}
+
 	// getters
 	public int getId_usuario() {
 		return id_usuario;

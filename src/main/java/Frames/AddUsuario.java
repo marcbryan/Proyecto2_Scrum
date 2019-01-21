@@ -10,9 +10,19 @@ import java.awt.Color;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import javax.swing.JTextField;
 import javax.swing.LayoutStyle.ComponentPlacement;
+
+import daoImpl.ScrumDAOImpl;
+import idao.IScrumConfig;
+import model.Usuario;
+
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
@@ -23,6 +33,8 @@ public class AddUsuario extends JInternalFrame {
 	private JTextField tf_Pass;
 	private JTextField tf_Pass2;
 	private JTextField tf_Mail;
+	
+	private IScrumConfig dao;
 
 	/**
 	 * Launch the application.
@@ -44,6 +56,9 @@ public class AddUsuario extends JInternalFrame {
 	 * Create the frame.
 	 */
 	public AddUsuario() {
+		//DAO
+		dao = new ScrumDAOImpl();
+		
 		setMaximizable(true);
 		setResizable(true);
 		setClosable(true);
@@ -73,7 +88,7 @@ public class AddUsuario extends JInternalFrame {
 		lblMail.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		lblMail.setForeground(Color.white);
 		
-		tf_Nombre = new JTextField();
+		tf_Nombre = new JTextField("");
 		tf_Nombre.setColumns(10);
 		
 		JButton btnNewButton = new JButton("Generar");
@@ -96,19 +111,33 @@ public class AddUsuario extends JInternalFrame {
 		lblTipoUsuario.setForeground(Color.white);
 		
 		JButton btnCrear = new JButton("Crear");
+		btnCrear.addActionListener(new ActionListener() {
+			
+			public void actionPerformed(ActionEvent e) {
+				if (!tf_Nombre.getText().equals("") && !tf_loginG.getText().equals("") && !tf_Pass.getText().equals("") && !tf_Pass2.getText().equals("") && !tf_Mail.getText().equals("")) {
+					if (dao.bd_online()) {
+						//Usuario user = new Usuario(tf_loginG.getText(), tf_Pass.getText(), tf_Nombre.getText(), tipo_usuario, tf_Mail.getText(), 1);
+					} else {
+						//si no hay conexión con la base de datos REMOTA, se insertarán los datos en la base de datos embebida (nosotros utilizaremos SQLite)
+					}
+				} else {
+					JOptionPane.showMessageDialog(AddUsuario.this, "Introduce un nombre de usuario y contraseña validos", "Error", JOptionPane.ERROR_MESSAGE);
+				}
+			}
+		});
 		btnCrear.setBackground(new Color(227,28,33));
 		btnCrear.setForeground(Color.white);
 		
-		tf_loginG = new JTextField();
+		tf_loginG = new JTextField("");
 		tf_loginG.setColumns(10);
 		
-		tf_Pass = new JTextField();
+		tf_Pass = new JTextField("");
 		tf_Pass.setColumns(10);
 		
-		tf_Pass2 = new JTextField();
+		tf_Pass2 = new JTextField("");
 		tf_Pass2.setColumns(10);
 		
-		tf_Mail = new JTextField();
+		tf_Mail = new JTextField("");
 		tf_Mail.setColumns(10);
 		GroupLayout gl_panel = new GroupLayout(panel);
 		gl_panel.setHorizontalGroup(

@@ -87,7 +87,6 @@ public class FramePrincipal extends JFrame {
 		mntmAddU.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
 				AddUsuario IFrameAddU = new AddUsuario();
 
 				desktopPane.add(IFrameAddU);
