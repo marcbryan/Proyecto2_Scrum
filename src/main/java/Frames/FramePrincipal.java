@@ -20,10 +20,15 @@ import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ActionEvent;
+import javax.swing.JLabel;
+import java.awt.Font;
+import javax.swing.JButton;
+import javax.swing.LayoutStyle.ComponentPlacement;
 
 public class FramePrincipal extends JFrame {
 
 	private JPanel contentPane;
+	static JLabel lblUsuario;
 
 	/**
 	 * Launch the application.
@@ -89,13 +94,45 @@ public class FramePrincipal extends JFrame {
 				IFrameAddU.setVisible(true);
 			}
 		});
+		
+		lblUsuario = new JLabel("Usuario: ");
+		lblUsuario.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		
+		
+		
+		JButton btnSalir = new JButton("SALIR");
+		
+		btnSalir.addActionListener(new ActionListener() {
+			
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				
+				
+				
+			}
+		});
 
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
-		gl_contentPane.setHorizontalGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-				.addComponent(desktopPane, GroupLayout.DEFAULT_SIZE, 660, Short.MAX_VALUE));
+		gl_contentPane.setHorizontalGroup(
+			gl_contentPane.createParallelGroup(Alignment.LEADING)
+				.addComponent(desktopPane, GroupLayout.DEFAULT_SIZE, 660, Short.MAX_VALUE)
+				.addGroup(Alignment.TRAILING, gl_contentPane.createSequentialGroup()
+					.addContainerGap(266, Short.MAX_VALUE)
+					.addComponent(lblUsuario, GroupLayout.PREFERRED_SIZE, 280, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(btnSalir)
+					.addContainerGap())
+		);
 		gl_contentPane.setVerticalGroup(
-				gl_contentPane.createParallelGroup(Alignment.TRAILING).addGroup(gl_contentPane.createSequentialGroup()
-						.addGap(58).addComponent(desktopPane, GroupLayout.DEFAULT_SIZE, 363, Short.MAX_VALUE)));
+			gl_contentPane.createParallelGroup(Alignment.TRAILING)
+				.addGroup(gl_contentPane.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+						.addComponent(lblUsuario)
+						.addComponent(btnSalir, GroupLayout.PREFERRED_SIZE, 28, GroupLayout.PREFERRED_SIZE))
+					.addGap(29)
+					.addComponent(desktopPane, GroupLayout.DEFAULT_SIZE, 351, Short.MAX_VALUE))
+		);
 		contentPane.setLayout(gl_contentPane);
 	}
 }
