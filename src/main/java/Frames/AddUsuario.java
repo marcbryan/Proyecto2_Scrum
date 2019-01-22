@@ -34,6 +34,8 @@ public class AddUsuario extends JInternalFrame {
 	private JTextField tf_Pass2;
 	private JTextField tf_Mail;
 	
+	private JComboBox cBox_TipoUsuario;
+	
 	private IScrumConfig dao;
 
 	/**
@@ -95,8 +97,9 @@ public class AddUsuario extends JInternalFrame {
 		btnNewButton.setBackground(new Color(227,28,33));
 		btnNewButton.setForeground(Color.white);
 		
-		JComboBox cBox_TipoUsuario = new JComboBox();
-		cBox_TipoUsuario.setModel(new DefaultComboBoxModel(new String[] {"Elige un tipo usuario", "Product Owner", "Scrum Master", "Developer", "Administrator"}));
+		cBox_TipoUsuario = new JComboBox();
+		cBox_TipoUsuario.setModel(new DefaultComboBoxModel(new String[] {//"Elige un tipo usuario", 
+				"Product Owner", "Scrum Master", "Developer", "Administrator"}));
 		cBox_TipoUsuario.setToolTipText("Elige un tipo de usuario");
 		
 		cBox_TipoUsuario.setBackground(new Color(227,28,33));
@@ -114,14 +117,21 @@ public class AddUsuario extends JInternalFrame {
 		btnCrear.addActionListener(new ActionListener() {
 			
 			public void actionPerformed(ActionEvent e) {
-				if (!tf_Nombre.getText().equals("") && !tf_loginG.getText().equals("") && !tf_Pass.getText().equals("") && !tf_Pass2.getText().equals("") && !tf_Mail.getText().equals("")) {
+				if (!tf_Pass.getText().equals(tf_Pass2.getText())) {
+					JOptionPane.showMessageDialog(AddUsuario.this, "Las contraseñas no coinciden", "Alerta", JOptionPane.WARNING_MESSAGE);
+				}
+				else if (!tf_Nombre.getText().equals("") && !tf_loginG.getText().equals("") && !tf_Pass.getText().equals("") && !tf_Pass2.getText().equals("") && !tf_Mail.getText().equals("")) {
 					if (dao.bd_online()) {
-						//Usuario user = new Usuario(tf_loginG.getText(), tf_Pass.getText(), tf_Nombre.getText(), tipo_usuario, tf_Mail.getText(), 1);
+						String tipo_usuario = String.valueOf(cBox_TipoUsuario.getSelectedItem().toString());
+						System.out.println(tipo_usuario);
+						Usuario user = new Usuario(tf_loginG.getText(), tf_Pass.getText(), tf_Nombre.getText(), tipo_usuario, tf_Mail.getText(), 1);
+						dao.insertarUsuario(user);
+						JOptionPane.showMessageDialog(AddUsuario.this, "Usuario " + user.getNombre_usuario() + " añadido correctamente!", "Información", JOptionPane.INFORMATION_MESSAGE);
 					} else {
 						//si no hay conexión con la base de datos REMOTA, se insertarán los datos en la base de datos embebida (nosotros utilizaremos SQLite)
 					}
 				} else {
-					JOptionPane.showMessageDialog(AddUsuario.this, "Introduce un nombre de usuario y contraseña validos", "Error", JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(AddUsuario.this, "Faltan campos por rellenar", "Alerta", JOptionPane.WARNING_MESSAGE);
 				}
 			}
 		});

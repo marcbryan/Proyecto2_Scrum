@@ -105,39 +105,31 @@ CREATE TABLE `usuarios` (
 -- Indices de la tabla `especificaciones`
 --
 ALTER TABLE `especificaciones`
-  ADD PRIMARY KEY (`ID_Especificacion`),
-  ADD KEY `Especificaciones_fk1` (`ID_Proyecto`),
-  ADD KEY `Especificaciones_fk2` (`ID_Sprint`);
+  ADD PRIMARY KEY (`ID_Especificacion`);
 
 --
 -- Indices de la tabla `grupos_usuarios`
 --
 ALTER TABLE `grupos_usuarios`
-  ADD PRIMARY KEY (`ID_Grupo`),
-  ADD KEY `Grupos_Usuarios_fk1` (`ID_Proyecto`);
+  ADD PRIMARY KEY (`ID_Grupo`);
 
 --
 -- Indices de la tabla `proyectos`
 --
 ALTER TABLE `proyectos`
-  ADD PRIMARY KEY (`ID_Proyecto`),
-  ADD KEY `Proyectos_fk1` (`ID_Grupo`),
-  ADD KEY `Proyectos_fk2` (`Scrum_Master_Proyecto`),
-  ADD KEY `Proyectos_fk3` (`Product_Owner_Proyecto`) USING BTREE;
+  ADD PRIMARY KEY (`ID_Proyecto`);
 
 --
 -- Indices de la tabla `sprints`
 --
 ALTER TABLE `sprints`
-  ADD PRIMARY KEY (`ID_Sprint`),
-  ADD KEY `Sprints_fk1` (`ID_Proyecto`);
+  ADD PRIMARY KEY (`ID_Sprint`);
 
 --
 -- Indices de la tabla `usuarios`
 --
 ALTER TABLE `usuarios`
-  ADD PRIMARY KEY (`ID_Usuario`),
-  ADD KEY `Usuarios_fk1` (`ID_Grupo`);
+  ADD PRIMARY KEY (`ID_Usuario`);
 
 --
 -- AUTO_INCREMENT de las tablas volcadas
@@ -174,42 +166,16 @@ ALTER TABLE `usuarios`
   MODIFY `ID_Usuario` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- Restricciones para tablas volcadas
+-- INSERTS EN LAS TABLAS
 --
 
---
--- Filtros para la tabla `especificaciones`
---
-ALTER TABLE `especificaciones`
-  ADD CONSTRAINT `Especificaciones_fk1` FOREIGN KEY (`ID_Proyecto`) REFERENCES `proyectos` (`ID_Proyecto`),
-  ADD CONSTRAINT `Especificaciones_fk2` FOREIGN KEY (`ID_Sprint`) REFERENCES `sprints` (`ID_Sprint`);
+INSERT INTO usuarios VALUES(1, 'aforali', '1234', 'Ali Murtaza', 'Product Owner', 'aforali@madali.com', 1);
 
---
--- Filtros para la tabla `grupos_usuarios`
---
-ALTER TABLE `grupos_usuarios`
-  ADD CONSTRAINT `Grupos_Usuarios_fk1` FOREIGN KEY (`ID_Proyecto`) REFERENCES `proyectos` (`ID_Proyecto`);
+INSERT INTO usuarios VALUES(2, 'davidg', '1234', 'David Garcia', 'Administrator', 'davidg@madali.com', 1);
 
---
--- Filtros para la tabla `proyectos`
---
-ALTER TABLE `proyectos`
-  ADD CONSTRAINT `Proyectos_fk1` FOREIGN KEY (`ID_Grupo`) REFERENCES `grupos_usuarios` (`ID_Grupo`),
-  ADD CONSTRAINT `Proyectos_fk2` FOREIGN KEY (`Scrum_Master_Proyecto`) REFERENCES `usuarios` (`ID_Usuario`),
-  ADD CONSTRAINT `Proyectos_fk3` FOREIGN KEY (`Product_Owner_Proyecto`) REFERENCES `usuarios` (`ID_Usuario`);
+INSERT INTO usuarios VALUES(3, 'marcb', '1234', 'Marc Boakye', 'Developer', 'mboakye@madali.com', 1);
 
---
--- Filtros para la tabla `sprints`
---
-ALTER TABLE `sprints`
-  ADD CONSTRAINT `Sprints_fk1` FOREIGN KEY (`ID_Proyecto`) REFERENCES `proyectos` (`ID_Proyecto`);
-
---
--- Filtros para la tabla `usuarios`
---
-ALTER TABLE `usuarios`
-  ADD CONSTRAINT `Usuarios_fk1` FOREIGN KEY (`ID_Grupo`) REFERENCES `grupos_usuarios` (`ID_Grupo`);
-COMMIT;
+INSERT INTO usuarios VALUES(4, 'root', 'root', 'Root', 'Scrum Master', 'root@root.com', 1);
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

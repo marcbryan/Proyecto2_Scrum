@@ -1,6 +1,5 @@
 package Frames;
 
-import java.awt.BorderLayout;
 import java.awt.EventQueue;
 import java.awt.Graphics;
 import java.awt.Image;
@@ -12,13 +11,10 @@ import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.ImageIcon;
 import javax.swing.JDesktopPane;
-import java.awt.Color;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JMenu;
 import java.awt.event.ActionListener;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
 import java.awt.event.ActionEvent;
 import javax.swing.JLabel;
 import java.awt.Font;
@@ -29,6 +25,8 @@ public class FramePrincipal extends JFrame {
 
 	private JPanel contentPane;
 	static JLabel lblUsuario;
+	static JMenu mnUsuarios;
+	static JMenuItem mntmAddU;
 
 	/**
 	 * Launch the application.
@@ -60,12 +58,12 @@ public class FramePrincipal extends JFrame {
 		JMenu mnProyectos = new JMenu("Proyectos");
 		menuBar.add(mnProyectos);
 
-		JMenu mnUsuarios = new JMenu("Usuarios");
+		mnUsuarios = new JMenu("Usuarios");
 		menuBar.add(mnUsuarios);
 
-		JMenuItem mntmAddU = new JMenuItem("Añadir Usuario");
+		mntmAddU = new JMenuItem("Añadir Usuario");
 
-		mnUsuarios.add(mntmAddU);
+		//mnUsuarios.add(mntmAddU);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -77,13 +75,13 @@ public class FramePrincipal extends JFrame {
 			public void paintComponent(Graphics g) {
 				g.drawImage(image, 0, 0, getWidth(), getHeight(), this);
 			}
-
 		};
 
 		Login IFramelog = new Login();
 		desktopPane.add(IFramelog);
 		IFramelog.setVisible(true);
-
+		
+		
 		mntmAddU.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
