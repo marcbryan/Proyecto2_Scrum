@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.8.4
+-- version 4.8.3
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 18-01-2019 a las 20:28:01
--- Versión del servidor: 10.1.37-MariaDB
--- Versión de PHP: 7.3.0
+-- Tiempo de generación: 23-01-2019 a las 11:42:45
+-- Versión del servidor: 10.1.36-MariaDB
+-- Versión de PHP: 7.2.11
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -38,6 +38,13 @@ CREATE TABLE `especificaciones` (
   `Estado_Especificacion` varchar(30) COLLATE utf8_spanish_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
+--
+-- Volcado de datos para la tabla `especificaciones`
+--
+
+INSERT INTO `especificaciones` (`ID_Especificacion`, `Nombre_Especificacion`, `Descripcion_Especificacion`, `Duracion_Especificacion`, `ID_Proyecto`, `ID_Sprint`, `Estado_Especificacion`) VALUES
+(1, 'Hacer login pulsando el botón enter', 'En la pantalla de login, haz que cuando pulses el botón ENTER haga lo mismo que al hacer click en botón', '1h', 1, 1, 'En desarollo');
+
 -- --------------------------------------------------------
 
 --
@@ -48,6 +55,13 @@ CREATE TABLE `grupos_usuarios` (
   `ID_Grupo` int(11) NOT NULL,
   `ID_Proyecto` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+
+--
+-- Volcado de datos para la tabla `grupos_usuarios`
+--
+
+INSERT INTO `grupos_usuarios` (`ID_Grupo`, `ID_Proyecto`) VALUES
+(1, 1);
 
 -- --------------------------------------------------------
 
@@ -66,6 +80,13 @@ CREATE TABLE `proyectos` (
   `ID_Grupo` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
+--
+-- Volcado de datos para la tabla `proyectos`
+--
+
+INSERT INTO `proyectos` (`ID_Proyecto`, `Nombre_Proyecto`, `Descripcion_Proyecto`, `Fecha_Inicio_Proyecto`, `Fecha_Final_Proyecto`, `Scrum_Master_Proyecto`, `Product_Owner_Proyecto`, `ID_Grupo`) VALUES
+(1, 'Gestor de proyectos Scrum', 'Desarollar un gestor de proyectos Scrum en el que habrá usuarios con diferentes permisos', '2019-01-16', '2019-02-20', 4, 1, 1);
+
 -- --------------------------------------------------------
 
 --
@@ -80,6 +101,13 @@ CREATE TABLE `sprints` (
   `Duracion_Sprint` int(11) NOT NULL,
   `Estado_Sprint` varchar(20) COLLATE utf8_spanish_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+
+--
+-- Volcado de datos para la tabla `sprints`
+--
+
+INSERT INTO `sprints` (`ID_Sprint`, `ID_Proyecto`, `Fecha_Inicio_Sprint`, `Fecha_Final_Sprint`, `Duracion_Sprint`, `Estado_Sprint`) VALUES
+(2, 1, '2019-01-16', '2019-01-23', 18, 'En progreso');
 
 -- --------------------------------------------------------
 
@@ -96,6 +124,17 @@ CREATE TABLE `usuarios` (
   `Correo_Usuario` varchar(50) COLLATE utf8_spanish_ci NOT NULL,
   `ID_Grupo` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+
+--
+-- Volcado de datos para la tabla `usuarios`
+--
+
+INSERT INTO `usuarios` (`ID_Usuario`, `Nombre_Usuario`, `Password_Usuario`, `Nombre_Apellidos`, `Tipo_Usuario`, `Correo_Usuario`, `ID_Grupo`) VALUES
+(1, 'aforali', '1234', 'Ali Murtaza', 'Product Owner', 'aforali@madali.com', 1),
+(2, 'davidg', '1234', 'David Garcia', 'Administrator', 'davidg@madali.com', 1),
+(3, 'marcb', '1234', 'Marc Boakye', 'Developer', 'mboakye@madali.com', 1),
+(4, 'root', 'root', 'Root', 'Scrum Master', 'root@root.com', 1),
+(6, 'lzabala', 'root', 'Leandro Zabala', 'Scrum Master', 'lzabala@xtec.cat', 1);
 
 --
 -- Índices para tablas volcadas
@@ -139,43 +178,32 @@ ALTER TABLE `usuarios`
 -- AUTO_INCREMENT de la tabla `especificaciones`
 --
 ALTER TABLE `especificaciones`
-  MODIFY `ID_Especificacion` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `ID_Especificacion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de la tabla `grupos_usuarios`
 --
 ALTER TABLE `grupos_usuarios`
-  MODIFY `ID_Grupo` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `ID_Grupo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de la tabla `proyectos`
 --
 ALTER TABLE `proyectos`
-  MODIFY `ID_Proyecto` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `ID_Proyecto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de la tabla `sprints`
 --
 ALTER TABLE `sprints`
-  MODIFY `ID_Sprint` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `ID_Sprint` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `ID_Usuario` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- INSERTS EN LAS TABLAS
---
-
-INSERT INTO usuarios VALUES(1, 'aforali', '1234', 'Ali Murtaza', 'Product Owner', 'aforali@madali.com', 1);
-
-INSERT INTO usuarios VALUES(2, 'davidg', '1234', 'David Garcia', 'Administrator', 'davidg@madali.com', 1);
-
-INSERT INTO usuarios VALUES(3, 'marcb', '1234', 'Marc Boakye', 'Developer', 'mboakye@madali.com', 1);
-
-INSERT INTO usuarios VALUES(4, 'root', 'root', 'Root', 'Scrum Master', 'root@root.com', 1);
+  MODIFY `ID_Usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
