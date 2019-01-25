@@ -24,9 +24,9 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 public class FramePrincipal extends JFrame {
 
 	private JPanel contentPane;
-	static JLabel lblUsuario;
-	static JMenu mnUsuarios;
-	static JMenuItem mntmAddU;
+	static JLabel lbl_Usuario;
+	static JMenu menu_Usuarios;
+	static JMenuItem mnItem_AddU;
 
 	/**
 	 * Launch the application.
@@ -64,14 +64,14 @@ public class FramePrincipal extends JFrame {
 		JMenuItem mntmShowProject = new JMenuItem("Mostrar proyectos");
 		mnProyectos.add(mntmShowProject);
 
-		mnUsuarios = new JMenu("Usuarios");
-		menuBar.add(mnUsuarios);
+		menu_Usuarios = new JMenu("Usuarios");
+		menuBar.add(menu_Usuarios);
 		
-		mntmAddU  = new JMenuItem("Nuevo usuario");
-		mnUsuarios.add(mntmAddU);
+		mnItem_AddU  = new JMenuItem("Nuevo usuario");
+		menu_Usuarios.add(mnItem_AddU);
 		
 		JMenuItem mntmSearchUsu = new JMenuItem("Buscar/modificar usuario");
-		mnUsuarios.add(mntmSearchUsu);
+		menu_Usuarios.add(mntmSearchUsu);
 		
 		
 		
@@ -79,7 +79,7 @@ public class FramePrincipal extends JFrame {
 		
 		
 
-		//mnUsuarios.add(mntmAddU);
+		//menu_Usuarios.add(mnItem_AddU);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -98,7 +98,7 @@ public class FramePrincipal extends JFrame {
 		IFramelog.setVisible(true);
 		
 		
-		mntmAddU.addActionListener(new ActionListener() {
+		mnItem_AddU.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
 				AddUsuario IFrameAddU = new AddUsuario();
@@ -108,8 +108,8 @@ public class FramePrincipal extends JFrame {
 			}
 		});
 		
-		lblUsuario = new JLabel("Usuario: ");
-		lblUsuario.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		lbl_Usuario = new JLabel("Usuario: ");
+		lbl_Usuario.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		
 		
 		
@@ -131,7 +131,7 @@ public class FramePrincipal extends JFrame {
 				.addComponent(desktopPane, GroupLayout.DEFAULT_SIZE, 660, Short.MAX_VALUE)
 				.addGroup(Alignment.TRAILING, gl_contentPane.createSequentialGroup()
 					.addContainerGap(266, Short.MAX_VALUE)
-					.addComponent(lblUsuario, GroupLayout.PREFERRED_SIZE, 280, GroupLayout.PREFERRED_SIZE)
+					.addComponent(lbl_Usuario, GroupLayout.PREFERRED_SIZE, 280, GroupLayout.PREFERRED_SIZE)
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(btnSalir)
 					.addContainerGap())
@@ -141,7 +141,7 @@ public class FramePrincipal extends JFrame {
 				.addGroup(gl_contentPane.createSequentialGroup()
 					.addContainerGap()
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-						.addComponent(lblUsuario)
+						.addComponent(lbl_Usuario)
 						.addComponent(btnSalir, GroupLayout.PREFERRED_SIZE, 28, GroupLayout.PREFERRED_SIZE))
 					.addGap(29)
 					.addComponent(desktopPane, GroupLayout.DEFAULT_SIZE, 351, Short.MAX_VALUE))

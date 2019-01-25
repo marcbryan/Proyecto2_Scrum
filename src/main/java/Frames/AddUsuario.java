@@ -29,7 +29,7 @@ import javax.swing.DefaultComboBoxModel;
 
 public class AddUsuario extends JInternalFrame {
 	private JTextField tf_Nombre;
-	private JTextField tf_loginG;
+	private JTextField tf_LoginGen;
 	private JTextField tf_Pass;
 	private JTextField tf_Pass2;
 	private JTextField tf_Mail;
@@ -127,8 +127,8 @@ public class AddUsuario extends JInternalFrame {
 		
 		
 		
-		tf_loginG = new JTextField("");
-		tf_loginG.setColumns(10);
+		tf_LoginGen = new JTextField("");
+		tf_LoginGen.setColumns(10);
 		
 		tf_Pass = new JTextField("");
 		tf_Pass.setColumns(10);
@@ -146,11 +146,11 @@ public class AddUsuario extends JInternalFrame {
 				if (!tf_Pass.getText().equals(tf_Pass2.getText())) {
 					JOptionPane.showMessageDialog(AddUsuario.this, "Las contraseñas no coinciden", "Alerta", JOptionPane.WARNING_MESSAGE);
 				}
-				else if (!tf_Nombre.getText().equals("") && !tf_loginG.getText().equals("") && !tf_Pass.getText().equals("") && !tf_Pass2.getText().equals("") && !tf_Mail.getText().equals("")) {
+				else if (!tf_Nombre.getText().equals("") && !tf_LoginGen.getText().equals("") && !tf_Pass.getText().equals("") && !tf_Pass2.getText().equals("") && !tf_Mail.getText().equals("")) {
 					if (dao.bd_online()) {
 						String tipo_usuario = String.valueOf(cBox_TipoUsuario.getSelectedItem().toString());
 						System.out.println(tipo_usuario);
-						Usuario user = new Usuario(tf_loginG.getText(), tf_Pass.getText(), tf_Nombre.getText(), tipo_usuario, tf_Mail.getText(), 1);
+						Usuario user = new Usuario(tf_LoginGen.getText(), tf_Pass.getText(), tf_Nombre.getText(), tipo_usuario, tf_Mail.getText(), 1);
 						dao.insertarUsuario(user);
 						JOptionPane.showMessageDialog(AddUsuario.this, "Usuario " + user.getNombre_usuario() + " añadido correctamente!", "Información", JOptionPane.INFORMATION_MESSAGE);
 					} else {
@@ -181,7 +181,7 @@ public class AddUsuario extends JInternalFrame {
 					.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
 						.addComponent(tf_Pass2, GroupLayout.DEFAULT_SIZE, 193, Short.MAX_VALUE)
 						.addComponent(tf_Pass, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 193, Short.MAX_VALUE)
-						.addComponent(tf_loginG, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 193, Short.MAX_VALUE)
+						.addComponent(tf_LoginGen, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 193, Short.MAX_VALUE)
 						.addComponent(tf_Nombre, GroupLayout.DEFAULT_SIZE, 193, Short.MAX_VALUE)
 						.addComponent(btnCrear, GroupLayout.PREFERRED_SIZE, 125, GroupLayout.PREFERRED_SIZE)
 						.addComponent(tf_Mail, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 193, Short.MAX_VALUE)
@@ -201,7 +201,7 @@ public class AddUsuario extends JInternalFrame {
 					.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
 						.addComponent(lblLoginGenerado)
 						.addComponent(btnGenerar, GroupLayout.PREFERRED_SIZE, 25, GroupLayout.PREFERRED_SIZE)
-						.addComponent(tf_loginG, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addComponent(tf_LoginGen, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 					.addGap(18)
 					.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
 						.addComponent(lblPassword, GroupLayout.PREFERRED_SIZE, 19, GroupLayout.PREFERRED_SIZE)

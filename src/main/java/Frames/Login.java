@@ -206,12 +206,12 @@ public class Login extends JInternalFrame {
 			if (dao.bd_online()) {
 				Usuario user = dao.login(tf_Usuario.getText(), pass);
 				if (user != null) {
-					FramePrincipal.lblUsuario.setText("Usuario: "+tf_Usuario.getText());
+					FramePrincipal.lbl_Usuario.setText("Usuario: "+tf_Usuario.getText());
 					tf_Usuario.setText("");
 					passwordField.setText("");
 					//Si el usuario es Administrador podrá añadir usuarios, si no esta funcion no estará disponible
 					if (user.getTipo_usuario().equals("Administrator")) {
-						FramePrincipal.mnUsuarios.add(FramePrincipal.mntmAddU);
+						FramePrincipal.menu_Usuarios.add(FramePrincipal.mnItem_AddU);
 					}
 					Login.this.setVisible(false);
 				} else {
