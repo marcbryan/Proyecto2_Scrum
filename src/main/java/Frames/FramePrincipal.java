@@ -57,11 +57,27 @@ public class FramePrincipal extends JFrame {
 
 		JMenu mnProyectos = new JMenu("Proyectos");
 		menuBar.add(mnProyectos);
+		
+		JMenuItem mntmAddProject = new JMenuItem("Crear proyecto");
+		mnProyectos.add(mntmAddProject);
+		
+		JMenuItem mntmShowProject = new JMenuItem("Mostrar proyectos");
+		mnProyectos.add(mntmShowProject);
 
 		mnUsuarios = new JMenu("Usuarios");
 		menuBar.add(mnUsuarios);
-
-		mntmAddU = new JMenuItem("Añadir Usuario");
+		
+		mntmAddU  = new JMenuItem("Nuevo usuario");
+		mnUsuarios.add(mntmAddU);
+		
+		JMenuItem mntmSearchUsu = new JMenuItem("Buscar/modificar usuario");
+		mnUsuarios.add(mntmSearchUsu);
+		
+		
+		
+		
+		
+		
 
 		//mnUsuarios.add(mntmAddU);
 		contentPane = new JPanel();

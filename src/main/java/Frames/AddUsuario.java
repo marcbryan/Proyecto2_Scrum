@@ -93,9 +93,20 @@ public class AddUsuario extends JInternalFrame {
 		tf_Nombre = new JTextField("");
 		tf_Nombre.setColumns(10);
 		
-		JButton btnNewButton = new JButton("Generar");
-		btnNewButton.setBackground(new Color(227,28,33));
-		btnNewButton.setForeground(Color.white);
+		JButton btnGenerar = new JButton("Generar");
+		btnGenerar.setBackground(new Color(227,28,33));
+		btnGenerar.setForeground(Color.white);
+		
+		
+		btnGenerar.addActionListener(new ActionListener() {
+			
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				
+				
+				
+			}
+		});
 		
 		cBox_TipoUsuario = new JComboBox();
 		cBox_TipoUsuario.setModel(new DefaultComboBoxModel(new String[] {//"Elige un tipo usuario", 
@@ -112,6 +123,21 @@ public class AddUsuario extends JInternalFrame {
 		JLabel lblTipoUsuario = new JLabel("Tipo usuario:");
 		lblTipoUsuario.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		lblTipoUsuario.setForeground(Color.white);
+		
+		
+		
+		
+		tf_loginG = new JTextField("");
+		tf_loginG.setColumns(10);
+		
+		tf_Pass = new JTextField("");
+		tf_Pass.setColumns(10);
+		
+		tf_Pass2 = new JTextField("");
+		tf_Pass2.setColumns(10);
+		
+		tf_Mail = new JTextField("");
+		tf_Mail.setColumns(10);
 		
 		JButton btnCrear = new JButton("Crear");
 		btnCrear.addActionListener(new ActionListener() {
@@ -135,20 +161,10 @@ public class AddUsuario extends JInternalFrame {
 				}
 			}
 		});
+		
 		btnCrear.setBackground(new Color(227,28,33));
 		btnCrear.setForeground(Color.white);
 		
-		tf_loginG = new JTextField("");
-		tf_loginG.setColumns(10);
-		
-		tf_Pass = new JTextField("");
-		tf_Pass.setColumns(10);
-		
-		tf_Pass2 = new JTextField("");
-		tf_Pass2.setColumns(10);
-		
-		tf_Mail = new JTextField("");
-		tf_Mail.setColumns(10);
 		GroupLayout gl_panel = new GroupLayout(panel);
 		gl_panel.setHorizontalGroup(
 			gl_panel.createParallelGroup(Alignment.LEADING)
@@ -171,7 +187,7 @@ public class AddUsuario extends JInternalFrame {
 						.addComponent(tf_Mail, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 193, Short.MAX_VALUE)
 						.addComponent(cBox_TipoUsuario, Alignment.TRAILING, 0, 193, Short.MAX_VALUE))
 					.addGap(26)
-					.addComponent(btnNewButton, GroupLayout.PREFERRED_SIZE, 140, GroupLayout.PREFERRED_SIZE)
+					.addComponent(btnGenerar, GroupLayout.PREFERRED_SIZE, 140, GroupLayout.PREFERRED_SIZE)
 					.addGap(75))
 		);
 		gl_panel.setVerticalGroup(
@@ -184,7 +200,7 @@ public class AddUsuario extends JInternalFrame {
 					.addGap(26)
 					.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
 						.addComponent(lblLoginGenerado)
-						.addComponent(btnNewButton, GroupLayout.PREFERRED_SIZE, 25, GroupLayout.PREFERRED_SIZE)
+						.addComponent(btnGenerar, GroupLayout.PREFERRED_SIZE, 25, GroupLayout.PREFERRED_SIZE)
 						.addComponent(tf_loginG, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 					.addGap(18)
 					.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
