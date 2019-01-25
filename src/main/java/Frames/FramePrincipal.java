@@ -1,12 +1,16 @@
 package Frames;
 
+import java.awt.Cursor;
 import java.awt.EventQueue;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.Point;
+import java.awt.Toolkit;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.imageio.ImageIO;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.ImageIcon;
@@ -15,6 +19,8 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JMenu;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
 import java.awt.event.ActionEvent;
 import javax.swing.JLabel;
 import java.awt.Font;
@@ -52,6 +58,9 @@ public class FramePrincipal extends JFrame {
 		setBounds(100, 100, 688, 502);
 		setExtendedState(getExtendedState() | JFrame.MAXIMIZED_BOTH);
 
+		//Metodo para poner el cursor personalizado con una imagen nuestra
+		cambiarCursor();
+		
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
 
@@ -148,4 +157,19 @@ public class FramePrincipal extends JFrame {
 		);
 		contentPane.setLayout(gl_contentPane);
 	}
+	
+	public void cambiarCursor() {
+		Image customimage;
+        Cursor customCursor;
+		try {
+			customimage = ImageIO.read(new File("src"+File.separator+"main"+File.separator+"resources"+File.separator+"cursor2.png"));
+			customCursor = Toolkit.getDefaultToolkit().createCustomCursor(customimage, new Point(0, 0), "customCursor");
+			this.setCursor(customCursor);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	
 }

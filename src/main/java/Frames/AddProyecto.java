@@ -2,12 +2,19 @@ package Frames;
 
 import java.awt.EventQueue;
 import java.awt.Font;
+import java.awt.Image;
+import java.awt.Point;
+import java.awt.Toolkit;
+import java.io.File;
+import java.io.IOException;
 
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Cursor;
 
+import javax.imageio.ImageIO;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JTextField;
@@ -47,6 +54,9 @@ public class AddProyecto extends JInternalFrame {
 		setBounds(100, 100, 580, 405);
 		setBackground(new Color(90,21,50));
 		
+		//Metodo para poner el cursor personalizado con una imagen nuestra
+		cambiarCursor();
+		
 		JLabel lbl_nombreProyecto = new JLabel("Nombre proyecto:");
 		lbl_nombreProyecto.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		lbl_nombreProyecto.setForeground(Color.white);
@@ -65,6 +75,8 @@ public class AddProyecto extends JInternalFrame {
 		lbl_ScrumMaster.setForeground(Color.white);
 		
 		JComboBox cb_ScrumMaster = new JComboBox();
+		cb_ScrumMaster.setBackground(new Color(227, 28, 33));
+		cb_ScrumMaster.setForeground(Color.white);
 		
 		JLabel lbl_ProductOwner = new JLabel("Product Owner:");
 		lbl_ProductOwner.setFont(new Font("Tahoma", Font.PLAIN, 15));
@@ -72,14 +84,17 @@ public class AddProyecto extends JInternalFrame {
 		
 		JComboBox cb_ProductOwner = new JComboBox();
 		
+		cb_ProductOwner.setBackground(new Color(227, 28, 33));
+		cb_ProductOwner.setForeground(Color.white);
+		
 		JButton btn_Anadir = new JButton("A\u00F1adir");
-		btn_Anadir.setBackground(new Color(227,28,33));
+		btn_Anadir.setBackground(new Color(227, 28, 33));
 		btn_Anadir.setForeground(Color.white);
 		
 		GroupLayout groupLayout = new GroupLayout(getContentPane());
 		groupLayout.setHorizontalGroup(
-			groupLayout.createParallelGroup(Alignment.TRAILING)
-				.addGroup(Alignment.LEADING, groupLayout.createSequentialGroup()
+			groupLayout.createParallelGroup(Alignment.LEADING)
+				.addGroup(groupLayout.createSequentialGroup()
 					.addGap(33)
 					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 						.addComponent(lbl_nombreProyecto)
@@ -93,10 +108,10 @@ public class AddProyecto extends JInternalFrame {
 							.addContainerGap())
 						.addGroup(groupLayout.createSequentialGroup()
 							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-								.addComponent(cb_ProductOwner, 0, 369, Short.MAX_VALUE)
-								.addComponent(cb_ScrumMaster, Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, 367, GroupLayout.PREFERRED_SIZE)
-								.addComponent(ta_Descripcion, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 369, Short.MAX_VALUE)
-								.addComponent(textField, GroupLayout.DEFAULT_SIZE, 369, Short.MAX_VALUE))
+								.addComponent(cb_ProductOwner, 0, 367, Short.MAX_VALUE)
+								.addComponent(cb_ScrumMaster, Alignment.TRAILING, 0, 367, Short.MAX_VALUE)
+								.addComponent(ta_Descripcion, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 367, Short.MAX_VALUE)
+								.addComponent(textField, GroupLayout.DEFAULT_SIZE, 367, Short.MAX_VALUE))
 							.addGap(33))))
 		);
 		groupLayout.setVerticalGroup(
@@ -120,9 +135,22 @@ public class AddProyecto extends JInternalFrame {
 						.addComponent(lbl_ProductOwner))
 					.addGap(27)
 					.addComponent(btn_Anadir)
-					.addContainerGap(45, Short.MAX_VALUE))
+					.addContainerGap(37, Short.MAX_VALUE))
 		);
 		getContentPane().setLayout(groupLayout);
 
+	}
+	
+	public void cambiarCursor() {
+		Image customimage;
+        Cursor customCursor;
+		try {
+			customimage = ImageIO.read(new File("src"+File.separator+"main"+File.separator+"resources"+File.separator+"cursor2.png"));
+			customCursor = Toolkit.getDefaultToolkit().createCustomCursor(customimage, new Point(0, 0), "customCursor");
+			this.setCursor(customCursor);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }

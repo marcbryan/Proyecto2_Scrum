@@ -1,20 +1,26 @@
 package Frames;
 
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.EventQueue;
 
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.imageio.ImageIO;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import java.awt.Font;
+import java.awt.Image;
+import java.awt.Point;
 import java.awt.TextField;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-
+import java.io.File;
+import java.io.IOException;
 
 import javax.swing.LayoutStyle.ComponentPlacement;
 
@@ -59,6 +65,9 @@ public class Login extends JInternalFrame {
 		setClosable(true);
 		setBounds(100, 100, 450, 300);
 		setTitle("Log in");
+		
+		//Metodo para poner el cursor personalizado con una imagen nuestra
+		cambiarCursor();
 		
 		final JPanel panel = new JPanel();
 		
@@ -222,6 +231,21 @@ public class Login extends JInternalFrame {
 			}
 		}else {
 			JOptionPane.showMessageDialog(this, "Introduce un nombre de usuario y contraseña validos", "Error", JOptionPane.ERROR_MESSAGE);
+		}
+	}
+	
+	
+	
+	public void cambiarCursor() {
+		Image customimage;
+        Cursor customCursor;
+		try {
+			customimage = ImageIO.read(new File("src"+File.separator+"main"+File.separator+"resources"+File.separator+"cursor2.png"));
+			customCursor = Toolkit.getDefaultToolkit().createCustomCursor(customimage, new Point(0, 0), "customCursor");
+			this.setCursor(customCursor);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 }
