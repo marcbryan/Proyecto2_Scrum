@@ -22,6 +22,8 @@ public class Sprint {
 	private int duracion_sprint;
 	private String estado_sprint;
 	
+	public Sprint() {}
+	
 	public Sprint(int id_sprint, int id_proyecto, Date fecha_Inicio_Sprint, Date fecha_Final_Sprint,
 			int duracion_sprint, String estado_sprint) {
 		this.id_sprint = id_sprint;

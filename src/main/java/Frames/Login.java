@@ -2,7 +2,6 @@ package Frames;
 
 import java.awt.Color;
 import java.awt.Cursor;
-import java.awt.EventQueue;
 
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
@@ -22,8 +21,7 @@ import java.awt.event.KeyListener;
 import java.io.File;
 import java.io.IOException;
 
-import javax.swing.LayoutStyle.ComponentPlacement;
-
+import daoImpl.SQLiteDAOImpl;
 import daoImpl.ScrumDAOImpl;
 import idao.IScrumConfig;
 import model.Usuario;
@@ -35,30 +33,20 @@ import javax.swing.JPasswordField;
 public class Login extends JInternalFrame {
 	private TextField tf_Usuario;
 	private JPasswordField passwordField;
-	private IScrumConfig dao;
+	private JLabel lbl_statusDB;
+	
+	/** Aquí guardaremos el estado de la base de datos remota (<b>OFFLINE</b> o <b>ONLINE</b>) para ver con que base de datos se tendrá que trabajar */
+	public static String statusDB = "OFFLINE";
+	
+	private IScrumConfig remotaDAO;
+	private IScrumConfig embebidaDAO;
 
 	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					Login frame = new Login();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
-	/**
-	 * Create the frame.
+	 * Crea el JInternalFrame del login
+	 * @author David
 	 */
 	public Login() {
-		//DAO
-		dao = new ScrumDAOImpl();
+		remotaDAO = new ScrumDAOImpl();
 		
 		setMaximizable(true);
 		setResizable(true);
@@ -66,15 +54,20 @@ public class Login extends JInternalFrame {
 		setBounds(100, 100, 450, 300);
 		setTitle("Log in");
 		
-		//Metodo para poner el cursor personalizado con una imagen nuestra
+		// Metodo para poner el cursor personalizado con una imagen nuestra
 		cambiarCursor();
 		
 		final JPanel panel = new JPanel();
 		
-		JLabel lbl_statusDB = new JLabel("<html><font color=red>OFFLINE</font></html>");
-		if (dao.bd_online()) {
+		// Texto ONLINE/OFFLINE en el InternalFrame 
+		lbl_statusDB = new JLabel("<html><font color=red>OFFLINE</font></html>");
+		if (remotaDAO.bd_online()) {
 			lbl_statusDB.setText("<html><font color=green>ONLINE</font></html>");
+			statusDB = "ONLINE";
 		}
+		
+		// Lo hago aquí porque necesito saber el estado de la base de datos remota
+		embebidaDAO = new SQLiteDAOImpl();
 		
 		GroupLayout groupLayout = new GroupLayout(getContentPane());
 		groupLayout.setHorizontalGroup(
@@ -147,10 +140,8 @@ public class Login extends JInternalFrame {
 			}
 		});
 		
-		passwordField = new JPasswordField("");
-		
-		
-		//Añadimos el listener de teclado para detectar el boton Enter cuando tenemos el focus en el campo de contraseña.
+		passwordField = new JPasswordField("");	
+		// Añadimos el listener de teclado para detectar el boton Enter cuando tenemos el focus en el campo de contraseña.
 		passwordField.addKeyListener(new KeyListener() {
 			
 			public void keyTyped(KeyEvent e) {}
@@ -208,34 +199,51 @@ public class Login extends JInternalFrame {
 	
 	/**
 	 * Sirve para hacer login en el gestor de Scrum
+	 * @author Marc
 	 */
 	private void login() {
 		String pass = String.valueOf(passwordField.getPassword());
 		if(!tf_Usuario.getText().equals("") && !pass.equals("")) {
-			if (dao.bd_online()) {
-				Usuario user = dao.login(tf_Usuario.getText(), pass);
+			// Si la base de datos está OFFLINE nos saltamos el paso de comprobar si la base de datos está online, para acceder más rápido
+			if (lbl_statusDB.getText().contains("OFFLINE")) {
+				// Si no hay conexión con la base de datos REMOTA, se insertarán los datos en la base de datos embebida (nosotros utilizaremos SQLite)
+				Usuario user = embebidaDAO.login(tf_Usuario.getText(), pass);
 				if (user != null) {
-					FramePrincipal.lbl_Usuario.setText("Usuario: "+tf_Usuario.getText());
-					tf_Usuario.setText("");
-					passwordField.setText("");
-					//Si el usuario es Administrador podrá añadir usuarios, si no esta funcion no estará disponible
-					if (user.getTipo_usuario().equals("Administrator")) {
-						FramePrincipal.menu_Usuarios.add(FramePrincipal.mnItem_AddU);
-					}
-					Login.this.setVisible(false);
+					darPermisos(user);
 				} else {
-					JOptionPane.showMessageDialog(this, "Introduce un nombre de usuario y contraseña validos", "Error", JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(this, "Introduce un nombre de usuario y contraseña válidos", "Error", JOptionPane.ERROR_MESSAGE);
 				}
+			}
+			// Si la base de datos remota está online, comprobamos si hay conexión
+			else if (remotaDAO.bd_online()) {
+				Usuario user = remotaDAO.login(tf_Usuario.getText(), pass);
+				if (user != null) {
+					darPermisos(user);
+				} else {
+					JOptionPane.showMessageDialog(this, "Introduce un nombre de usuario y contraseña válidos", "Error", JOptionPane.ERROR_MESSAGE);
+				}
+			/* Si se ha ido la conexión con la base de datos remota, en el tiempo en que se pone el texto ONLINE en el InternalFrame
+			 * y entre que se haga click en el botón de login, utilizaremos la embebida (para que no haya errores) */
 			} else {
-				//si no hay conexión con la base de datos REMOTA, se insertarán los datos en la base de datos embebida (nosotros utilizaremos SQLite) 
+				lbl_statusDB.setText("<html><font color=red>OFFLINE</font></html>");
+				statusDB = "OFFLINE";
+				// Si no hay conexión con la base de datos REMOTA, se insertarán los datos en la base de datos embebida (nosotros utilizaremos SQLite)
+				Usuario user = embebidaDAO.login(tf_Usuario.getText(), pass);
+				if (user != null) {
+					darPermisos(user);
+				} else {
+					JOptionPane.showMessageDialog(this, "Introduce un nombre de usuario y contraseña válidos", "Error", JOptionPane.ERROR_MESSAGE);
+				}
 			}
 		}else {
-			JOptionPane.showMessageDialog(this, "Introduce un nombre de usuario y contraseña validos", "Error", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(this, "Introduce un nombre de usuario y contraseña válidos", "Error", JOptionPane.ERROR_MESSAGE);
 		}
 	}
 	
-	
-	
+	/** 
+	 * Método para poner el cursor personalizado con una imagen nuestra 
+	 * @author David 
+	 */
 	public void cambiarCursor() {
 		Image customimage;
         Cursor customCursor;
@@ -244,8 +252,41 @@ public class Login extends JInternalFrame {
 			customCursor = Toolkit.getDefaultToolkit().createCustomCursor(customimage, new Point(0, 0), "customCursor");
 			this.setCursor(customCursor);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	/**
+	 * Dependiendo del tipo de usuario que sea, tendrá unos permisos o otros 
+	 * @param user - El usuario con el que hemos hecho login satisfactoriamente
+	 * @author Marc
+	 */
+	private void darPermisos(Usuario user) {
+		FramePrincipal.lbl_Usuario.setText("Usuario: "+tf_Usuario.getText()+" ("+user.getTipo_usuario()+")");
+		tf_Usuario.setText("");
+		passwordField.setText("");
+		// Si el usuario es Administrador podrá añadir usuarios, si no esta función no estará disponible
+		if (user.getTipo_usuario().equals("Administrator")) {
+			FramePrincipal.mnItem_AddU.addActionListener(new ActionListener() {
+
+				public void actionPerformed(ActionEvent e) {
+					AddUsuario IFrameAddU = new AddUsuario();
+					FramePrincipal.desktopPane.add(IFrameAddU);
+					IFrameAddU.setVisible(true);
+				}
+			});
+		}
+		// Si el usuario es Scrum Master podrá añadir proyectos, si no esta función no estará disponible
+		else if (user.getTipo_usuario().equals("Scrum Master")) {
+			FramePrincipal.mnItem_AddProject.addActionListener(new ActionListener() {
+				
+				public void actionPerformed(ActionEvent arg0) {
+					AddProyecto IFrameAddP = new AddProyecto();
+					FramePrincipal.desktopPane.add(IFrameAddP);
+					IFrameAddP.setVisible(true);
+				}
+			});
+		}
+		Login.this.setVisible(false);
 	}
 }

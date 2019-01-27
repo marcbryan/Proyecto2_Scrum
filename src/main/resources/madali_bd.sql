@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generaci√≥n: 23-01-2019 a las 11:42:45
--- Versi√≥n del servidor: 10.1.36-MariaDB
--- Versi√≥n de PHP: 7.2.11
+-- Tiempo de generaciÛn: 23-01-2019 a las 11:42:45
+-- VersiÛn del servidor: 10.1.36-MariaDB
+-- VersiÛn de PHP: 7.2.11
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -43,7 +43,7 @@ CREATE TABLE `especificaciones` (
 --
 
 INSERT INTO `especificaciones` (`ID_Especificacion`, `Nombre_Especificacion`, `Descripcion_Especificacion`, `Duracion_Especificacion`, `ID_Proyecto`, `ID_Sprint`, `Estado_Especificacion`) VALUES
-(1, 'Hacer login pulsando el bot√≥n enter', 'En la pantalla de login, haz que cuando pulses el bot√≥n ENTER haga lo mismo que al hacer click en bot√≥n', '1h', 1, 1, 'En desarollo');
+(1, 'Hacer login pulsando el botÛn enter', 'En la pantalla de login, haz que cuando pulses el botÛn ENTER haga lo mismo que al hacer click en botÛn', '1h', 1, 1, 'En desarollo');
 
 -- --------------------------------------------------------
 
@@ -73,8 +73,8 @@ CREATE TABLE `proyectos` (
   `ID_Proyecto` int(11) NOT NULL,
   `Nombre_Proyecto` varchar(30) COLLATE utf8_spanish_ci NOT NULL,
   `Descripcion_Proyecto` varchar(250) COLLATE utf8_spanish_ci NOT NULL,
-  `Fecha_Inicio_Proyecto` date NOT NULL,
-  `Fecha_Final_Proyecto` date NOT NULL,
+  `Fecha_Inicio_Proyecto` date,
+  `Fecha_Final_Proyecto` date,
   `Scrum_Master_Proyecto` int(11) NOT NULL,
   `Product_Owner_Proyecto` int(11) NOT NULL,
   `ID_Grupo` int(11) NOT NULL
@@ -85,7 +85,7 @@ CREATE TABLE `proyectos` (
 --
 
 INSERT INTO `proyectos` (`ID_Proyecto`, `Nombre_Proyecto`, `Descripcion_Proyecto`, `Fecha_Inicio_Proyecto`, `Fecha_Final_Proyecto`, `Scrum_Master_Proyecto`, `Product_Owner_Proyecto`, `ID_Grupo`) VALUES
-(1, 'Gestor de proyectos Scrum', 'Desarollar un gestor de proyectos Scrum en el que habr√° usuarios con diferentes permisos', '2019-01-16', '2019-02-20', 4, 1, 1);
+(1, 'Gestor de proyectos Scrum', 'Desarollar un gestor de proyectos Scrum en el que habr· usuarios con diferentes permisos', '2019-01-16', '2019-02-06', 4, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -107,7 +107,7 @@ CREATE TABLE `sprints` (
 --
 
 INSERT INTO `sprints` (`ID_Sprint`, `ID_Proyecto`, `Fecha_Inicio_Sprint`, `Fecha_Final_Sprint`, `Duracion_Sprint`, `Estado_Sprint`) VALUES
-(2, 1, '2019-01-16', '2019-01-23', 18, 'En progreso');
+(1, 1, '2019-01-16', '2019-01-23', 18, 'En progreso');
 
 -- --------------------------------------------------------
 
@@ -130,14 +130,14 @@ CREATE TABLE `usuarios` (
 --
 
 INSERT INTO `usuarios` (`ID_Usuario`, `Nombre_Usuario`, `Password_Usuario`, `Nombre_Apellidos`, `Tipo_Usuario`, `Correo_Usuario`, `ID_Grupo`) VALUES
-(1, 'aforali', '1234', 'Ali Murtaza', 'Product Owner', 'aforali@madali.com', 1),
+(1, 'amurtaza', '1234', 'Ali Murtaza', 'Product Owner', 'amurtaza@madali.com', 1),
 (2, 'davidg', '1234', 'David Garcia', 'Administrator', 'davidg@madali.com', 1),
 (3, 'marcb', '1234', 'Marc Boakye', 'Developer', 'mboakye@madali.com', 1),
 (4, 'root', 'root', 'Root', 'Scrum Master', 'root@root.com', 1),
-(6, 'lzabala', 'root', 'Leandro Zabala', 'Scrum Master', 'lzabala@xtec.cat', 1);
+(5, 'lzabala', 'root', 'Leandro Zabala', 'Scrum Master', 'lzabala@xtec.cat', 1);
 
 --
--- √çndices para tablas volcadas
+-- Õndices para tablas volcadas
 --
 
 --
@@ -196,13 +196,13 @@ ALTER TABLE `proyectos`
 -- AUTO_INCREMENT de la tabla `sprints`
 --
 ALTER TABLE `sprints`
-  MODIFY `ID_Sprint` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `ID_Sprint` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de la tabla `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `ID_Usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `ID_Usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

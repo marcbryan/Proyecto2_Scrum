@@ -16,6 +16,8 @@ public class GrupoUsuarios {
 	private int id_grupo;
 	private int id_proyecto;
 	
+	public GrupoUsuarios() {}
+	
 	public GrupoUsuarios(int id_grupo, int id_proyecto) {
 		this.id_grupo = id_grupo;
 		this.id_proyecto = id_proyecto;

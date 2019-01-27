@@ -31,11 +31,17 @@ public class FramePrincipal extends JFrame {
 
 	private JPanel contentPane;
 	static JLabel lbl_Usuario;
+	
 	static JMenu menu_Usuarios;
 	static JMenuItem mnItem_AddU;
+	
+	static JMenu menu_Proyectos;
+	static JMenuItem mnItem_AddProject;
+	
+	static JDesktopPane desktopPane;
 
 	/**
-	 * Launch the application.
+	 * Main para ejecutar la aplicación.
 	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -51,27 +57,28 @@ public class FramePrincipal extends JFrame {
 	}
 
 	/**
-	 * Create the frame.
+	 * Crea el frame principal del gestor de Scrum
+	 * @author David
 	 */
 	public FramePrincipal() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 688, 502);
 		setExtendedState(getExtendedState() | JFrame.MAXIMIZED_BOTH);
 
-		//Metodo para poner el cursor personalizado con una imagen nuestra
+		// Metodo para poner el cursor personalizado con una imagen nuestra
 		cambiarCursor();
 		
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
 
-		JMenu mnProyectos = new JMenu("Proyectos");
-		menuBar.add(mnProyectos);
+		menu_Proyectos = new JMenu("Proyectos");
+		menuBar.add(menu_Proyectos);
 		
-		JMenuItem mntmAddProject = new JMenuItem("Crear proyecto");
-		mnProyectos.add(mntmAddProject);
+		mnItem_AddProject = new JMenuItem("Crear proyecto");
+		menu_Proyectos.add(mnItem_AddProject);
 		
 		JMenuItem mntmShowProject = new JMenuItem("Mostrar proyectos");
-		mnProyectos.add(mntmShowProject);
+		menu_Proyectos.add(mntmShowProject);
 
 		menu_Usuarios = new JMenu("Usuarios");
 		menuBar.add(menu_Usuarios);
@@ -81,14 +88,7 @@ public class FramePrincipal extends JFrame {
 		
 		JMenuItem mntmSearchUsu = new JMenuItem("Buscar/modificar usuario");
 		menu_Usuarios.add(mntmSearchUsu);
-		
-		
-		
-		
-		
-		
 
-		//menu_Usuarios.add(mnItem_AddU);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -96,7 +96,7 @@ public class FramePrincipal extends JFrame {
 		ImageIcon icon = new ImageIcon(getClass().getResource("fondo.jpg"));
 		final Image image = icon.getImage();
 
-		final JDesktopPane desktopPane = new JDesktopPane() {
+		desktopPane = new JDesktopPane() {
 			public void paintComponent(Graphics g) {
 				g.drawImage(image, 0, 0, getWidth(), getHeight(), this);
 			}
@@ -106,31 +106,18 @@ public class FramePrincipal extends JFrame {
 		desktopPane.add(IFramelog);
 		IFramelog.setVisible(true);
 		
-		
-		mnItem_AddU.addActionListener(new ActionListener() {
-
-			public void actionPerformed(ActionEvent e) {
-				AddUsuario IFrameAddU = new AddUsuario();
-
-				desktopPane.add(IFrameAddU);
-				IFrameAddU.setVisible(true);
-			}
-		});
-		
 		lbl_Usuario = new JLabel("Usuario: ");
 		lbl_Usuario.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		
 		
-		
+		// Para cerrar sesión y volver a hacer login
 		JButton btnSalir = new JButton("SALIR");
-		
 		btnSalir.addActionListener(new ActionListener() {
 			
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				
-				
-				
+				FramePrincipal principal = new FramePrincipal();
+				principal.setVisible(true);
+				FramePrincipal.this.dispose();
 			}
 		});
 
@@ -158,6 +145,10 @@ public class FramePrincipal extends JFrame {
 		contentPane.setLayout(gl_contentPane);
 	}
 	
+	/** 
+	 * Método para poner el cursor personalizado con una imagen nuestra 
+	 * @author David 
+	 */
 	public void cambiarCursor() {
 		Image customimage;
         Cursor customCursor;
@@ -166,7 +157,6 @@ public class FramePrincipal extends JFrame {
 			customCursor = Toolkit.getDefaultToolkit().createCustomCursor(customimage, new Point(0, 0), "customCursor");
 			this.setCursor(customCursor);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

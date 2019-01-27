@@ -5,6 +5,8 @@ import java.awt.Font;
 import java.awt.Image;
 import java.awt.Point;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 
@@ -19,34 +21,35 @@ import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JTextField;
 import javax.swing.LayoutStyle.ComponentPlacement;
+
+import daoImpl.SQLiteDAOImpl;
+import daoImpl.ScrumDAOImpl;
+import idao.IScrumConfig;
+import model.Proyecto;
+
 import javax.swing.JTextArea;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JComboBox;
 import javax.swing.JButton;
 
 public class AddProyecto extends JInternalFrame {
-	private JTextField textField;
-
+	private JTextField tf_nombreProyecto;
+	private JTextArea ta_Descripcion;
+	private JComboBox cb_ScrumMaster;
+	private JComboBox cb_ProductOwner;
+	
+	private IScrumConfig remotaDAO;
+	private IScrumConfig embebidaDAO;
+	
 	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					AddProyecto frame = new AddProyecto();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
-	/**
-	 * Create the frame.
+	 * Crea el JInternalFrame para añadir un proyecto
+	 * @author Ali
 	 */
 	public AddProyecto() {
+		remotaDAO = new ScrumDAOImpl();
+		embebidaDAO = new SQLiteDAOImpl();
+		
 		setTitle("Nuevo Proyecto");
 		setClosable(true);
 		setResizable(true);
@@ -61,20 +64,21 @@ public class AddProyecto extends JInternalFrame {
 		lbl_nombreProyecto.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		lbl_nombreProyecto.setForeground(Color.white);
 		
-		textField = new JTextField();
-		textField.setColumns(10);
+		tf_nombreProyecto = new JTextField();
+		tf_nombreProyecto.setColumns(10);
 		
 		JLabel lbl_Descripcion = new JLabel("Descripci\u00F3n:");
 		lbl_Descripcion.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		lbl_Descripcion.setForeground(Color.white);
 		
-		JTextArea ta_Descripcion = new JTextArea();
+		ta_Descripcion = new JTextArea();
 		
 		JLabel lbl_ScrumMaster = new JLabel("Scrum Master:");
 		lbl_ScrumMaster.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		lbl_ScrumMaster.setForeground(Color.white);
 		
-		JComboBox cb_ScrumMaster = new JComboBox();
+		cb_ScrumMaster = new JComboBox();
+		//Falta añadir los scrum masters
 		cb_ScrumMaster.setBackground(new Color(227, 28, 33));
 		cb_ScrumMaster.setForeground(Color.white);
 		
@@ -82,12 +86,35 @@ public class AddProyecto extends JInternalFrame {
 		lbl_ProductOwner.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		lbl_ProductOwner.setForeground(Color.white);
 		
-		JComboBox cb_ProductOwner = new JComboBox();
-		
+		cb_ProductOwner = new JComboBox();
+		//Falta añadir los product owners 
 		cb_ProductOwner.setBackground(new Color(227, 28, 33));
 		cb_ProductOwner.setForeground(Color.white);
 		
 		JButton btn_Anadir = new JButton("A\u00F1adir");
+		btn_Anadir.addActionListener(new ActionListener() {
+			
+			public void actionPerformed(ActionEvent e) {
+				if (!tf_nombreProyecto.getText().equals("") && !ta_Descripcion.getText().equals("")) {
+					// Si la base de datos está OFFLINE nos saltamos el paso de comprobar si la base de datos está online, para acceder más rápido
+					if (Login.statusDB.equals("OFFLINE")) {
+						
+					}
+					// Comprobamos si está online con la BBDD remota
+					else if (remotaDAO.bd_online()) {
+						
+					}
+					/* Si se ha ido la conexión con la base de datos remota, en el tiempo en que se pone el texto ONLINE en el InternalFrame
+					 * y entre que se haga click en el botón de crear proyecto, utilizaremos la embebida (para que no haya errores) */
+					else {
+						
+					}					
+				} else {
+					JOptionPane.showMessageDialog(AddProyecto.this, "Faltan campos por rellenar", "Alerta",
+							JOptionPane.WARNING_MESSAGE);
+				}
+			}
+		});
 		btn_Anadir.setBackground(new Color(227, 28, 33));
 		btn_Anadir.setForeground(Color.white);
 		
@@ -111,7 +138,7 @@ public class AddProyecto extends JInternalFrame {
 								.addComponent(cb_ProductOwner, 0, 367, Short.MAX_VALUE)
 								.addComponent(cb_ScrumMaster, Alignment.TRAILING, 0, 367, Short.MAX_VALUE)
 								.addComponent(ta_Descripcion, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 367, Short.MAX_VALUE)
-								.addComponent(textField, GroupLayout.DEFAULT_SIZE, 367, Short.MAX_VALUE))
+								.addComponent(tf_nombreProyecto, GroupLayout.DEFAULT_SIZE, 367, Short.MAX_VALUE))
 							.addGap(33))))
 		);
 		groupLayout.setVerticalGroup(
@@ -120,7 +147,7 @@ public class AddProyecto extends JInternalFrame {
 					.addGap(43)
 					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
 						.addComponent(lbl_nombreProyecto)
-						.addComponent(textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addComponent(tf_nombreProyecto, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 					.addGap(34)
 					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 						.addComponent(lbl_Descripcion)
@@ -141,6 +168,10 @@ public class AddProyecto extends JInternalFrame {
 
 	}
 	
+	/** 
+	 * Método para poner el cursor personalizado con una imagen nuestra 
+	 * @author David
+	 */
 	public void cambiarCursor() {
 		Image customimage;
         Cursor customCursor;
@@ -149,7 +180,6 @@ public class AddProyecto extends JInternalFrame {
 			customCursor = Toolkit.getDefaultToolkit().createCustomCursor(customimage, new Point(0, 0), "customCursor");
 			this.setCursor(customCursor);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

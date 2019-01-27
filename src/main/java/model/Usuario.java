@@ -21,9 +21,7 @@ public class Usuario {
 	private String correo_usuario;
 	private int id_grupo;
 
-	public Usuario() {
-
-	}
+	public Usuario() {}
 
 	public Usuario(int id_usuario, String nombre_usuario, String password_usuario, String nombre_apellidos,
 			String tipo_usuario, String correo_usuario, int id_grupo) {
@@ -38,7 +36,6 @@ public class Usuario {
 
 	public Usuario(String nombre_usuario, String password_usuario, String nombre_apellidos, String tipo_usuario,
 			String correo_usuario, int id_grupo) {
-		super();
 		this.nombre_usuario = nombre_usuario;
 		this.password_usuario = password_usuario;
 		this.nombre_apellidos = nombre_apellidos;

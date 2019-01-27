@@ -22,6 +22,8 @@ public class Especificacion {
 	private int id_sprint;
 	private String estado_especificacion;
 	
+	public Especificacion() {}
+	
 	public Especificacion(int id_especificacion, int nombre_especificacion, String descricion_especificacion,
 			String duracion_especificacion, int id_proyecto, int id_sprint, String estado_especificacion) {
 		this.id_especificacion = id_especificacion;

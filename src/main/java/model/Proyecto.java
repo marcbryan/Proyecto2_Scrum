@@ -24,6 +24,8 @@ public class Proyecto {
 	private int product_owner_proyecto;
 	private int id_grupo;
 	
+	public Proyecto() {}
+	
 	public Proyecto(int id_proyecto, String nombre_proyecto, String descripcion_proyecto, Date fecha_inicio_proyecto,
 			Date fecha_final_proyecto, int scrum_master_proyecto, int product_owner_proyecto, int id_grupo) {
 		this.id_proyecto = id_proyecto;
@@ -36,6 +38,17 @@ public class Proyecto {
 		this.id_grupo = id_grupo; 
 	}
 	
+	public Proyecto(String nombre_proyecto, String descripcion_proyecto, Date fecha_inicio_proyecto,
+			Date fecha_final_proyecto, int scrum_master_proyecto, int product_owner_proyecto, int id_grupo) {
+		this.nombre_proyecto = nombre_proyecto;
+		this.descripcion_proyecto = descripcion_proyecto;
+		this.fecha_inicio_proyecto = fecha_inicio_proyecto;
+		this.fecha_final_proyecto = fecha_final_proyecto;
+		this.scrum_master_proyecto = scrum_master_proyecto;
+		this.product_owner_proyecto = product_owner_proyecto;
+		this.id_grupo = id_grupo;
+	}
+
 	//getters
 	public int getId_proyecto() {
 		return id_proyecto;
