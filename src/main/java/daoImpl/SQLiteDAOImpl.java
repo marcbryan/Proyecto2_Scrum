@@ -8,6 +8,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 
 import Frames.Login;
@@ -175,7 +176,41 @@ public class SQLiteDAOImpl implements IScrumConfig {
 	
 	// Falta desarollarlo
 	public List<Usuario> getScrumMasters() {
-		return null;
+		List<Usuario> lista_sm = new ArrayList<Usuario>();
+		Connection conn = connect();
+		String sql = "SELECT ID_Usuario, Nombre_Apellidos FROM usuarios where Tipo_Usuario = 'Scrum Master'";
+		Statement stmt = null;
+		ResultSet rs = null;
+		try {
+			stmt = conn.createStatement();
+			rs = stmt.executeQuery(sql);
+			while (rs.next()) {
+				Usuario user = new Usuario();
+				// Añadimos a la lista de usuarios un usuario solo con el ID y su nombre y apellido que es lo que necesitaremos
+				user.setId_usuario(rs.getInt(1));
+				user.setNombre_apellidos(rs.getString(2));
+				lista_sm.add(user);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			// Muy importante cerrar Statement y ResultSet
+	        if(stmt != null){
+	            try{
+	                stmt.close();
+	            } catch(Exception e){
+	                e.printStackTrace();
+	            }
+	        }
+	        if (rs != null) {
+	        	try {
+					rs.close();
+				} catch (Exception e2) {
+					e2.printStackTrace();
+				}
+	        }
+	    }
+		return lista_sm;
 	}
 	
 	// Falta desarollarlo
