@@ -9,6 +9,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
@@ -17,6 +19,7 @@ import java.awt.Color;
 import java.awt.Cursor;
 
 import javax.imageio.ImageIO;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.GroupLayout;
 import javax.swing.ImageIcon;
 import javax.swing.GroupLayout.Alignment;
@@ -27,6 +30,7 @@ import daoImpl.SQLiteDAOImpl;
 import daoImpl.ScrumDAOImpl;
 import idao.IScrumConfig;
 import model.Proyecto;
+import model.Usuario;
 
 import javax.swing.JTextArea;
 import javax.swing.JList;
@@ -83,18 +87,30 @@ public class AddProyecto extends JInternalFrame {
 		lbl_ScrumMaster.setForeground(Color.white);
 		
 		cb_ScrumMaster = new JComboBox();
-		//Falta añadir los scrum masters
 		cb_ScrumMaster.setBackground(new Color(227, 28, 33));
 		cb_ScrumMaster.setForeground(Color.white);
+		
+		List<Usuario> lista_SM=remotaDAO.getScrumMasters();
+		List<String> lista_ScrumMasters=new ArrayList<String>();
+		for (int i = 0; i < lista_SM.size(); i++) {
+			lista_ScrumMasters.add(lista_SM.get(i).getNombre_apellidos());
+		}
+		cb_ScrumMaster.setModel(new DefaultComboBoxModel(lista_ScrumMasters.toArray()));
 		
 		JLabel lbl_ProductOwner = new JLabel("Product Owner:");
 		lbl_ProductOwner.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		lbl_ProductOwner.setForeground(Color.white);
 		
 		cb_ProductOwner = new JComboBox();
-		//Falta añadir los product owners 
 		cb_ProductOwner.setBackground(new Color(227, 28, 33));
 		cb_ProductOwner.setForeground(Color.white);
+		
+		List<Usuario> lista_PO=remotaDAO.getProductOwners();
+		List<String> lista_ProductOwners=new ArrayList<String>();
+		for (int i = 0; i < lista_PO.size(); i++) {
+			lista_ProductOwners.add(lista_PO.get(i).getNombre_apellidos());
+		}
+		cb_ProductOwner.setModel(new DefaultComboBoxModel(lista_ProductOwners.toArray()));
 		
 		JButton btn_Anadir = new JButton("A\u00F1adir");
 		btn_Anadir.addActionListener(new ActionListener() {

@@ -138,7 +138,17 @@ public class ScrumDAOImpl implements IScrumConfig {
 	
 	//Falta desarrollarlo
 	public List<Usuario> getProductOwners(){
-		return null;
+		List <Usuario>product_owners = null;
+		EntityManagerFactory factory = Persistence.createEntityManagerFactory("madali_db");
+        EntityManager entityManager = factory.createEntityManager();
+        try {
+        	entityManager.getTransaction().begin();
+        	product_owners = entityManager.createQuery("SELECT u from Usuario u where u.tipo_usuario = 'Product Owner'").getResultList();
+	        
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return product_owners;
 	}
 	
 	//Métodos propios de esta clase

@@ -54,7 +54,7 @@ public class Login extends JInternalFrame {
 		setMaximizable(true);
 		setResizable(true);
 		setClosable(true);
-		setBounds(100, 100, 450, 300);
+		setBounds(100, 100, 450, 272);
 		setTitle("Log in");
 		
 		//Asignamos esta imagen como icono del Internal Frame

@@ -64,6 +64,7 @@ public class FramePrincipal extends JFrame {
 	public FramePrincipal() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 688, 502);
+		setTitle("MAD Scrum Mananger");
 		setExtendedState(getExtendedState() | JFrame.MAXIMIZED_BOTH);
 		
 		ImageIcon img = new ImageIcon("src"+File.separator+"main"+File.separator+"resources"+File.separator+"icono.png");
