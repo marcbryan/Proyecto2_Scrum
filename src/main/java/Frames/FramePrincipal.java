@@ -1,5 +1,6 @@
 package Frames;
 
+import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.EventQueue;
 import java.awt.Graphics;
@@ -64,33 +65,54 @@ public class FramePrincipal extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 688, 502);
 		setExtendedState(getExtendedState() | JFrame.MAXIMIZED_BOTH);
+		
+		ImageIcon img = new ImageIcon("src"+File.separator+"main"+File.separator+"resources"+File.separator+"icono.png");
+		
+		setIconImage(img.getImage());
+		//setIconImages(new ("src"+File.separator+"main"+File.separator+"resources"+File.separator+"iconoPro.png"));
 
 		// Metodo para poner el cursor personalizado con una imagen nuestra
 		cambiarCursor();
 		
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
+		
+		menuBar.setBackground(new Color(33,0,17));
+		menuBar.setForeground(Color.white);
 
 		menu_Proyectos = new JMenu("Proyectos");
+		menu_Proyectos.setBackground(new Color(33,0,17));
+		menu_Proyectos.setForeground(Color.white);
 		menuBar.add(menu_Proyectos);
 		
+		
 		mnItem_AddProject = new JMenuItem("Crear proyecto");
+		mnItem_AddProject.setBackground(new Color(33,0,17));
+		mnItem_AddProject.setForeground(Color.white);
 		menu_Proyectos.add(mnItem_AddProject);
 		
 		JMenuItem mntmShowProject = new JMenuItem("Mostrar proyectos");
+		mntmShowProject.setBackground(new Color(33,0,17));
+		mntmShowProject.setForeground(Color.white);
 		menu_Proyectos.add(mntmShowProject);
 
 		menu_Usuarios = new JMenu("Usuarios");
+		menu_Usuarios.setBackground(new Color(33,0,17));
+		menu_Usuarios.setForeground(Color.white);
 		menuBar.add(menu_Usuarios);
 		
 		mnItem_AddU  = new JMenuItem("Nuevo usuario");
+		mnItem_AddU.setBackground(new Color(33,0,17));
+		mnItem_AddU.setForeground(Color.white);
 		menu_Usuarios.add(mnItem_AddU);
 		
 		JMenuItem mntmSearchUsu = new JMenuItem("Buscar/modificar usuario");
+		mntmSearchUsu.setBackground(new Color(33,0,17));
+		mntmSearchUsu.setForeground(Color.white);
 		menu_Usuarios.add(mntmSearchUsu);
 
 		contentPane = new JPanel();
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		contentPane.setBackground(new Color(255,69,28));
 		setContentPane(contentPane);
 
 		ImageIcon icon = new ImageIcon(getClass().getResource("fondo.jpg"));
@@ -107,11 +129,16 @@ public class FramePrincipal extends JFrame {
 		IFramelog.setVisible(true);
 		
 		lbl_Usuario = new JLabel("Usuario: ");
-		lbl_Usuario.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		lbl_Usuario.setFont(new Font("Times new roman", Font.BOLD, 20));
+		lbl_Usuario.setForeground(Color.white);
 		
 		
 		// Para cerrar sesión y volver a hacer login
 		JButton btnSalir = new JButton("SALIR");
+		
+		btnSalir.setBackground(new Color(33,0,17));
+		btnSalir.setForeground(Color.white);
+		
 		btnSalir.addActionListener(new ActionListener() {
 			
 			public void actionPerformed(ActionEvent e) {
@@ -123,12 +150,12 @@ public class FramePrincipal extends JFrame {
 
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
-			gl_contentPane.createParallelGroup(Alignment.LEADING)
-				.addComponent(desktopPane, GroupLayout.DEFAULT_SIZE, 660, Short.MAX_VALUE)
-				.addGroup(Alignment.TRAILING, gl_contentPane.createSequentialGroup()
-					.addContainerGap(266, Short.MAX_VALUE)
-					.addComponent(lbl_Usuario, GroupLayout.PREFERRED_SIZE, 280, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED)
+			gl_contentPane.createParallelGroup(Alignment.TRAILING)
+				.addComponent(desktopPane, GroupLayout.DEFAULT_SIZE, 670, Short.MAX_VALUE)
+				.addGroup(gl_contentPane.createSequentialGroup()
+					.addContainerGap(236, Short.MAX_VALUE)
+					.addComponent(lbl_Usuario, GroupLayout.PREFERRED_SIZE, 337, GroupLayout.PREFERRED_SIZE)
+					.addGap(18)
 					.addComponent(btnSalir)
 					.addContainerGap())
 		);
@@ -137,10 +164,10 @@ public class FramePrincipal extends JFrame {
 				.addGroup(gl_contentPane.createSequentialGroup()
 					.addContainerGap()
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-						.addComponent(lbl_Usuario)
-						.addComponent(btnSalir, GroupLayout.PREFERRED_SIZE, 28, GroupLayout.PREFERRED_SIZE))
+						.addComponent(btnSalir, GroupLayout.PREFERRED_SIZE, 28, GroupLayout.PREFERRED_SIZE)
+						.addComponent(lbl_Usuario))
 					.addGap(29)
-					.addComponent(desktopPane, GroupLayout.DEFAULT_SIZE, 351, Short.MAX_VALUE))
+					.addComponent(desktopPane, GroupLayout.DEFAULT_SIZE, 360, Short.MAX_VALUE))
 		);
 		contentPane.setLayout(gl_contentPane);
 	}

@@ -8,7 +8,10 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.imageio.ImageIO;
 import javax.swing.GroupLayout;
+import javax.swing.ImageIcon;
 import javax.swing.GroupLayout.Alignment;
+import javax.swing.Icon;
+
 import java.awt.Font;
 import java.awt.Image;
 import java.awt.Point;
@@ -53,6 +56,10 @@ public class Login extends JInternalFrame {
 		setClosable(true);
 		setBounds(100, 100, 450, 300);
 		setTitle("Log in");
+		
+		//Asignamos esta imagen como icono del Internal Frame
+		ImageIcon img = new ImageIcon("src"+File.separator+"main"+File.separator+"resources"+File.separator+"iconoLogin.png");
+		setFrameIcon(img);
 		
 		// Metodo para poner el cursor personalizado con una imagen nuestra
 		cambiarCursor();

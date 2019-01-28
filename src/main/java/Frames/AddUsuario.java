@@ -9,6 +9,7 @@ import java.awt.Color;
 import java.awt.Cursor;
 
 import javax.swing.GroupLayout;
+import javax.swing.ImageIcon;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -67,6 +68,10 @@ public class AddUsuario extends JInternalFrame {
 		setClosable(true);
 		setBounds(100, 100, 635, 471);
 		setTitle("Añade un usuario");
+		
+		//Asignamos esta imagen como icono del Internal Frame
+		ImageIcon img = new ImageIcon("src"+File.separator+"main"+File.separator+"resources"+File.separator+"iconoInternalFrames.png");
+		setFrameIcon(img);
 
 		// Metodo para poner el cursor personalizado con una imagen nuestra
 		cambiarCursor();

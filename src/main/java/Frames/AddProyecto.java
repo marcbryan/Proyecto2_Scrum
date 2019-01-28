@@ -18,6 +18,7 @@ import java.awt.Cursor;
 
 import javax.imageio.ImageIO;
 import javax.swing.GroupLayout;
+import javax.swing.ImageIcon;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JTextField;
 import javax.swing.LayoutStyle.ComponentPlacement;
@@ -56,6 +57,10 @@ public class AddProyecto extends JInternalFrame {
 		setMaximizable(true);
 		setBounds(100, 100, 580, 405);
 		setBackground(new Color(90,21,50));
+		
+		//Asignamos esta imagen como icono del Internal Frame
+		ImageIcon img = new ImageIcon("src"+File.separator+"main"+File.separator+"resources"+File.separator+"iconoInternalFrames.png");
+		setFrameIcon(img);
 		
 		//Metodo para poner el cursor personalizado con una imagen nuestra
 		cambiarCursor();
