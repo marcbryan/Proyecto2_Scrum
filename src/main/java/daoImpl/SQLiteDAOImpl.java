@@ -28,6 +28,8 @@ public class SQLiteDAOImpl implements IScrumConfig {
 	}
 	
 	//Métodos a implementar
+	
+	// No hace nada en esta clase
 	public boolean bd_online() {
 		return false;
 	}
@@ -85,14 +87,6 @@ public class SQLiteDAOImpl implements IScrumConfig {
 		//System.out.println(sql);
 		try {
 			pstmt = (PreparedStatement) conn.prepareStatement(sql);
-			/*
-			pstmt.setInt(1, usuario.getId_usuario());
-			pstmt.setString(2, usuario.getNombre_usuario());
-			pstmt.setString(3, usuario.getPassword_usuario());
-			pstmt.setString(4, usuario.getNombre_usuario());
-			pstmt.setString(5, usuario.getTipo_usuario());
-			pstmt.setString(6, usuario.getCorreo_usuario());
-			pstmt.setInt(7, usuario.getId_grupo());*/
 			pstmt.executeUpdate();
 			guardarSentencia(sql, Login.statusDB);
 		} catch (SQLException e) {
@@ -112,7 +106,7 @@ public class SQLiteDAOImpl implements IScrumConfig {
 	public boolean comprobarUsuario(String username) {
 		boolean check = false;
 		Connection conn = connect();
-		String sql = "SELECT * FROM usuarios where Nombre_Usuario = '" + username + "'";
+		String sql = "SELECT Nombre_Usuario FROM usuarios where Nombre_Usuario = '" + username + "'";
 		Statement stmt = null;
 		ResultSet rs = null;
 		try {
@@ -152,14 +146,16 @@ public class SQLiteDAOImpl implements IScrumConfig {
 				+ proyecto.getDescripcion_proyecto() + "', " //'"
 				+ "null, "
 				//+ proyecto.getFecha_inicio_proyecto() + "', '"
-				+ "null, '"
+				+ "null, "
 				//+ proyecto.getFecha_final_proyecto() + "', '"
-				+ proyecto.getScrum_master_proyecto() + "', '"
-				+ proyecto.getProduct_owner_proyecto() + "', "
+				+ proyecto.getScrum_master_proyecto() + ", "
+				+ proyecto.getProduct_owner_proyecto() + ", "
 				+ proyecto.getIdGrupo() + ");";
+		//System.out.println(sql);
 		try {
 			pstmt = (PreparedStatement) conn.prepareStatement(sql);
-			pstmt.executeUpdate(sql);
+			pstmt.executeUpdate();
+			guardarSentencia(sql, Login.statusDB);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
@@ -174,9 +170,44 @@ public class SQLiteDAOImpl implements IScrumConfig {
 	    }
 	}
 	
-	// Falta desarollarlo
-	public List<Usuario> getScrumMasters() {
-		List<Usuario> lista_sm = new ArrayList<Usuario>();
+	public boolean comprobarProyecto(String nombre_proyecto) {
+		boolean check = false;
+		Connection conn = connect();
+		String sql = "SELECT Nombre_Proyecto FROM proyectos where Nombre_Proyecto = '" + nombre_proyecto + "'";
+		Statement stmt = null;
+		ResultSet rs = null;
+		try {
+			stmt = conn.createStatement();
+			rs = stmt.executeQuery(sql);
+			if (rs.next() == true) {
+				check = true;
+			}
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			//System.out.println("El nombre del proyecto está disponible");
+		} finally {
+			// Muy importante cerrar Statement y ResultSet
+	        if(stmt != null){
+	            try{
+	                stmt.close();
+	            } catch(Exception e){
+	                e.printStackTrace();
+	            }
+	        }
+	        if (rs != null) {
+	        	try {
+					rs.close();
+				} catch (Exception e2) {
+					e2.printStackTrace();
+				}
+	        }
+	    }
+		return check;
+	}
+	
+	// Falta desarollarlo !!
+	public List<Object[]> getScrumMasters() {
+		List<Object[]> lista_sm = new ArrayList<Object[]>();
 		Connection conn = connect();
 		String sql = "SELECT ID_Usuario, Nombre_Apellidos FROM usuarios where Tipo_Usuario = 'Scrum Master'";
 		Statement stmt = null;
@@ -184,12 +215,14 @@ public class SQLiteDAOImpl implements IScrumConfig {
 		try {
 			stmt = conn.createStatement();
 			rs = stmt.executeQuery(sql);
+			Object[] sm;
 			while (rs.next()) {
-				Usuario user = new Usuario();
-				// Añadimos a la lista de usuarios un usuario solo con el ID y su nombre y apellido que es lo que necesitaremos
-				user.setId_usuario(rs.getInt(1));
-				user.setNombre_apellidos(rs.getString(2));
-				lista_sm.add(user);
+				// Añadimos a la lista del array de Object solo con el ID y su nombre-apellido que es lo que necesitaremos
+				sm = new Object [2];
+				sm[0] = rs.getInt(1);
+				sm[1] = rs.getString(2);
+				System.out.println("Nombre: "+sm[1]);
+				lista_sm.add(sm);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -214,8 +247,43 @@ public class SQLiteDAOImpl implements IScrumConfig {
 	}
 	
 	// Falta desarollarlo
-	public List<Usuario> getProductOwners() {
-		return null;
+	public List<Object[]> getProductOwners() {
+		List<Object[]> lista_po = new ArrayList<Object[]>();
+		Connection conn = connect();
+		String sql = "SELECT ID_Usuario, Nombre_Apellidos FROM usuarios where Tipo_Usuario = 'Product Owner'";
+		Statement stmt = null;
+		ResultSet rs = null;
+		try {
+			stmt = conn.createStatement();
+			rs = stmt.executeQuery(sql);
+			Object[] po;
+			while (rs.next()) {
+				// Añadimos a la lista del array de Object solo con el ID y su nombre-apellido que es lo que necesitaremos
+				po = new Object [2];
+				po[0] = rs.getInt(1);
+				po[1] = rs.getString(2);
+				lista_po.add(po);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			// Muy importante cerrar Statement y ResultSet
+	        if(stmt != null){
+	            try{
+	                stmt.close();
+	            } catch(Exception e){
+	                e.printStackTrace();
+	            }
+	        }
+	        if (rs != null) {
+	        	try {
+					rs.close();
+				} catch (Exception e2) {
+					e2.printStackTrace();
+				}
+	        }
+	    }
+		return lista_po;
 	}
 	
 	//Métodos de esta clase
@@ -337,14 +405,14 @@ public class SQLiteDAOImpl implements IScrumConfig {
 			if (check_db.exists()) {
 				//System.out.println("La base de datos embebida "+nombreBD+" ya existe.");
 			} else {
-				System.out.println("No se puede crear la base de datos embebida, no hay conexión con la remota");
+				System.out.println("No se puede crear la base de datos embebida por primera vez, no hay conexión con la remota");
 			}
 		}
 	}
 	
 	/**
 	 * Este método es utilizado por {@link #crearBBDD()}, solo se utilizá al crear la base de datos embebida.
-	 * <br>Sirve para guardar los datos de la BBDD remota en la embebida cuando esta es creada.<br>
+	 * <br>Sirve para guardar los datos de la BBDD remota (de momento solo los que utilizamos) en la embebida cuando esta es creada.<br>
 	 * @param status - El estado de la base de datos OFFLINE/ONLINE
 	 * @author Marc
 	 */
@@ -379,9 +447,37 @@ public class SQLiteDAOImpl implements IScrumConfig {
 			        }
 			    }
 			}
-			//System.out.println("Primera sincronización de usuarios realizada con éxito");
+			
+			List<Proyecto> proyectos = ScrumDAOImpl.getProyectosFromRemoteDB();
+			int numProyectos = proyectos.size();
+			for (int i = 0; i < numProyectos; i++) {
+				sql = "INSERT INTO Proyectos VALUES (null, '"
+						+ proyectos.get(i).getNombre_proyecto() + "', '"
+						+ proyectos.get(i).getDescripcion_proyecto() + "', "
+						+ "null, "
+						+ "null, "
+						+ proyectos.get(i).getScrum_master_proyecto() + ", "
+						+ proyectos.get(i).getProduct_owner_proyecto() + ", "
+						+ proyectos.get(i).getIdGrupo() + ");";
+				try {
+					pstmt = (PreparedStatement) conn.prepareStatement(sql);
+					pstmt.executeUpdate();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				} finally {
+					// Muy importante cerrar PreparedStatement
+			        if(pstmt != null){
+			            try{
+			                pstmt.close();
+			            } catch(Exception e){
+			                e.printStackTrace();
+			            }
+			        }
+			    }
+			}
+			//System.out.println("Primera sincronización de usuarios y proyectos realizada con éxito");
 		} else {
-			System.out.println("No se puede sincronizar, no hay conexión");
+			System.out.println("No se puede realizar la primera sincronización, no hay conexión");
 		}
 	}
 	
@@ -399,7 +495,7 @@ public class SQLiteDAOImpl implements IScrumConfig {
 			if (sentencia.contains("'")) {
 			    sentencia = sentencia.replaceAll("'", "''");
 			}
-			System.out.println("SQL stmt: "+sentencia);
+			//System.out.println("SQL stmt: "+sentencia);
 			Connection conn = connect();
 			PreparedStatement pstmt = null;
 			try {

@@ -11,8 +11,10 @@ import model.Usuario;
 
 public interface IScrumConfig {
 	//Métodos que implementarán las clases que implementen esta interface
-	
-	//Seguramente se borrará y será utilizado únicamente en el dao de la bd remota ya que en el dao de sqlite es inútil
+	/**
+	 * Comprueba si hay conexión con la base remota o no (en la clase SQLiteDAOImpl no hará nada) 
+	 * @return Devolverá <b>true</b> si hay conexión con la base de datos remota y <b>false</b> si no hay conexión (tardará un poco en cargar si no hay conexión)
+	 */
 	public boolean bd_online();
 	
 	/**
@@ -44,15 +46,22 @@ public interface IScrumConfig {
 	public void insertarProyecto(Proyecto proyecto);
 	
 	/**
-	 * Se utiliza para poner los Scrum Master en el JComboBox del InternalFrame de Crear Proyecto
-	 * @return Devuelve una lista de los Scrum Master que haya en la base de datos
+	 * Comprueba si el nombre del proyecto existe en la base de datos, ya que no se puede repetir
+	 * @param nombre_proyecto - El nombre del proyecto a comprobar
+	 * @return Devuelve <b>true</b> si el nombre del proyecto ya existe y devolverá <b>false</b> si el nombre del proyecto está disponible 
 	 */
-	public List<Usuario> getScrumMasters();
+	public boolean comprobarProyecto(String nombre_proyecto);
+	
+	/**
+	 * Se utiliza para poner los Scrum Master en el JComboBox del InternalFrame de Crear Proyecto
+	 * @return Devuelve una lista de los Scrum Master (solo devolverá su ID y su nombre) que haya en la base de datos
+	 */
+	public List<Object[]> getScrumMasters();
 	
 	/**
 	 * Se utiliza para poner los Product Owner en el JComboBox del InternalFrame de Crear Proyecto
-	 * @return Devuelve una lista de los Product Owner que haya en la base de datos
+	 * @return Devuelve una lista de los Product Owner (solo devolverá su ID y su nombre) que haya en la base de datos
 	 */
-	public List<Usuario> getProductOwners();
+	public List<Object[]> getProductOwners();
 	
 }

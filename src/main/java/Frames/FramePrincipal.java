@@ -10,7 +10,6 @@ import java.awt.Toolkit;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
 import javax.imageio.ImageIO;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -26,7 +25,6 @@ import java.awt.event.ActionEvent;
 import javax.swing.JLabel;
 import java.awt.Font;
 import javax.swing.JButton;
-import javax.swing.LayoutStyle.ComponentPlacement;
 
 public class FramePrincipal extends JFrame {
 
@@ -64,13 +62,12 @@ public class FramePrincipal extends JFrame {
 	public FramePrincipal() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 688, 502);
-		setTitle("MAD Scrum Mananger");
+		setTitle("MAD Scrum Manager");
 		setExtendedState(getExtendedState() | JFrame.MAXIMIZED_BOTH);
 		
 		ImageIcon img = new ImageIcon("src"+File.separator+"main"+File.separator+"resources"+File.separator+"icono.png");
 		
 		setIconImage(img.getImage());
-		//setIconImages(new ("src"+File.separator+"main"+File.separator+"resources"+File.separator+"iconoPro.png"));
 
 		// Metodo para poner el cursor personalizado con una imagen nuestra
 		cambiarCursor();
@@ -125,12 +122,12 @@ public class FramePrincipal extends JFrame {
 			}
 		};
 
-		Login IFramelog = new Login();
+		Login IFramelog = new Login(this);
 		desktopPane.add(IFramelog);
 		IFramelog.setVisible(true);
 		
 		lbl_Usuario = new JLabel("Usuario: ");
-		lbl_Usuario.setFont(new Font("Times new roman", Font.BOLD, 20));
+		lbl_Usuario.setFont(new Font("Tw Cen MT", Font.BOLD, 20));
 		lbl_Usuario.setForeground(Color.white);
 		
 		
@@ -152,9 +149,9 @@ public class FramePrincipal extends JFrame {
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
 			gl_contentPane.createParallelGroup(Alignment.TRAILING)
-				.addComponent(desktopPane, GroupLayout.DEFAULT_SIZE, 670, Short.MAX_VALUE)
+				.addComponent(desktopPane, GroupLayout.DEFAULT_SIZE, 1916, Short.MAX_VALUE)
 				.addGroup(gl_contentPane.createSequentialGroup()
-					.addContainerGap(236, Short.MAX_VALUE)
+					.addContainerGap(1490, Short.MAX_VALUE)
 					.addComponent(lbl_Usuario, GroupLayout.PREFERRED_SIZE, 337, GroupLayout.PREFERRED_SIZE)
 					.addGap(18)
 					.addComponent(btnSalir)
@@ -163,12 +160,12 @@ public class FramePrincipal extends JFrame {
 		gl_contentPane.setVerticalGroup(
 			gl_contentPane.createParallelGroup(Alignment.TRAILING)
 				.addGroup(gl_contentPane.createSequentialGroup()
-					.addContainerGap()
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+					.addGap(14)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
 						.addComponent(btnSalir, GroupLayout.PREFERRED_SIZE, 28, GroupLayout.PREFERRED_SIZE)
 						.addComponent(lbl_Usuario))
 					.addGap(29)
-					.addComponent(desktopPane, GroupLayout.DEFAULT_SIZE, 360, Short.MAX_VALUE))
+					.addComponent(desktopPane, GroupLayout.DEFAULT_SIZE, 821, Short.MAX_VALUE))
 		);
 		contentPane.setLayout(gl_contentPane);
 	}

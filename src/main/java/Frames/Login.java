@@ -10,7 +10,6 @@ import javax.imageio.ImageIO;
 import javax.swing.GroupLayout;
 import javax.swing.ImageIcon;
 import javax.swing.GroupLayout.Alignment;
-import javax.swing.Icon;
 
 import java.awt.Font;
 import java.awt.Image;
@@ -45,10 +44,10 @@ public class Login extends JInternalFrame {
 	private IScrumConfig embebidaDAO;
 
 	/**
-	 * Crea el JInternalFrame del login
+	 * Crea el JInternalFrame del login, le pasaremos el FramePrincipal para poder cambiar el titulo del frame
 	 * @author David
 	 */
-	public Login() {
+	public Login(FramePrincipal fp) {
 		remotaDAO = new ScrumDAOImpl();
 		
 		setMaximizable(true);
@@ -68,7 +67,12 @@ public class Login extends JInternalFrame {
 		
 		// Texto ONLINE/OFFLINE en el InternalFrame 
 		lbl_statusDB = new JLabel("<html><font color=red>OFFLINE</font></html>");
+		lbl_statusDB.setFont(new Font("Tahoma", Font.BOLD, 14));
+		// Cambiar el titulo al Frame Principal
+		String title = fp.getTitle();
+		fp.setTitle(title + " [OFFLINE]");
 		if (remotaDAO.bd_online()) {
+			fp.setTitle(title +" [ONLINE]");
 			lbl_statusDB.setText("<html><font color=green>ONLINE</font></html>");
 			statusDB = "ONLINE";
 		}

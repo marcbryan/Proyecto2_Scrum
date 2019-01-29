@@ -87,7 +87,6 @@ public class ScrumDAOImpl implements IScrumConfig {
 	        String sql = "SELECT u.nombre_usuario from Usuario u where u.nombre_usuario = :username";
 	        Query query = entityManager.createQuery(sql);
 	        query.setParameter("username", username);
-	        //Guardamos el resultado en el objeto Usuario
 	        try {
 	        	String usrname = (String) query.getSingleResult();
 	        	//System.out.println(El usuario "+usrname+" ya existe");
@@ -121,29 +120,56 @@ public class ScrumDAOImpl implements IScrumConfig {
 		}
 	}
 	
-	public List<Usuario> getScrumMasters() {
-		List <Usuario>scrum_masters = null;
+	//Falta testearlo
+	public boolean comprobarProyecto(String nombre_proyecto) {
+		boolean check = false;
+		EntityManagerFactory factory = Persistence.createEntityManagerFactory("madali_db");
+        EntityManager entityManager = factory.createEntityManager();
+        try {
+	        entityManager.getTransaction().begin();
+	        //JPQL opera entre objetos Java en vez de con las tablas de la base de datos
+	        String sql = "SELECT p.nombre_proyecto from Proyecto p where p.nombre_proyecto = :nombre_proyecto";
+	        Query query = entityManager.createQuery(sql);
+	        query.setParameter("nombre_proyecto", nombre_proyecto);
+	        try {
+	        	//Si consigue recoger un resultado, el proyecto existe
+	        	String nmProyecto = (String) query.getSingleResult();
+	        	check = true;
+	        } catch (NoResultException noRes) {
+	        	//System.out.println("El proyecto está disponible");
+	        }
+	    	entityManager.getTransaction().commit();
+        } catch (Exception e){
+        	e.printStackTrace();
+        } finally {
+        	entityManager.close();
+        	factory.close();
+        }
+		return check;
+	}
+	
+	public List<Object[]> getScrumMasters() {
+		List <Object[]> scrum_masters = null;
 		EntityManagerFactory factory = Persistence.createEntityManagerFactory("madali_db");
         EntityManager entityManager = factory.createEntityManager();
         try {
         	entityManager.getTransaction().begin();
-        	scrum_masters = entityManager.createQuery("SELECT u from Usuario u where u.tipo_usuario = 'Scrum Master'").getResultList();
-	        
+        	//String sql = "SELECT u from Usuario u where u.tipo_usuario = 'Scrum Master'";
+        	scrum_masters = entityManager.createQuery("SELECT u.id_usuario, u.nombre_apellidos from Usuario u where u.tipo_usuario = 'Scrum Master'").getResultList();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return scrum_masters;
-		
 	}
 	
 	//Falta desarrollarlo
-	public List<Usuario> getProductOwners(){
-		List <Usuario>product_owners = null;
+	public List<Object[]> getProductOwners(){
+		List <Object[]> product_owners = null;
 		EntityManagerFactory factory = Persistence.createEntityManagerFactory("madali_db");
         EntityManager entityManager = factory.createEntityManager();
         try {
         	entityManager.getTransaction().begin();
-        	product_owners = entityManager.createQuery("SELECT u from Usuario u where u.tipo_usuario = 'Product Owner'").getResultList();
+        	product_owners = entityManager.createQuery("SELECT u.id_usuario, u.nombre_apellidos from Usuario u where u.tipo_usuario = 'Product Owner'").getResultList();
 	        
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -176,6 +202,31 @@ public class ScrumDAOImpl implements IScrumConfig {
 	        factory.close();
 		}
 		return usuarios;
+	}
+	
+	/**
+	 * Este método solo lo utilizará este otro método {@link SQLiteDAOImpl#syncRemotaAlCrearla(String)}
+	 * @return Devuelve los proyectos de la base de datos remota en un list de proyectos
+	 */
+	protected static List<Proyecto> getProyectosFromRemoteDB() {
+		EntityManagerFactory factory = Persistence.createEntityManagerFactory("madali_db");
+		EntityManager entityManager = factory.createEntityManager();
+		List <Proyecto> proyectos = new ArrayList<Proyecto>();
+		try {
+			String sql = "SELECT p from Proyecto p";
+			Query query = entityManager.createQuery(sql);
+			try {
+	        	proyectos = query.getResultList();
+	        } catch (NoResultException noRes) {
+	        	System.out.println("No hay proyectos en la base de datos");
+	        }
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			entityManager.close();
+	        factory.close();
+		}
+		return proyectos;
 	}
 	
 }

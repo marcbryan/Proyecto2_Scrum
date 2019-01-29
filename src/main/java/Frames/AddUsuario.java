@@ -1,9 +1,9 @@
 package Frames;
 
-import java.awt.EventQueue;
-
 import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
@@ -37,12 +37,13 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.imageio.ImageIO;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JCheckBox;
 
 public class AddUsuario extends JInternalFrame {
 	private JTextField tf_Nombre;
 	private JTextField tf_LoginGen;
-	private JTextField tf_Pass;
-	private JTextField tf_Pass2;
+	private JPasswordField passwordField;
+	private JPasswordField passwordField2;
 	private JTextField tf_Mail;
 	private String CaracteresPass = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 	private String password = "", nombre, logGene;
@@ -66,7 +67,7 @@ public class AddUsuario extends JInternalFrame {
 		setMaximizable(true);
 		setResizable(true);
 		setClosable(true);
-		setBounds(100, 100, 635, 471);
+		setBounds(100, 100, 675, 471);
 		setTitle("Añade un usuario");
 		
 		//Asignamos esta imagen como icono del Internal Frame
@@ -129,15 +130,15 @@ public class AddUsuario extends JInternalFrame {
 		btnGenerar.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
-				tf_Pass.setText("");
-				tf_Pass2.setText("");
+				passwordField.setText("");
+				passwordField2.setText("");
 				password = "";
 				for (int i = 0; i < 6; i++) {
 					password = password + CaracteresPass.charAt(0 + (int) (Math.random() * 62));
 				}
-
-				tf_Pass.setText(password);
-				tf_Pass2.setText(password);
+				
+				passwordField.setText(password);
+				passwordField2.setText(password);
 
 				JOptionPane.showInternalMessageDialog(panel, "La contraseña autogenerada es: " + password,
 						"Información", JOptionPane.INFORMATION_MESSAGE);
@@ -159,11 +160,11 @@ public class AddUsuario extends JInternalFrame {
 		lblErr = new JLabel(" ");
 		lblErr.setForeground(new Color(227, 28, 33));
 
-		tf_Pass = new JTextField("");
-		tf_Pass.setColumns(10);
+		passwordField = new JPasswordField("");
+		passwordField.setColumns(10);
 
-		tf_Pass2 = new JTextField("");
-		tf_Pass2.setColumns(10);
+		passwordField2 = new JPasswordField("");
+		passwordField2.setColumns(10);
 
 		tf_Mail = new JTextField("");
 		tf_Mail.setColumns(10);
@@ -172,10 +173,12 @@ public class AddUsuario extends JInternalFrame {
 		btnCrear.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
-				if (!tf_Pass.getText().equals(tf_Pass2.getText())) {
+				String pass = String.valueOf(passwordField.getPassword());
+				String pass2 = String.valueOf(passwordField2.getPassword());
+				if (!pass.equals(pass2)) {
 					lblErr.setText("Las contraseñas no coinciden");
 				} else if (!tf_Nombre.getText().equals("") && !tf_LoginGen.getText().equals("")
-						&& !tf_Pass.getText().equals("") && !tf_Pass2.getText().equals("")
+						&& !pass.equals("") && !pass2.equals("")
 						&& !tf_Mail.getText().equals("")) {
 					// Una vez comprobado si todos los campos han sido rellenados, comprobamos si el
 					// email tiene el formato correcto
@@ -186,12 +189,12 @@ public class AddUsuario extends JInternalFrame {
 							if (embebidaDAO.comprobarUsuario(tf_LoginGen.getText()) == false) {
 								lblErr.setText(" ");
 								String tipo_usuario = String.valueOf(cBox_TipoUsuario.getSelectedItem().toString());
-								Usuario user = new Usuario(tf_LoginGen.getText(), tf_Pass.getText(), tf_Nombre.getText(),
+								Usuario user = new Usuario(tf_LoginGen.getText(), pass, tf_Nombre.getText(),
 										tipo_usuario, tf_Mail.getText(), 1);
 								// Insertamos el usuario creado en la base de datos remota y en la embebida
 								embebidaDAO.insertarUsuario(user);
 								JOptionPane.showMessageDialog(AddUsuario.this,
-										"Usuario " + user.getNombre_usuario() + " añadido correctamente!", "Información",
+										"Usuario " + user.getNombre_usuario() + " añadido correctamente en el modo OFFLINE!", "Información",
 										JOptionPane.INFORMATION_MESSAGE);
 							} else {
 								JOptionPane.showMessageDialog(null, "El usuario "+tf_LoginGen.getText()+" ya existe. Prueba con otro nombre de usuario.", "Error",
@@ -204,7 +207,7 @@ public class AddUsuario extends JInternalFrame {
 							if (remotaDAO.comprobarUsuario(tf_LoginGen.getText()) == false) {
 								lblErr.setText(" ");
 								String tipo_usuario = String.valueOf(cBox_TipoUsuario.getSelectedItem().toString());
-								Usuario user = new Usuario(tf_LoginGen.getText(), tf_Pass.getText(), tf_Nombre.getText(),
+								Usuario user = new Usuario(tf_LoginGen.getText(), pass, tf_Nombre.getText(),
 										tipo_usuario, tf_Mail.getText(), 1);
 								// Insertamos el usuario creado en la base de datos remota y en la embebida
 								remotaDAO.insertarUsuario(user);
@@ -226,12 +229,12 @@ public class AddUsuario extends JInternalFrame {
 							if (embebidaDAO.comprobarUsuario(tf_LoginGen.getText()) == false) {
 								lblErr.setText(" ");
 								String tipo_usuario = String.valueOf(cBox_TipoUsuario.getSelectedItem().toString());
-								Usuario user = new Usuario(tf_LoginGen.getText(), tf_Pass.getText(), tf_Nombre.getText(),
+								Usuario user = new Usuario(tf_LoginGen.getText(), pass, tf_Nombre.getText(),
 										tipo_usuario, tf_Mail.getText(), 1);
 								// Insertamos el usuario creado en la base de datos remota y en la embebida
 								embebidaDAO.insertarUsuario(user);
 								JOptionPane.showMessageDialog(AddUsuario.this,
-										"Usuario " + user.getNombre_usuario() + " añadido correctamente!", "Información",
+										"Usuario " + user.getNombre_usuario() + " añadido correctamente en el modo OFFLINE!", "Información",
 										JOptionPane.INFORMATION_MESSAGE);
 							} else {
 								JOptionPane.showMessageDialog(null, "El usuario "+tf_LoginGen.getText()+" ya existe. Prueba con otro nombre de usuario.", "Error",
@@ -253,60 +256,90 @@ public class AddUsuario extends JInternalFrame {
 
 		btnCrear.setBackground(new Color(227, 28, 33));
 		btnCrear.setForeground(Color.white);
+		final JCheckBox showhide_password = new JCheckBox("");
+		showhide_password.setBackground(null);
+		final char defaultChar = passwordField.getEchoChar(); 
+		showhide_password.addActionListener(new ActionListener() {
+			
+			public void actionPerformed(ActionEvent e) {
+				if (showhide_password.isSelected()) {
+					passwordField.setEchoChar((char) 0);
+					passwordField2.setEchoChar((char) 0);
+				} else {
+					passwordField.setEchoChar(defaultChar);
+					passwordField2.setEchoChar(defaultChar);
+				}
+			}
+		});		
 
 		GroupLayout gl_panel = new GroupLayout(panel);
-		gl_panel.setHorizontalGroup(gl_panel.createParallelGroup(Alignment.LEADING).addGroup(gl_panel
-				.createSequentialGroup().addGap(27)
-				.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
+		gl_panel.setHorizontalGroup(
+			gl_panel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panel.createSequentialGroup()
+					.addGap(27)
+					.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
 						.addComponent(lblTipoUsuario, GroupLayout.PREFERRED_SIZE, 118, GroupLayout.PREFERRED_SIZE)
 						.addComponent(lblMail, GroupLayout.PREFERRED_SIZE, 49, GroupLayout.PREFERRED_SIZE)
 						.addComponent(lblLoginGenerado)
 						.addComponent(lblPassword, GroupLayout.PREFERRED_SIZE, 104, GroupLayout.PREFERRED_SIZE)
 						.addComponent(lblNombre)
 						.addComponent(lblRepitaPassword, GroupLayout.PREFERRED_SIZE, 153, GroupLayout.PREFERRED_SIZE))
-				.addPreferredGap(ComponentPlacement.RELATED)
-				.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
-						.addComponent(tf_Pass2, GroupLayout.DEFAULT_SIZE, 193, Short.MAX_VALUE)
-						.addComponent(tf_Pass, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 193, Short.MAX_VALUE)
-						.addComponent(tf_LoginGen, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 193, Short.MAX_VALUE)
-						.addComponent(tf_Nombre, GroupLayout.DEFAULT_SIZE, 193, Short.MAX_VALUE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
+						.addComponent(passwordField2, GroupLayout.DEFAULT_SIZE, 246, Short.MAX_VALUE)
+						.addComponent(passwordField, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 246, Short.MAX_VALUE)
+						.addComponent(tf_LoginGen, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 246, Short.MAX_VALUE)
+						.addComponent(tf_Nombre, GroupLayout.DEFAULT_SIZE, 246, Short.MAX_VALUE)
 						.addComponent(btnCrear, GroupLayout.PREFERRED_SIZE, 125, GroupLayout.PREFERRED_SIZE)
-						.addComponent(tf_Mail, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 193, Short.MAX_VALUE)
-						.addComponent(cBox_TipoUsuario, Alignment.TRAILING, 0, 193, Short.MAX_VALUE))
-				.addGap(26)
-				.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_panel.createSequentialGroup().addComponent(lblErr).addGap(75))
+						.addComponent(tf_Mail, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 246, Short.MAX_VALUE)
+						.addComponent(cBox_TipoUsuario, Alignment.TRAILING, 0, 246, Short.MAX_VALUE))
+					.addGap(6)
+					.addComponent(showhide_password, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)
+					.addGap(18)
+					.addGroup(gl_panel.createParallelGroup(Alignment.TRAILING)
 						.addGroup(gl_panel.createSequentialGroup()
-								.addComponent(btnGenerar, GroupLayout.DEFAULT_SIZE, 140, Short.MAX_VALUE)
-								.addContainerGap()))));
-		gl_panel.setVerticalGroup(gl_panel.createParallelGroup(Alignment.LEADING).addGroup(gl_panel
-				.createSequentialGroup().addGap(64)
-				.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE).addComponent(lblNombre)
+							.addComponent(lblErr)
+							.addGap(75))
+						.addGroup(gl_panel.createSequentialGroup()
+							.addComponent(btnGenerar, GroupLayout.PREFERRED_SIZE, 132, GroupLayout.PREFERRED_SIZE)
+							.addGap(53))))
+		);
+		gl_panel.setVerticalGroup(
+			gl_panel.createParallelGroup(Alignment.TRAILING)
+				.addGroup(gl_panel.createSequentialGroup()
+					.addGap(64)
+					.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(lblNombre)
 						.addComponent(tf_Nombre, GroupLayout.DEFAULT_SIZE, 22, Short.MAX_VALUE))
-				.addGap(26)
-				.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE).addComponent(lblLoginGenerado).addComponent(
-						tf_LoginGen, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-				.addGap(18)
-				.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
-						.addComponent(lblPassword, GroupLayout.PREFERRED_SIZE, 19, GroupLayout.PREFERRED_SIZE)
-						.addComponent(tf_Pass, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(btnGenerar, GroupLayout.PREFERRED_SIZE, 25, GroupLayout.PREFERRED_SIZE))
-				.addGap(20)
-				.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE).addComponent(lblRepitaPassword)
-						.addComponent(tf_Pass2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(lblErr, GroupLayout.PREFERRED_SIZE, 19, GroupLayout.PREFERRED_SIZE))
-				.addGap(18)
-				.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE).addComponent(lblMail).addComponent(tf_Mail,
-						GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-				.addGap(32)
-				.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
-						.addComponent(cBox_TipoUsuario, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addComponent(lblTipoUsuario, GroupLayout.PREFERRED_SIZE, 21, GroupLayout.PREFERRED_SIZE))
-				.addGap(18).addComponent(btnCrear, GroupLayout.PREFERRED_SIZE, 40, GroupLayout.PREFERRED_SIZE)
-				.addGap(66)));
+					.addGap(26)
+					.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(lblLoginGenerado)
+						.addComponent(tf_LoginGen, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addGap(18)
+					.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
+						.addComponent(showhide_password, GroupLayout.PREFERRED_SIZE, 22, GroupLayout.PREFERRED_SIZE)
+						.addGroup(gl_panel.createSequentialGroup()
+							.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
+								.addComponent(lblPassword, GroupLayout.PREFERRED_SIZE, 19, GroupLayout.PREFERRED_SIZE)
+								.addComponent(passwordField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addComponent(btnGenerar, GroupLayout.PREFERRED_SIZE, 25, GroupLayout.PREFERRED_SIZE))
+							.addGap(20)
+							.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
+								.addComponent(lblRepitaPassword)
+								.addComponent(passwordField2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addComponent(lblErr, GroupLayout.PREFERRED_SIZE, 19, GroupLayout.PREFERRED_SIZE))
+							.addGap(18)
+							.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
+								.addComponent(lblMail)
+								.addComponent(tf_Mail, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+							.addGap(32)
+							.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
+								.addComponent(cBox_TipoUsuario, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addComponent(lblTipoUsuario, GroupLayout.PREFERRED_SIZE, 21, GroupLayout.PREFERRED_SIZE))
+							.addGap(18)
+							.addComponent(btnCrear, GroupLayout.PREFERRED_SIZE, 40, GroupLayout.PREFERRED_SIZE)))
+					.addGap(73))
+		);
 
 		panel.setBackground(new Color(90, 21, 50));
 
