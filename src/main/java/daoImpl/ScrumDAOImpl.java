@@ -120,7 +120,6 @@ public class ScrumDAOImpl implements IScrumConfig {
 		}
 	}
 	
-	//Falta testearlo
 	public boolean comprobarProyecto(String nombre_proyecto) {
 		boolean check = false;
 		EntityManagerFactory factory = Persistence.createEntityManagerFactory("madali_db");
@@ -154,7 +153,6 @@ public class ScrumDAOImpl implements IScrumConfig {
         EntityManager entityManager = factory.createEntityManager();
         try {
         	entityManager.getTransaction().begin();
-        	//String sql = "SELECT u from Usuario u where u.tipo_usuario = 'Scrum Master'";
         	scrum_masters = entityManager.createQuery("SELECT u.id_usuario, u.nombre_apellidos from Usuario u where u.tipo_usuario = 'Scrum Master'").getResultList();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -162,7 +160,6 @@ public class ScrumDAOImpl implements IScrumConfig {
 		return scrum_masters;
 	}
 	
-	//Falta desarrollarlo
 	public List<Object[]> getProductOwners(){
 		List <Object[]> product_owners = null;
 		EntityManagerFactory factory = Persistence.createEntityManagerFactory("madali_db");

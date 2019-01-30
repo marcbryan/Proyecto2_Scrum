@@ -205,7 +205,6 @@ public class SQLiteDAOImpl implements IScrumConfig {
 		return check;
 	}
 	
-	// Falta desarollarlo !!
 	public List<Object[]> getScrumMasters() {
 		List<Object[]> lista_sm = new ArrayList<Object[]>();
 		Connection conn = connect();
@@ -221,7 +220,6 @@ public class SQLiteDAOImpl implements IScrumConfig {
 				sm = new Object [2];
 				sm[0] = rs.getInt(1);
 				sm[1] = rs.getString(2);
-				System.out.println("Nombre: "+sm[1]);
 				lista_sm.add(sm);
 			}
 		} catch (SQLException e) {
@@ -246,7 +244,6 @@ public class SQLiteDAOImpl implements IScrumConfig {
 		return lista_sm;
 	}
 	
-	// Falta desarollarlo
 	public List<Object[]> getProductOwners() {
 		List<Object[]> lista_po = new ArrayList<Object[]>();
 		Connection conn = connect();
@@ -296,7 +293,6 @@ public class SQLiteDAOImpl implements IScrumConfig {
 	private Connection connect() {
 		File db = new File(new File("").getAbsoluteFile() + pathProyecto + nombreBD);
 		String url = "jdbc:sqlite:" + new File("").getAbsolutePath() + pathProyecto + nombreBD;
-		//Connection conn = null;
 		// Si la base de datos existe le devuelvo la conexión, si no le devolveré una conexión nula para obligar a que conecte al menos una con la remota
 		// porque no puedo crear una base de datos vacía.
 		if (db.exists()) {
