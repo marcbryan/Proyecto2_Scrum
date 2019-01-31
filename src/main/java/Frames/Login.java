@@ -128,7 +128,7 @@ public class Login extends JInternalFrame {
 		
 		
 		JButton btn_Entrar = new JButton("Entrar");
-		btn_Entrar.setBackground(new Color(227,28,33));
+		btn_Entrar.setBackground(new Color(255,69,28));
 		btn_Entrar.setForeground(Color.white);
 		
 		btn_Entrar.addActionListener(new ActionListener() {
@@ -298,6 +298,17 @@ public class Login extends JInternalFrame {
 				}
 			});
 		}
+		
+		FramePrincipal.mntmShowProject.addActionListener(new ActionListener() {
+			
+			public void actionPerformed(ActionEvent arg0) {
+
+				InfoProyectos info_proyectos = new InfoProyectos();
+				FramePrincipal.desktopPane.add(info_proyectos);
+				info_proyectos.setVisible(true);
+			}
+		});
+		
 		Login.this.setVisible(false);
 	}
 }

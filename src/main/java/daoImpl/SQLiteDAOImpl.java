@@ -515,4 +515,14 @@ public class SQLiteDAOImpl implements IScrumConfig {
 		}
 	}
 
+	public List<Proyecto> getProyectos() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public String getNombre(int id_usuario) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

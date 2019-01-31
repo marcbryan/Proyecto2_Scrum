@@ -36,7 +36,7 @@ public class FramePrincipal extends JFrame {
 	
 	static JMenu menu_Proyectos;
 	static JMenuItem mnItem_AddProject;
-	
+	static JMenuItem mntmShowProject;
 	static JDesktopPane desktopPane;
 
 	/**
@@ -89,7 +89,7 @@ public class FramePrincipal extends JFrame {
 		mnItem_AddProject.setForeground(Color.white);
 		menu_Proyectos.add(mnItem_AddProject);
 		
-		JMenuItem mntmShowProject = new JMenuItem("Mostrar proyectos");
+		mntmShowProject = new JMenuItem("Mostrar proyectos");
 		mntmShowProject.setBackground(new Color(33,0,17));
 		mntmShowProject.setForeground(Color.white);
 		menu_Proyectos.add(mntmShowProject);

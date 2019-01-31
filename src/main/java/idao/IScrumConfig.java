@@ -64,4 +64,14 @@ public interface IScrumConfig {
 	 */
 	public List<Object[]> getProductOwners();
 	
+	/**
+	 * Se utiliza para conseguir los proyectos que hay y mostrarlos en la ventana de InfoProyectos
+	 * @return Devuelve una lista de proyectos
+	 */
+	public List<Proyecto> getProyectos();
+	
+	public String getNombre(int id_usuario);
+	
+
+	
 }

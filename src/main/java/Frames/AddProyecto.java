@@ -88,7 +88,7 @@ public class AddProyecto extends JInternalFrame {
 		lbl_ScrumMaster.setForeground(Color.white);
 		
 		cb_ScrumMaster = new JComboBox();
-		cb_ScrumMaster.setBackground(new Color(227, 28, 33));
+		cb_ScrumMaster.setBackground(new Color(255,69,28));
 		cb_ScrumMaster.setForeground(Color.white);
 		
 		// Para recoger los Scrum Masters
@@ -117,7 +117,7 @@ public class AddProyecto extends JInternalFrame {
 		lbl_ProductOwner.setForeground(Color.white);
 		
 		cb_ProductOwner = new JComboBox();
-		cb_ProductOwner.setBackground(new Color(227, 28, 33));
+		cb_ProductOwner.setBackground(new Color(255,69,28));
 		cb_ProductOwner.setForeground(Color.white);
 		
 		// Para recoger los Product Owners
@@ -201,7 +201,8 @@ public class AddProyecto extends JInternalFrame {
 				}
 			}
 		});
-		btn_Anadir.setBackground(new Color(227, 28, 33));
+		btn_Anadir.setBackground(new Color(255,69,28));
+
 		btn_Anadir.setForeground(Color.white);
 		
 		lblError = new JLabel(" ");
