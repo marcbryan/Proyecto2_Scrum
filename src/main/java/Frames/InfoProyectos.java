@@ -18,6 +18,7 @@ import javax.swing.border.BevelBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import daoImpl.SQLiteDAOImpl;
 import daoImpl.ScrumDAOImpl;
 import idao.IScrumConfig;
 import model.Proyecto;
@@ -29,6 +30,7 @@ public class InfoProyectos extends JInternalFrame {
 	private JTextField tf_ProductOwner;
 	private JTextField tf_ScrumMaster;
 	private IScrumConfig remotaDAO;
+	private IScrumConfig embebidaDAO;
 	private List<Proyecto> lista_Proyectos;
 	private JTextArea ta_Descripcion;
 
@@ -56,7 +58,7 @@ public class InfoProyectos extends JInternalFrame {
 		setClosable(true);
 		setMaximizable(true);
 		remotaDAO = new ScrumDAOImpl();
-		lista_Proyectos = remotaDAO.getProyectos();
+		embebidaDAO = new SQLiteDAOImpl();
 
 		setBounds(100, 100, 738, 495);
 		setBackground(new Color(90, 21, 50));
@@ -70,14 +72,32 @@ public class InfoProyectos extends JInternalFrame {
 		list.setBackground(new Color(90, 21, 50));
 		list.setForeground(Color.WHITE);
 		list.setBorder(new BevelBorder(BevelBorder.RAISED));
-		for (int i = 0; i < lista_Proyectos.size(); i++) {
-			model.addElement(lista_Proyectos.get(i).getNombre_proyecto());
-		}
 
 		if (Login.statusDB.equals("OFFLINE")) {
+			lista_Proyectos = embebidaDAO.getProyectos();
+			for (int i = 0; i < lista_Proyectos.size(); i++) {
+				model.addElement(lista_Proyectos.get(i).getNombre_proyecto());
+			}
+			list.addListSelectionListener(new ListSelectionListener() {
+				public void valueChanged(ListSelectionEvent event) {
+					if (!event.getValueIsAdjusting()) {
+						JList source = (JList) event.getSource();
+						int selected = source.getSelectedIndex();
+						Proyecto p = lista_Proyectos.get(selected);
+						tf_NombreProyecto.setText(p.getNombre_proyecto());
+						tf_ProductOwner.setText(embebidaDAO.getNombre(p.getProduct_owner_proyecto()));
+						tf_ScrumMaster.setText(embebidaDAO.getNombre(p.getScrum_master_proyecto()));
+						ta_Descripcion.setText(p.getDescripcion_proyecto());
+					}
+				}
+			});
 
 		} else {
 			if (remotaDAO.bd_online()) {
+				lista_Proyectos = remotaDAO.getProyectos();
+				for (int i = 0; i < lista_Proyectos.size(); i++) {
+					model.addElement(lista_Proyectos.get(i).getNombre_proyecto());
+				}
 				list.addListSelectionListener(new ListSelectionListener() {
 					public void valueChanged(ListSelectionEvent event) {
 						if (!event.getValueIsAdjusting()) {
@@ -123,59 +143,53 @@ public class InfoProyectos extends JInternalFrame {
 		tf_ScrumMaster.setEditable(false);
 		tf_ScrumMaster.setColumns(10);
 
-
 		GroupLayout groupLayout = new GroupLayout(getContentPane());
-		groupLayout.setHorizontalGroup(
-			groupLayout.createParallelGroup(Alignment.LEADING)
-				.addGroup(groupLayout.createSequentialGroup()
-					.addContainerGap()
-					.addComponent(list, GroupLayout.PREFERRED_SIZE, 187, GroupLayout.PREFERRED_SIZE)
-					.addGap(29)
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addGroup(groupLayout.createSequentialGroup()
-							.addComponent(btn_MostrarEspec)
-							.addContainerGap())
-						.addGroup(groupLayout.createSequentialGroup()
-							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-								.addComponent(ta_Descripcion)
+		groupLayout.setHorizontalGroup(groupLayout.createParallelGroup(Alignment.LEADING).addGroup(groupLayout
+				.createSequentialGroup().addContainerGap()
+				.addComponent(list, GroupLayout.PREFERRED_SIZE, 187, GroupLayout.PREFERRED_SIZE).addGap(29)
+				.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+						.addGroup(groupLayout.createSequentialGroup().addComponent(btn_MostrarEspec).addContainerGap())
+						.addGroup(groupLayout.createSequentialGroup().addGroup(groupLayout
+								.createParallelGroup(Alignment.LEADING).addComponent(ta_Descripcion)
 								.addGroup(groupLayout.createSequentialGroup()
-									.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-										.addComponent(lbl_ScrumMaster, GroupLayout.PREFERRED_SIZE, 87, GroupLayout.PREFERRED_SIZE)
-										.addComponent(lbl_NombreProyecto)
-										.addComponent(lbl_ProductOwner, GroupLayout.PREFERRED_SIZE, 96, GroupLayout.PREFERRED_SIZE))
-									.addGap(18)
-									.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-										.addComponent(tf_ScrumMaster, GroupLayout.DEFAULT_SIZE, 321, Short.MAX_VALUE)
-										.addComponent(tf_ProductOwner, 321, 321, 321)
-										.addComponent(tf_NombreProyecto, GroupLayout.DEFAULT_SIZE, 321, Short.MAX_VALUE))))
-							.addGap(61))))
-		);
-		groupLayout.setVerticalGroup(
-			groupLayout.createParallelGroup(Alignment.LEADING)
-				.addGroup(groupLayout.createSequentialGroup()
-					.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING, false)
-						.addGroup(Alignment.LEADING, groupLayout.createSequentialGroup()
-							.addContainerGap()
-							.addComponent(list, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-						.addGroup(Alignment.LEADING, groupLayout.createSequentialGroup()
-							.addGap(49)
-							.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-								.addComponent(lbl_NombreProyecto)
-								.addComponent(tf_NombreProyecto, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-							.addGap(38)
-							.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-								.addComponent(lbl_ProductOwner)
-								.addComponent(tf_ProductOwner, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-							.addGap(41)
-							.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-								.addComponent(lbl_ScrumMaster)
-								.addComponent(tf_ScrumMaster, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-							.addGap(38)
-							.addComponent(ta_Descripcion, GroupLayout.PREFERRED_SIZE, 151, GroupLayout.PREFERRED_SIZE)))
-					.addGap(26)
-					.addComponent(btn_MostrarEspec)
-					.addContainerGap(39, Short.MAX_VALUE))
-		);
+										.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+												.addComponent(lbl_ScrumMaster, GroupLayout.PREFERRED_SIZE, 87,
+														GroupLayout.PREFERRED_SIZE)
+												.addComponent(lbl_NombreProyecto).addComponent(lbl_ProductOwner,
+														GroupLayout.PREFERRED_SIZE, 96, GroupLayout.PREFERRED_SIZE))
+										.addGap(18)
+										.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+												.addComponent(tf_ScrumMaster, GroupLayout.DEFAULT_SIZE, 321,
+														Short.MAX_VALUE)
+												.addComponent(tf_ProductOwner, 321, 321, 321)
+												.addComponent(tf_NombreProyecto, GroupLayout.DEFAULT_SIZE, 321,
+														Short.MAX_VALUE))))
+								.addGap(61)))));
+		groupLayout.setVerticalGroup(groupLayout.createParallelGroup(Alignment.LEADING).addGroup(groupLayout
+				.createSequentialGroup()
+				.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING, false)
+						.addGroup(Alignment.LEADING,
+								groupLayout.createSequentialGroup().addContainerGap().addComponent(list,
+										GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+						.addGroup(Alignment.LEADING,
+								groupLayout.createSequentialGroup().addGap(49)
+										.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+												.addComponent(lbl_NombreProyecto)
+												.addComponent(tf_NombreProyecto, GroupLayout.PREFERRED_SIZE,
+														GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+										.addGap(38)
+										.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+												.addComponent(lbl_ProductOwner)
+												.addComponent(tf_ProductOwner, GroupLayout.PREFERRED_SIZE,
+														GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+										.addGap(41)
+										.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+												.addComponent(lbl_ScrumMaster).addComponent(tf_ScrumMaster,
+														GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
+														GroupLayout.PREFERRED_SIZE))
+										.addGap(38).addComponent(ta_Descripcion, GroupLayout.PREFERRED_SIZE, 151,
+												GroupLayout.PREFERRED_SIZE)))
+				.addGap(26).addComponent(btn_MostrarEspec).addContainerGap(39, Short.MAX_VALUE)));
 		getContentPane().setLayout(groupLayout);
 
 	}

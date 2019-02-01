@@ -70,6 +70,11 @@ public interface IScrumConfig {
 	 */
 	public List<Proyecto> getProyectos();
 	
+	/**
+	 * Se utiliza para conseguir el nombre y apellido del ScrumMaster o Product Owner pasandole un id de usuario.
+	 * @param id_usuario
+	 * @return
+	 */
 	public String getNombre(int id_usuario);
 	
 
