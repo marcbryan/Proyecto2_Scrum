@@ -146,27 +146,13 @@ public class FramePrincipal extends JFrame {
 				FramePrincipal.this.dispose();
 			}
 		});
-		
-		JButton btnNewButton = new JButton("NO PULSAR");
-		
-		btnNewButton.addActionListener(new ActionListener() {
-			
-			public void actionPerformed(ActionEvent arg0) {
-				// TODO Auto-generated method stub
-				Especificaciones espec = new Especificaciones();
-				desktopPane.add(espec);
-				espec.setVisible(true);
-			}
-		});
 
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
 			gl_contentPane.createParallelGroup(Alignment.TRAILING)
-				.addComponent(desktopPane, GroupLayout.DEFAULT_SIZE, 670, Short.MAX_VALUE)
+				.addComponent(desktopPane, GroupLayout.DEFAULT_SIZE, 672, Short.MAX_VALUE)
 				.addGroup(gl_contentPane.createSequentialGroup()
-					.addGap(63)
-					.addComponent(btnNewButton)
-					.addPreferredGap(ComponentPlacement.RELATED, 76, Short.MAX_VALUE)
+					.addContainerGap(246, Short.MAX_VALUE)
 					.addComponent(lbl_Usuario, GroupLayout.PREFERRED_SIZE, 337, GroupLayout.PREFERRED_SIZE)
 					.addGap(18)
 					.addComponent(btnSalir)
@@ -178,11 +164,9 @@ public class FramePrincipal extends JFrame {
 					.addGap(14)
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
 						.addComponent(btnSalir, GroupLayout.PREFERRED_SIZE, 28, GroupLayout.PREFERRED_SIZE)
-						.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-							.addComponent(lbl_Usuario)
-							.addComponent(btnNewButton, GroupLayout.PREFERRED_SIZE, 36, GroupLayout.PREFERRED_SIZE)))
+						.addComponent(lbl_Usuario))
 					.addGap(29)
-					.addComponent(desktopPane, GroupLayout.DEFAULT_SIZE, 360, Short.MAX_VALUE))
+					.addComponent(desktopPane, GroupLayout.DEFAULT_SIZE, 363, Short.MAX_VALUE))
 		);
 		contentPane.setLayout(gl_contentPane);
 	}

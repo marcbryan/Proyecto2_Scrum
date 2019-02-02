@@ -9,6 +9,7 @@ import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JTextArea;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.util.List;
@@ -33,27 +34,10 @@ public class InfoProyectos extends JInternalFrame {
 	private IScrumConfig embebidaDAO;
 	private List<Proyecto> lista_Proyectos;
 	private JTextArea ta_Descripcion;
+	JList<String> list;
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					InfoProyectos frame = new InfoProyectos();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
-	/**
-	 * Create the frame.
-	 */
 	public InfoProyectos() {
+		setTitle("Proyectos");
 		setResizable(true);
 		setClosable(true);
 		setMaximizable(true);
@@ -67,34 +51,18 @@ public class InfoProyectos extends JInternalFrame {
 		ta_Descripcion.setLineWrap(true);
 
 		DefaultListModel<String> model = new DefaultListModel<String>();
-		JList<String> list = new JList<String>(model);
+		list = new JList<String>(model);
 		list.setValueIsAdjusting(true);
 		list.setBackground(new Color(90, 21, 50));
 		list.setForeground(Color.WHITE);
 		list.setBorder(new BevelBorder(BevelBorder.RAISED));
 
 		if (Login.statusDB.equals("OFFLINE")) {
-			lista_Proyectos = embebidaDAO.getProyectos();
-			for (int i = 0; i < lista_Proyectos.size(); i++) {
-				model.addElement(lista_Proyectos.get(i).getNombre_proyecto());
-			}
-			list.addListSelectionListener(new ListSelectionListener() {
-				public void valueChanged(ListSelectionEvent event) {
-					if (!event.getValueIsAdjusting()) {
-						JList source = (JList) event.getSource();
-						int selected = source.getSelectedIndex();
-						Proyecto p = lista_Proyectos.get(selected);
-						tf_NombreProyecto.setText(p.getNombre_proyecto());
-						tf_ProductOwner.setText(embebidaDAO.getNombre(p.getProduct_owner_proyecto()));
-						tf_ScrumMaster.setText(embebidaDAO.getNombre(p.getScrum_master_proyecto()));
-						ta_Descripcion.setText(p.getDescripcion_proyecto());
-					}
-				}
-			});
-
-		} else {
-			if (remotaDAO.bd_online()) {
-				lista_Proyectos = remotaDAO.getProyectos();
+			if (FramePrincipal.lbl_Usuario.getText().contains("Developer")
+					|| FramePrincipal.lbl_Usuario.getText().contains("Product Owner")) {
+				// ...
+			} else {
+				lista_Proyectos = embebidaDAO.getProyectos();
 				for (int i = 0; i < lista_Proyectos.size(); i++) {
 					model.addElement(lista_Proyectos.get(i).getNombre_proyecto());
 				}
@@ -105,20 +73,79 @@ public class InfoProyectos extends JInternalFrame {
 							int selected = source.getSelectedIndex();
 							Proyecto p = lista_Proyectos.get(selected);
 							tf_NombreProyecto.setText(p.getNombre_proyecto());
-							tf_ProductOwner.setText(remotaDAO.getNombre(p.getProduct_owner_proyecto()));
-							tf_ScrumMaster.setText(remotaDAO.getNombre(p.getScrum_master_proyecto()));
+							tf_ProductOwner.setText(embebidaDAO.getNombre(p.getProduct_owner_proyecto()));
+							tf_ScrumMaster.setText(embebidaDAO.getNombre(p.getScrum_master_proyecto()));
 							ta_Descripcion.setText(p.getDescripcion_proyecto());
 						}
 					}
 				});
+
+			}
+		} else {
+			if (remotaDAO.bd_online()) {
+				int idgrupo=0;
+				if (FramePrincipal.lbl_Usuario.getText().contains("Developer")
+						|| FramePrincipal.lbl_Usuario.getText().contains("Product Owner")) {
+					String linea = FramePrincipal.lbl_Usuario.getText();
+					String[] linea_array = FramePrincipal.lbl_Usuario.getText().split(" ");
+					if (linea_array.length > 4) {
+						idgrupo=remotaDAO.getIdGrupo(linea_array[1]+linea_array[2]);
+					} else {
+						idgrupo = remotaDAO.getIdGrupo(linea_array[1]);
+					}
+					lista_Proyectos = remotaDAO.getProyectos(idgrupo);
+					for (int i = 0; i < lista_Proyectos.size(); i++) {
+						model.addElement(lista_Proyectos.get(i).getNombre_proyecto());
+					}
+					list.addListSelectionListener(new ListSelectionListener() {
+						public void valueChanged(ListSelectionEvent event) {
+							if (!event.getValueIsAdjusting()) {
+								JList source = (JList) event.getSource();
+								int selected = source.getSelectedIndex();
+								Proyecto p = lista_Proyectos.get(selected);
+								tf_NombreProyecto.setText(p.getNombre_proyecto());
+								tf_ProductOwner.setText(remotaDAO.getNombre(p.getProduct_owner_proyecto()));
+								tf_ScrumMaster.setText(remotaDAO.getNombre(p.getScrum_master_proyecto()));
+								ta_Descripcion.setText(p.getDescripcion_proyecto());
+							}
+						}
+					});
+
+				} else {
+					lista_Proyectos = remotaDAO.getProyectos();
+					for (int i = 0; i < lista_Proyectos.size(); i++) {
+						model.addElement(lista_Proyectos.get(i).getNombre_proyecto());
+					}
+					list.addListSelectionListener(new ListSelectionListener() {
+						public void valueChanged(ListSelectionEvent event) {
+							if (!event.getValueIsAdjusting()) {
+								JList source = (JList) event.getSource();
+								int selected = source.getSelectedIndex();
+								Proyecto p = lista_Proyectos.get(selected);
+								tf_NombreProyecto.setText(p.getNombre_proyecto());
+								tf_ProductOwner.setText(remotaDAO.getNombre(p.getProduct_owner_proyecto()));
+								tf_ScrumMaster.setText(remotaDAO.getNombre(p.getScrum_master_proyecto()));
+								ta_Descripcion.setText(p.getDescripcion_proyecto());
+
+							}
+						}
+					});
+				}
 			}
 		}
-
 		JButton btn_MostrarEspec = new JButton("Mostrar Especificaciones");
 		btn_MostrarEspec.setBackground(new Color(227, 28, 33));
 		btn_MostrarEspec.setForeground(Color.white);
 		btn_MostrarEspec.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				//Si no se ha seleccionado nada mostrará un optionpane
+				if (list.getSelectedIndex() == -1) {
+					JOptionPane.showMessageDialog(InfoProyectos.this, "Selecciona un proyecto para ver sus especificaciones", "Alerta", JOptionPane.WARNING_MESSAGE);
+				} else {
+					Especificaciones espec = new Especificaciones();
+					FramePrincipal.desktopPane.add(espec);
+					espec.setVisible(true);
+				}
 			}
 		});
 

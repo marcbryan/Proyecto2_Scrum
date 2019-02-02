@@ -71,12 +71,28 @@ public interface IScrumConfig {
 	public List<Proyecto> getProyectos();
 	
 	/**
+	 * Método para conseguir los proyectos pasando una id de grupo
+	 * @param id_grupo - El id de grupo para ver los proyectos de ese grupo
+	 * @return Devuelve un list de proyectos que sean del id de grupo que se haya pasado
+	 */
+	
+	public List<Proyecto> getProyectos(int id_grupo);
+
+	
+	/**
 	 * Se utiliza para conseguir el nombre y apellido del ScrumMaster o Product Owner pasandole un id de usuario.
-	 * @param id_usuario
-	 * @return
+	 * @param id_usuario - El id del Scrum Master o Product Owner
+	 * @return Devuelve un string que contiene el nombre y los apellidos
 	 */
 	public String getNombre(int id_usuario);
 	
 
-	
+	/**
+	 * Este metodo se usa para conseguir el id del Grupo y luego usar ese id para conseguir todos los proyectos de la tabla Proyectos
+	 * @param nombre_usuario - El nombre de usuario (username)
+	 * @return Devuelve el id de grupo del usuario
+	 */
+	public int getIdGrupo(String nombre_usuario);
+
+
 }

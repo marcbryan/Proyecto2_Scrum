@@ -276,4 +276,43 @@ public class ScrumDAOImpl implements IScrumConfig {
 
 	}
 
+	public int getIdGrupo(String nombre_usuario) {
+		EntityManagerFactory factory = Persistence.createEntityManagerFactory("madali_db");
+		EntityManager entityManager = factory.createEntityManager();
+		int id_grupo = 0;
+		try {
+			String sql = "SELECT u.id_grupo from Usuario u where u.nombre_usuario=:nom_usr";// and
+																							// u.tipo_usuario=:type_user";
+			Query query = entityManager.createQuery(sql);
+			query.setParameter("nom_usr", nombre_usuario);
+			id_grupo = (Integer) query.getSingleResult();
+			// query.setParameter("type_user", tipo_usuario);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return id_grupo;
+	}
+	
+	public List<Proyecto> getProyectos(int id_grupo) {
+		EntityManagerFactory factory = Persistence.createEntityManagerFactory("madali_db");
+		EntityManager entityManager = factory.createEntityManager();
+		List<Proyecto> proyectos = new ArrayList<Proyecto>();
+		try {
+			String sql = "SELECT p from Proyecto p where p.id_grupo=:id";
+			Query query = entityManager.createQuery(sql);
+			query.setParameter("id", id_grupo);
+			try {
+				proyectos = query.getResultList();
+			} catch (NoResultException noRes) {
+				System.out.println("No hay proyectos en la base de datos");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			entityManager.close();
+			factory.close();
+		}
+		return proyectos;
+	}
+
 }

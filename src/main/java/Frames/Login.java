@@ -302,7 +302,6 @@ public class Login extends JInternalFrame {
 		FramePrincipal.mntmShowProject.addActionListener(new ActionListener() {
 			
 			public void actionPerformed(ActionEvent arg0) {
-
 				InfoProyectos info_proyectos = new InfoProyectos();
 				FramePrincipal.desktopPane.add(info_proyectos);
 				info_proyectos.setVisible(true);

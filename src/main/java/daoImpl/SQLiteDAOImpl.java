@@ -572,6 +572,16 @@ public class SQLiteDAOImpl implements IScrumConfig {
 		}
 	}
 
+	public int getIdGrupo(String nombre_usuario) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	public List<Proyecto> getProyectos(int id_grupo) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	
 	
 
