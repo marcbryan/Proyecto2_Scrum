@@ -1,17 +1,18 @@
 package Frames;
 
 import java.awt.Color;
-import java.awt.EventQueue;
 
 import javax.swing.JInternalFrame;
 import javax.swing.DefaultListModel;
 import javax.swing.GroupLayout;
+import javax.swing.ImageIcon;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JTextArea;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.util.List;
 import java.awt.event.ActionEvent;
 import javax.swing.JLabel;
@@ -36,6 +37,10 @@ public class InfoProyectos extends JInternalFrame {
 	private JTextArea ta_Descripcion;
 	JList<String> list;
 
+	/**
+	 * Crea el JIntenalFrame que muestra la información de los proyectos.
+	 * @author Ali
+	 */
 	public InfoProyectos() {
 		setTitle("Proyectos");
 		setResizable(true);
@@ -46,9 +51,14 @@ public class InfoProyectos extends JInternalFrame {
 
 		setBounds(100, 100, 738, 495);
 		setBackground(new Color(90, 21, 50));
+		
+		//Asignamos esta imagen como icono del Internal Frame
+		ImageIcon img = new ImageIcon("src"+File.separator+"main"+File.separator+"resources"+File.separator+"iconoInternalFrames.png");
+		setFrameIcon(img);
 
 		ta_Descripcion = new JTextArea();
 		ta_Descripcion.setLineWrap(true);
+		ta_Descripcion.setEditable(false);
 
 		DefaultListModel<String> model = new DefaultListModel<String>();
 		list = new JList<String>(model);
@@ -60,7 +70,30 @@ public class InfoProyectos extends JInternalFrame {
 		if (Login.statusDB.equals("OFFLINE")) {
 			if (FramePrincipal.lbl_Usuario.getText().contains("Developer")
 					|| FramePrincipal.lbl_Usuario.getText().contains("Product Owner")) {
-				// ...
+				int idgrupo = 0;
+				String[] linea_array = FramePrincipal.lbl_Usuario.getText().split(" ");
+				if (linea_array.length > 4) {
+					idgrupo = embebidaDAO.getIdGrupo(linea_array[1]+linea_array[2]);
+				} else {
+					idgrupo = embebidaDAO.getIdGrupo(linea_array[1]);
+				}
+				lista_Proyectos = embebidaDAO.getProyectos(idgrupo);
+				for (int i = 0; i < lista_Proyectos.size(); i++) {
+					model.addElement(lista_Proyectos.get(i).getNombre_proyecto());
+				}
+				list.addListSelectionListener(new ListSelectionListener() {
+					public void valueChanged(ListSelectionEvent event) {
+						if (!event.getValueIsAdjusting()) {
+							JList source = (JList) event.getSource();
+							int selected = source.getSelectedIndex();
+							Proyecto p = lista_Proyectos.get(selected);
+							tf_NombreProyecto.setText(p.getNombre_proyecto());
+							tf_ProductOwner.setText(embebidaDAO.getNombre(p.getProduct_owner_proyecto()));
+							tf_ScrumMaster.setText(embebidaDAO.getNombre(p.getScrum_master_proyecto()));
+							ta_Descripcion.setText(p.getDescripcion_proyecto());
+						}
+					}
+				});
 			} else {
 				lista_Proyectos = embebidaDAO.getProyectos();
 				for (int i = 0; i < lista_Proyectos.size(); i++) {
@@ -79,17 +112,16 @@ public class InfoProyectos extends JInternalFrame {
 						}
 					}
 				});
-
 			}
 		} else {
 			if (remotaDAO.bd_online()) {
-				int idgrupo=0;
+				int idgrupo = 0;
 				if (FramePrincipal.lbl_Usuario.getText().contains("Developer")
 						|| FramePrincipal.lbl_Usuario.getText().contains("Product Owner")) {
 					String linea = FramePrincipal.lbl_Usuario.getText();
 					String[] linea_array = FramePrincipal.lbl_Usuario.getText().split(" ");
 					if (linea_array.length > 4) {
-						idgrupo=remotaDAO.getIdGrupo(linea_array[1]+linea_array[2]);
+						idgrupo = remotaDAO.getIdGrupo(linea_array[1]+linea_array[2]);
 					} else {
 						idgrupo = remotaDAO.getIdGrupo(linea_array[1]);
 					}
@@ -126,13 +158,13 @@ public class InfoProyectos extends JInternalFrame {
 								tf_ProductOwner.setText(remotaDAO.getNombre(p.getProduct_owner_proyecto()));
 								tf_ScrumMaster.setText(remotaDAO.getNombre(p.getScrum_master_proyecto()));
 								ta_Descripcion.setText(p.getDescripcion_proyecto());
-
 							}
 						}
 					});
 				}
 			}
 		}
+		
 		JButton btn_MostrarEspec = new JButton("Mostrar Especificaciones");
 		btn_MostrarEspec.setBackground(new Color(227, 28, 33));
 		btn_MostrarEspec.setForeground(Color.white);
@@ -142,7 +174,7 @@ public class InfoProyectos extends JInternalFrame {
 				if (list.getSelectedIndex() == -1) {
 					JOptionPane.showMessageDialog(InfoProyectos.this, "Selecciona un proyecto para ver sus especificaciones", "Alerta", JOptionPane.WARNING_MESSAGE);
 				} else {
-					Especificaciones espec = new Especificaciones();
+					Especificaciones espec = new Especificaciones(list.getSelectedValue());
 					FramePrincipal.desktopPane.add(espec);
 					espec.setVisible(true);
 				}

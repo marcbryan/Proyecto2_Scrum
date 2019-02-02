@@ -25,7 +25,6 @@ import java.awt.event.ActionEvent;
 import javax.swing.JLabel;
 import java.awt.Font;
 import javax.swing.JButton;
-import javax.swing.LayoutStyle.ComponentPlacement;
 
 public class FramePrincipal extends JFrame {
 
@@ -34,6 +33,7 @@ public class FramePrincipal extends JFrame {
 	
 	static JMenu menu_Usuarios;
 	static JMenuItem mnItem_AddU;
+	static JMenuItem mnItem_SearchUsr;
 	
 	static JMenu menu_Proyectos;
 	static JMenuItem mnItem_AddProject;
@@ -105,10 +105,10 @@ public class FramePrincipal extends JFrame {
 		mnItem_AddU.setForeground(Color.white);
 		menu_Usuarios.add(mnItem_AddU);
 		
-		JMenuItem mntmSearchUsu = new JMenuItem("Buscar/modificar usuario");
-		mntmSearchUsu.setBackground(new Color(33,0,17));
-		mntmSearchUsu.setForeground(Color.white);
-		menu_Usuarios.add(mntmSearchUsu);
+		mnItem_SearchUsr = new JMenuItem("Buscar/modificar usuario");
+		mnItem_SearchUsr.setBackground(new Color(33,0,17));
+		mnItem_SearchUsr.setForeground(Color.white);
+		menu_Usuarios.add(mnItem_SearchUsr);
 
 		contentPane = new JPanel();
 		contentPane.setBackground(new Color(255,69,28));

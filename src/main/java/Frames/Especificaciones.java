@@ -2,9 +2,11 @@ package Frames;
 
 import java.awt.Color;
 import java.awt.EventQueue;
+import java.io.File;
 
 import javax.swing.JInternalFrame;
 import javax.swing.GroupLayout;
+import javax.swing.ImageIcon;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -16,30 +18,20 @@ import javax.swing.ScrollPaneConstants;
 public class Especificaciones extends JInternalFrame {
 
 	/**
-	 * Launch the application.
+	 * Crea el JIntenalFrame de las especificaciones.
+	 * @author David
 	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					Especificaciones frame = new Especificaciones();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
-	/**
-	 * Create the frame.
-	 */
-	public Especificaciones() {
+	public Especificaciones(String nombre_proyecto) {
 		setResizable(true);
 		setMaximizable(true);
 		setClosable(true);
-		setBounds(100, 100, 494, 324);
+		setTitle("Especificaciones "+nombre_proyecto);
+		setBounds(150, 150, 494, 324);
 		setBackground(new Color(90,21,50));
+		
+		//Asignamos esta imagen como icono del Internal Frame
+		ImageIcon img = new ImageIcon("src"+File.separator+"main"+File.separator+"resources"+File.separator+"iconoInternalFrames.png");
+		setFrameIcon(img);
 		
 		JButton btnGuardar = new JButton("Guardar");
 		

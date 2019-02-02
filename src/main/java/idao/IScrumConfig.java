@@ -75,7 +75,6 @@ public interface IScrumConfig {
 	 * @param id_grupo - El id de grupo para ver los proyectos de ese grupo
 	 * @return Devuelve un list de proyectos que sean del id de grupo que se haya pasado
 	 */
-	
 	public List<Proyecto> getProyectos(int id_grupo);
 
 	

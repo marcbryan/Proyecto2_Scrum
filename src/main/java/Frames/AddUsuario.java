@@ -57,7 +57,7 @@ public class AddUsuario extends JInternalFrame {
 	private IScrumConfig embebidaDAO;
 
 	/**
-	 * Crea el JInternalFrame para a√±adir un usuario
+	 * Crea el JInternalFrame para aÒadir un usuario
 	 * @author David
 	 */
 	public AddUsuario() {
@@ -68,7 +68,7 @@ public class AddUsuario extends JInternalFrame {
 		setResizable(true);
 		setClosable(true);
 		setBounds(100, 100, 700, 471);
-		setTitle("A√±ade un usuario");
+		setTitle("A\u00f1ade un usuario");
 		
 		//Asignamos esta imagen como icono del Internal Frame
 		ImageIcon img = new ImageIcon("src"+File.separator+"main"+File.separator+"resources"+File.separator+"iconoInternalFrames.png");
@@ -140,8 +140,8 @@ public class AddUsuario extends JInternalFrame {
 				passwordField.setText(password);
 				passwordField2.setText(password);
 
-				JOptionPane.showInternalMessageDialog(panel, "La contrase√±a autogenerada es: " + password,
-						"Informaci√≥n", JOptionPane.INFORMATION_MESSAGE);
+				JOptionPane.showInternalMessageDialog(panel, "La contrase\u00f1a autogenerada es: " + password,
+						"Informaci\u00f3n", JOptionPane.INFORMATION_MESSAGE);
 			}
 		});
 
@@ -174,16 +174,16 @@ public class AddUsuario extends JInternalFrame {
 				String pass = String.valueOf(passwordField.getPassword());
 				String pass2 = String.valueOf(passwordField2.getPassword());
 				if (!pass.equals(pass2)) {
-					lbl_Error.setText("Las contrase√±as no coinciden.");
+					lbl_Error.setText("Las contrase\u00f1as no coinciden.");
 				} else if (!tf_Nombre.getText().equals("") && !tf_LoginGen.getText().equals("")
 						&& !pass.equals("") && !pass2.equals("")
 						&& !tf_Mail.getText().equals("")) {
 					// Una vez comprobado si todos los campos han sido rellenados, comprobamos si el
 					// email tiene el formato correcto
 					if (comprobarEmail(tf_Mail.getText()) == true) {
-						// Si la base de datos est√° OFFLINE nos saltamos el paso de comprobar si la base de datos est√° online, para acceder m√°s r√°pido
+						// Si la base de datos est· OFFLINE nos saltamos el paso de comprobar si la base de datos est· online, para acceder m·s r·pido
 						if (Login.statusDB.equals("OFFLINE")) {
-							// Comprobamos si el nombre de usuario est√° disponible
+							// Comprobamos si el nombre de usuario est· disponible
 							if (embebidaDAO.comprobarUsuario(tf_LoginGen.getText()) == false) {
 								lbl_Error.setText(" ");
 								String tipo_usuario = String.valueOf(cBox_TipoUsuario.getSelectedItem().toString());
@@ -192,16 +192,16 @@ public class AddUsuario extends JInternalFrame {
 								// Insertamos el usuario creado en la base de datos remota y en la embebida
 								embebidaDAO.insertarUsuario(user);
 								JOptionPane.showMessageDialog(AddUsuario.this,
-										"Usuario " + user.getNombre_usuario() + " a√±adido correctamente en el modo OFFLINE!", "Informaci√≥n",
+										"Usuario " + user.getNombre_usuario() + " a\u00f1adido correctamente en el modo OFFLINE!", "Informaci\u00f3n",
 										JOptionPane.INFORMATION_MESSAGE);
 							} else {
 								JOptionPane.showMessageDialog(null, "El usuario "+tf_LoginGen.getText()+" ya existe. Prueba con otro nombre de usuario.", "Error",
 										JOptionPane.ERROR_MESSAGE);
 							}
 						}
-						// Ahora comprobamos si est√° online con la bbdd remota
+						// Ahora comprobamos si est· online con la bbdd remota
 						else if (remotaDAO.bd_online()) {
-							// Comprobamos si el nombre de usuario est√° disponible
+							// Comprobamos si el nombre de usuario est· disponible
 							if (remotaDAO.comprobarUsuario(tf_LoginGen.getText()) == false) {
 								lbl_Error.setText(" ");
 								String tipo_usuario = String.valueOf(cBox_TipoUsuario.getSelectedItem().toString());
@@ -211,19 +211,19 @@ public class AddUsuario extends JInternalFrame {
 								remotaDAO.insertarUsuario(user);
 								embebidaDAO.insertarUsuario(user);
 								JOptionPane.showMessageDialog(AddUsuario.this,
-										"Usuario " + user.getNombre_usuario() + " a√±adido correctamente!", "Informaci√≥n",
+										"Usuario " + user.getNombre_usuario() + " a\u00f1adido correctamente!", "Informaci\u00f3n",
 										JOptionPane.INFORMATION_MESSAGE);
 							} else {
 								JOptionPane.showMessageDialog(null, "El usuario "+tf_LoginGen.getText()+" ya existe. Prueba con otro nombre de usuario.", "Error",
 										JOptionPane.ERROR_MESSAGE);
 							}
-						/* Si se ha ido la conexi√≥n con la base de datos remota, en el tiempo en que se pone el texto ONLINE en el InternalFrame
-						 * y entre que se haga click en el bot√≥n de crear usuario, utilizaremos la embebida (para que no haya errores) */
+						/* Si se ha ido la conexiÛn con la base de datos remota, en el tiempo en que se pone el texto ONLINE en el InternalFrame
+						 * y entre que se haga click en el botÛn de crear usuario, utilizaremos la embebida (para que no haya errores) */
 						} else {
-							// Si no hay conexi√≥n con la base de datos REMOTA, se insertar√°n los datos en la
+							// Si no hay conexiÛn con la base de datos REMOTA, se insertar·n los datos en la
 							// base de datos embebida (nosotros utilizaremos SQLite)
 							
-							// Comprobamos si el nombre de usuario est√° disponible
+							// Comprobamos si el nombre de usuario est· disponible
 							if (embebidaDAO.comprobarUsuario(tf_LoginGen.getText()) == false) {
 								lbl_Error.setText(" ");
 								String tipo_usuario = String.valueOf(cBox_TipoUsuario.getSelectedItem().toString());
@@ -232,7 +232,7 @@ public class AddUsuario extends JInternalFrame {
 								// Insertamos el usuario creado en la base de datos remota y en la embebida
 								embebidaDAO.insertarUsuario(user);
 								JOptionPane.showMessageDialog(AddUsuario.this,
-										"Usuario " + user.getNombre_usuario() + " a√±adido correctamente en el modo OFFLINE!", "Informaci√≥n",
+										"Usuario " + user.getNombre_usuario() + " a\u00f1adido correctamente en el modo OFFLINE!", "Informac\u00f3n",
 										JOptionPane.INFORMATION_MESSAGE);
 							} else {
 								JOptionPane.showMessageDialog(null, "El usuario "+tf_LoginGen.getText()+" ya existe. Prueba con otro nombre de usuario.", "Error",
@@ -241,7 +241,7 @@ public class AddUsuario extends JInternalFrame {
 						}
 
 					} else {
-						JOptionPane.showMessageDialog(null, "El email ingresado es inv√°lido.", "Error",
+						JOptionPane.showMessageDialog(null, "El email ingresado es inv·lido.", "Error",
 								JOptionPane.ERROR_MESSAGE);
 					}
 
@@ -361,7 +361,7 @@ public class AddUsuario extends JInternalFrame {
 	
 	public boolean comprobarEmail(String correo) {
 
-		// Patr√≥n para validar el email
+		// PatrÛn para validar el email
 		Pattern pattern = Pattern.compile(
 				"^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@" + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$");
 		// El email a validar
@@ -380,7 +380,7 @@ public class AddUsuario extends JInternalFrame {
 	}
 	
 	/** 
-	 * M√©todo para poner el cursor personalizado con una imagen nuestra 
+	 * MÈtodo para poner el cursor personalizado con una imagen nuestra 
 	 * @author David
 	 */
 	public void cambiarCursor() {

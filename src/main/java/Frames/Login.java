@@ -278,6 +278,11 @@ public class Login extends JInternalFrame {
 		passwordField.setText("");
 		// Si el usuario es Administrador podrá añadir usuarios, si no esta función no estará disponible
 		if (user.getTipo_usuario().equals("Administrator")) {
+			//Desactivar las opciones que no pueda utilizar
+			FramePrincipal.mnItem_AddProject.setEnabled(false);
+			FramePrincipal.mntmShowProject.setEnabled(false);
+			FramePrincipal.mnItem_SearchUsr.setEnabled(false);
+			//Añade el listener para que pueda añadir usuarios
 			FramePrincipal.mnItem_AddU.addActionListener(new ActionListener() {
 
 				public void actionPerformed(ActionEvent e) {
@@ -289,6 +294,8 @@ public class Login extends JInternalFrame {
 		}
 		// Si el usuario es Scrum Master podrá añadir proyectos, si no esta función no estará disponible
 		else if (user.getTipo_usuario().equals("Scrum Master")) {
+			FramePrincipal.mnItem_AddU.setEnabled(false);
+			//Añade el listener para que pueda añadir proyectos
 			FramePrincipal.mnItem_AddProject.addActionListener(new ActionListener() {
 				
 				public void actionPerformed(ActionEvent arg0) {
@@ -297,6 +304,12 @@ public class Login extends JInternalFrame {
 					IFrameAddP.setVisible(true);
 				}
 			});
+		}
+		// Si el usuario es Developer solo podrá ver información
+		else if (user.getTipo_usuario().equals("Developer")) {
+			FramePrincipal.mnItem_AddProject.setEnabled(false);
+			FramePrincipal.mnItem_AddU.setEnabled(false);
+			FramePrincipal.mnItem_SearchUsr.setEnabled(false);
 		}
 		
 		FramePrincipal.mntmShowProject.addActionListener(new ActionListener() {

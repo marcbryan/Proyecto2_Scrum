@@ -283,7 +283,6 @@ public class SQLiteDAOImpl implements IScrumConfig {
 		return lista_po;
 	}
 	
-	
 	public List<Proyecto> getProyectos() {
 		List<Proyecto> lista_proyectos = new ArrayList<Proyecto>();
 		Connection conn = connect();
@@ -306,7 +305,6 @@ public class SQLiteDAOImpl implements IScrumConfig {
 				try {
 					stmt.close();
 				} catch (SQLException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
@@ -314,7 +312,6 @@ public class SQLiteDAOImpl implements IScrumConfig {
 				try {
 					rs.close();
 				} catch (SQLException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
@@ -323,24 +320,109 @@ public class SQLiteDAOImpl implements IScrumConfig {
 		return lista_proyectos;
 
 	}
-
 	
 	public String getNombre(int id_usuario) {
 		String nombre = null;
 		Connection conn = connect();
-		String sql = "SELECT nombre_apellidos from Usuarios  where id_usuario=" + id_usuario;
+		String sql = "SELECT nombre_apellidos from Usuarios where id_usuario=" + id_usuario;
 		Statement stmt = null;
 		ResultSet rs = null;
 		try {
 			stmt = conn.createStatement();
 			rs = stmt.executeQuery(sql);
-			nombre=rs.getString(1);
+			nombre = rs.getString(1);
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			// Importante cerrar ResultSet y Statement
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			if (stmt != null) {
+				try {
+					stmt.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
 		}
 
 		return nombre;
 
+	}
+	
+	public int getIdGrupo(String nombre_usuario) {
+		String sql = "SELECT ID_Grupo from Usuarios WHERE nombre_usuario = '" + nombre_usuario + "';";
+		Connection conn = connect();
+		int id_grupo = -1;
+		Statement stmt = null;
+		ResultSet rs = null;
+		try {
+			stmt = conn.createStatement();
+			rs = stmt.executeQuery(sql);
+			id_grupo = rs.getInt(1);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			// Importante cerrar ResultSet y Statement
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			if (stmt != null) {
+				try {
+					stmt.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return id_grupo;
+	}
+
+	public List<Proyecto> getProyectos(int id_grupo) {
+		List <Proyecto> lista_proyectos = new ArrayList<Proyecto>();
+		Proyecto proyecto;
+		String sql = "SELECT * from Proyectos WHERE id_grupo = " + id_grupo +";";
+		Connection conn = connect();
+		Statement stmt = null;
+		ResultSet rs = null;
+		try {
+			stmt = conn.createStatement();
+			rs = stmt.executeQuery(sql);
+			while (rs.next()) {
+				proyecto = new Proyecto(rs.getInt(1), rs.getString(2), rs.getString(3), null, null, rs.getInt(6),
+						rs.getInt(7), rs.getInt(8));
+				lista_proyectos.add(proyecto);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			// Importante cerrar ResultSet y Statement
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			if (stmt != null) {
+				try {
+					stmt.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		
+		return lista_proyectos;
 	}
 
 	// Métodos de esta clase
@@ -571,18 +653,4 @@ public class SQLiteDAOImpl implements IScrumConfig {
 			}
 		}
 	}
-
-	public int getIdGrupo(String nombre_usuario) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	public List<Proyecto> getProyectos(int id_grupo) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	
-	
-
 }
