@@ -174,7 +174,7 @@ public class InfoProyectos extends JInternalFrame {
 				if (list.getSelectedIndex() == -1) {
 					JOptionPane.showMessageDialog(InfoProyectos.this, "Selecciona un proyecto para ver sus especificaciones", "Alerta", JOptionPane.WARNING_MESSAGE);
 				} else {
-					Especificaciones espec = new Especificaciones(list.getSelectedValue());
+					Especificaciones espec = new Especificaciones(lista_Proyectos.get(list.getSelectedIndex()).getId_proyecto(), list.getSelectedValue());
 					FramePrincipal.desktopPane.add(espec);
 					espec.setVisible(true);
 				}
@@ -220,7 +220,8 @@ public class InfoProyectos extends JInternalFrame {
 										.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 												.addComponent(tf_ScrumMaster, GroupLayout.DEFAULT_SIZE, 321,
 														Short.MAX_VALUE)
-												.addComponent(tf_ProductOwner, 321, 321, 321)
+												.addComponent(tf_ProductOwner, GroupLayout.DEFAULT_SIZE, 321, 
+														Short.MAX_VALUE)
 												.addComponent(tf_NombreProyecto, GroupLayout.DEFAULT_SIZE, 321,
 														Short.MAX_VALUE))))
 								.addGap(61)))));

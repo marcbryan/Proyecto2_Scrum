@@ -13,6 +13,7 @@ import java.util.List;
 
 import Frames.Login;
 import idao.IScrumConfig;
+import model.Especificacion;
 import model.Proyecto;
 import model.Usuario;
 
@@ -428,7 +429,35 @@ public class SQLiteDAOImpl implements IScrumConfig {
 	/**
 	 * En esta clase este método no se utiliza
 	 */
-	public void aplicarCambios() {}	
+	public void aplicarCambios() {}
+	
+	public void insertarEspecificacion(Especificacion espec) {
+		Connection conn = connect();
+		PreparedStatement pstmt = null;
+		String sql = "INSERT INTO especificaciones VALUES (null, '" + espec.getNombre_especificacion() + "', '"
+				+ espec.getDescricion_especificacion() + "', '"
+				+ espec.getDuracion_especificacion() + "', "
+				+ espec.getId_proyecto() + ", "
+				+ espec.getId_sprint() + ", '"
+				+ espec.getEstado_especificacion() + "');";
+		// System.out.println(sql);
+		try {
+			pstmt = (PreparedStatement) conn.prepareStatement(sql);
+			pstmt.executeUpdate();
+			guardarSentencia(sql, Login.statusDB);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			// Muy importante cerrar PreparedStatement
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
 
 	// Métodos de esta clase
 
@@ -492,7 +521,9 @@ public class SQLiteDAOImpl implements IScrumConfig {
 						+ "ID_Sprint INTEGER NOT NULL, " + "Estado_Especificacion VARCHAR(30) NOT NULL);";
 
 				String CREATE_TABLE2 = "CREATE TABLE IF NOT EXISTS grupos_usuarios ("
-						+ "ID_Grupo INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, " + "ID_Proyecto INTEGER NOT NULL);";
+						+ "ID_Grupo INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, "
+						+ "ID_Proyecto INTEGER NOT NULL, "
+						+ "Nombre_Grupo VARCHAR(50) NOT NULL);";
 
 				String CREATE_TABLE3 = "CREATE TABLE IF NOT EXISTS proyectos ("
 						+ "ID_Proyecto INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, "
@@ -504,7 +535,7 @@ public class SQLiteDAOImpl implements IScrumConfig {
 
 				String CREATE_TABLE4 = "CREATE TABLE IF NOT EXISTS sprints ("
 						+ "ID_Sprint INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, " + "ID_Proyecto INTEGER NOT NULL, "
-						+ "Fecha_Inicio_Sprint date NOT NULL, " + "Fecha_Final_Sprint date NOT NULL, "
+						+ "Fecha_Inicio_Sprint date, " + "Fecha_Final_Sprint date, "
 						+ "Duracion_Sprint INTEGER NOT NULL, " + "Estado_Sprint VARCHAR(20) NOT NULL);";
 
 				String CREATE_TABLE5 = "CREATE TABLE IF NOT EXISTS usuarios ("
@@ -564,6 +595,7 @@ public class SQLiteDAOImpl implements IScrumConfig {
 		if (status.equals("ONLINE")) {
 			Connection conn = connect();
 			PreparedStatement pstmt = null;
+			
 			List<Usuario> usuarios = ScrumDAOImpl.getUsuariosFromRemoteDB();
 			int numUsuarios = usuarios.size();
 			String sql = "";
@@ -612,6 +644,33 @@ public class SQLiteDAOImpl implements IScrumConfig {
 					}
 				}
 			}
+			
+			List<Especificacion> especificaciones = ScrumDAOImpl.getEspecificacionesFromRemoteDB();
+			int numEspec = especificaciones.size();
+			for (int i = 0; i < numEspec; i++) {
+				sql = "INSERT INTO Especificaciones VALUES (null, '" + especificaciones.get(i).getNombre_especificacion() + "', '"
+						+ especificaciones.get(i).getDescricion_especificacion() + "', '"
+						+ especificaciones.get(i).getDuracion_especificacion() + "', "
+						+ especificaciones.get(i).getId_proyecto() + ", "
+						+ especificaciones.get(i).getId_sprint() + ", '"
+						+ especificaciones.get(i).getEstado_especificacion() + "');";
+				try {
+					pstmt = (PreparedStatement) conn.prepareStatement(sql);
+					pstmt.executeUpdate();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				} finally {
+					// Muy importante cerrar PreparedStatement
+					if (pstmt != null) {
+						try {
+							pstmt.close();
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
+				}
+			}
+			
 			// System.out.println("Primera sincronización de usuarios y proyectos realizada
 			// con éxito");
 		} else {

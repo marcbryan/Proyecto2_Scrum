@@ -2,10 +2,7 @@ package idao;
 
 import java.util.List;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-
+import model.Especificacion;
 import model.Proyecto;
 import model.Usuario;
 
@@ -94,5 +91,11 @@ public interface IScrumConfig {
 	 * Aplicará los cambios que se hayan realizado (si hay cambios) en la base de datos embebida en la remota, en caso contrario, no se hará nada
 	 */
 	public void aplicarCambios();
+	
+	/**
+	 * Inserta una especificación en la base de datos
+	 * @param espec - La especificación a insertar
+	 */
+	public void insertarEspecificacion(Especificacion espec);
 	
 }

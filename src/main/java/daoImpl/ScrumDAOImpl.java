@@ -10,6 +10,7 @@ import javax.persistence.Persistence;
 import javax.persistence.Query;
 
 import idao.IScrumConfig;
+import model.Especificacion;
 import model.Proyecto;
 import model.Usuario;
 
@@ -262,6 +263,22 @@ public class ScrumDAOImpl implements IScrumConfig {
 		ac.syncDBs();
 	}
 	
+	public void insertarEspecificacion(Especificacion espec) {
+		EntityManagerFactory factory = Persistence.createEntityManagerFactory("madali_db");
+		EntityManager entityManager = factory.createEntityManager();
+		try {
+			entityManager.getTransaction().begin();
+			entityManager.persist(espec);
+			entityManager.getTransaction().commit();
+			// System.out.println("Especificación insertada!");
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			entityManager.close();
+			factory.close();
+		}
+	}
+	
 	// Métodos propios de esta clase
 
 	/**
@@ -318,6 +335,34 @@ public class ScrumDAOImpl implements IScrumConfig {
 			factory.close();
 		}
 		return proyectos;
+	}
+	
+	/**
+	 * Este método solo lo utilizará este otro método
+	 * {@link SQLiteDAOImpl#syncRemotaAlCrearla(String)}
+	 * 
+	 * @return Devuelve las especificaciones de la base de datos remota en un list de
+	 *         especificaciones
+	 */
+	protected static List<Especificacion> getEspecificacionesFromRemoteDB() {
+		EntityManagerFactory factory = Persistence.createEntityManagerFactory("madali_db");
+		EntityManager entityManager = factory.createEntityManager();
+		List<Especificacion> especificaciones = new ArrayList<Especificacion>();
+		try {
+			String sql = "SELECT e from Especificacion e";
+			Query query = entityManager.createQuery(sql);
+			try {
+				especificaciones = query.getResultList();
+			} catch (NoResultException noRes) {
+				System.out.println("No hay especificaciones en la base de datos");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			entityManager.close();
+			factory.close();
+		}
+		return especificaciones;
 	}
 	
 	/**

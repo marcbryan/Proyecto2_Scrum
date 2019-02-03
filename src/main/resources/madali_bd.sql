@@ -43,7 +43,10 @@ CREATE TABLE `especificaciones` (
 --
 
 INSERT INTO `especificaciones` (`ID_Especificacion`, `Nombre_Especificacion`, `Descripcion_Especificacion`, `Duracion_Especificacion`, `ID_Proyecto`, `ID_Sprint`, `Estado_Especificacion`) VALUES
-(1, 'Hacer login pulsando el botón enter', 'En la pantalla de login, haz que cuando pulses el botón ENTER haga lo mismo que al hacer click en botón', '1h', 1, 1, 'En desarollo');
+(1, 'Hacer login pulsando el botón enter', 'En la pantalla de login, haz que cuando pulses el botón ENTER haga lo mismo que al hacer click en botón', '1h', 1, 1, 'En desarollo'),
+(2, 'Generar un password aleatorio', 'Genera un password aleatorio de 6 caracteres al hacer click en botón Generar', '2h', 1, 2, 'En desarollo'),
+(3, 'Crear usuarios con Store Procedure', 'Crea usuarios utilizando un Store Procedure en la base de datos remota y en la embebida', '1h', 1, 3, 'En desarollo'),
+(4, 'Genera un presupuesto en XML', 'Cuando se termine la configuración del vehiculo, tendras que generar un presupuesto en formato XML', '3h', 2, 3, 'Terminada');
 
 -- --------------------------------------------------------
 
@@ -53,15 +56,17 @@ INSERT INTO `especificaciones` (`ID_Especificacion`, `Nombre_Especificacion`, `D
 
 CREATE TABLE `grupos_usuarios` (
   `ID_Grupo` int(11) NOT NULL,
-  `ID_Proyecto` int(11) NOT NULL
+  `ID_Proyecto` int(11) NOT NULL,
+  `Nombre_Grupo` varchar(50)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
 --
 -- Volcado de datos para la tabla `grupos_usuarios`
 --
 
-INSERT INTO `grupos_usuarios` (`ID_Grupo`, `ID_Proyecto`) VALUES
-(1, 1);
+INSERT INTO `grupos_usuarios` (`ID_Grupo`, `ID_Proyecto`, `Nombre_Grupo`) VALUES
+(1, 1, 'AMS2'),
+(2, 3, 'AWS2');
 
 -- --------------------------------------------------------
 
@@ -85,7 +90,9 @@ CREATE TABLE `proyectos` (
 --
 
 INSERT INTO `proyectos` (`ID_Proyecto`, `Nombre_Proyecto`, `Descripcion_Proyecto`, `Fecha_Inicio_Proyecto`, `Fecha_Final_Proyecto`, `Scrum_Master_Proyecto`, `Product_Owner_Proyecto`, `ID_Grupo`) VALUES
-(1, 'Gestor de proyectos Scrum', 'Desarollar un gestor de proyectos Scrum en el que habrá usuarios con diferentes permisos', '2019-01-16', '2019-02-06', 4, 1, 1);
+(1, 'Gestor de proyectos Scrum', 'Desarollar un gestor de proyectos Scrum en el que habrá usuarios con diferentes permisos', '2019-01-16', '2019-02-06', 4, 1, 1),
+(2, 'Configurador de coches', 'Desarollar un programa que sirva para hacer un presupuesto para comprar un coche', '2018-10-17', '2018-11-14', 5, 6, 1),
+(3, 'Quien es quien?', 'Desarollar un juego que simule el tipico juego del quien es quien', '2018-10-11', '2018-11-08', 5, 6, 2);
 
 -- --------------------------------------------------------
 
@@ -96,8 +103,8 @@ INSERT INTO `proyectos` (`ID_Proyecto`, `Nombre_Proyecto`, `Descripcion_Proyecto
 CREATE TABLE `sprints` (
   `ID_Sprint` int(11) NOT NULL,
   `ID_Proyecto` int(11) NOT NULL,
-  `Fecha_Inicio_Sprint` date NOT NULL,
-  `Fecha_Final_Sprint` date NOT NULL,
+  `Fecha_Inicio_Sprint` date,
+  `Fecha_Final_Sprint` date,
   `Duracion_Sprint` int(11) NOT NULL,
   `Estado_Sprint` varchar(20) COLLATE utf8_spanish_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
@@ -107,7 +114,9 @@ CREATE TABLE `sprints` (
 --
 
 INSERT INTO `sprints` (`ID_Sprint`, `ID_Proyecto`, `Fecha_Inicio_Sprint`, `Fecha_Final_Sprint`, `Duracion_Sprint`, `Estado_Sprint`) VALUES
-(1, 1, '2019-01-16', '2019-01-23', 18, 'En progreso');
+(1, 1, '2019-01-16', '2019-01-23', 18, 'Terminado'),
+(2, 1, '2019-01-23', '2019-01-30', 18, 'Terminado'),
+(3, 1, '2019-01-30', '2019-02-06', 18, 'En progreso');
 
 -- --------------------------------------------------------
 
@@ -134,7 +143,8 @@ INSERT INTO `usuarios` (`ID_Usuario`, `Nombre_Usuario`, `Password_Usuario`, `Nom
 (2, 'davidg', '1234', 'David Garcia', 'Administrator', 'davidg@madali.com', 1),
 (3, 'marcb', '1234', 'Marc Boakye', 'Developer', 'mboakye@madali.com', 1),
 (4, 'root', 'root', 'Root', 'Scrum Master', 'root@root.com', 1),
-(5, 'lzabala', 'root', 'Leandro Zabala', 'Scrum Master', 'lzabala@xtec.cat', 1);
+(5, 'lzabala', 'root', 'Leandro Zabala', 'Scrum Master', 'lzabala@xtec.cat', 2),
+(6, 'despeja', 'profe', 'David Espeja', 'Product Owner', 'despeja@xtec.cat', 1);
 
 --
 -- Índices para tablas volcadas
@@ -178,31 +188,31 @@ ALTER TABLE `usuarios`
 -- AUTO_INCREMENT de la tabla `especificaciones`
 --
 ALTER TABLE `especificaciones`
-  MODIFY `ID_Especificacion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `ID_Especificacion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de la tabla `grupos_usuarios`
 --
 ALTER TABLE `grupos_usuarios`
-  MODIFY `ID_Grupo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `ID_Grupo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `proyectos`
 --
 ALTER TABLE `proyectos`
-  MODIFY `ID_Proyecto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `ID_Proyecto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `sprints`
 --
 ALTER TABLE `sprints`
-  MODIFY `ID_Sprint` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `ID_Sprint` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `ID_Usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `ID_Usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
