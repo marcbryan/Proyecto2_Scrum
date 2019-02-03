@@ -75,6 +75,9 @@ public class Login extends JInternalFrame {
 			fp.setTitle(title +" [ONLINE]");
 			lbl_statusDB.setText("<html><font color=green>ONLINE</font></html>");
 			statusDB = "ONLINE";
+			
+			//Como hay conexión con la base de datos remota, comprobamos si hay cambios en la base de datos embebida
+			remotaDAO.aplicarCambios();
 		}
 		
 		// Lo hago aquí porque necesito saber el estado de la base de datos remota

@@ -424,6 +424,11 @@ public class SQLiteDAOImpl implements IScrumConfig {
 		
 		return lista_proyectos;
 	}
+	
+	/**
+	 * En esta clase este método no se utiliza
+	 */
+	public void aplicarCambios() {}	
 
 	// Métodos de esta clase
 
@@ -653,4 +658,81 @@ public class SQLiteDAOImpl implements IScrumConfig {
 			}
 		}
 	}
+	
+	/**
+	 * Comprueba si hay cambios en la base de datos embebida. En ese caso ejecutará las sentencias para que la base de datos remota sea igual que la embebida.
+	 * <br>Este método solo lo utilizará {@link ScrumDAOImpl#aplicarCambios()}</br>
+	 * @return Devuelve <b>true</b> si se han realizado cambios en la base de datos embebida y <b>false</b> si no hay cambios.
+	 */
+	protected boolean syncDBs() {
+		Connection conn = connect();
+		String sql = "SELECT * FROM sync;";
+		Statement stmt = null;
+		ResultSet rs = null;
+		boolean succesful;
+		try {
+			stmt = conn.createStatement();
+			rs = stmt.executeQuery(sql);
+			while (rs.next()) {
+				// Si el campo sincronizado es 0, quiere decir que no está sincronizado
+				if (rs.getInt(3) == 0) {
+					System.out.println(rs.getString(2));
+					succesful = ScrumDAOImpl.addOfflineChanges(rs.getString(2));
+					//System.out.println("Succesful: "+succesful);
+					if (succesful == true) {
+						updateSyncTable(rs.getInt(1));
+					}
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			// Muy importante cerrar Statement y ResultSet
+			if (stmt != null) {
+				try {
+					stmt.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (Exception e2) {
+					e2.printStackTrace();
+				}
+			}
+		}
+		return false;
+	}
+	
+	/**
+	 * Cambia el valor del campo sincronizado de 0 (no sincronizado) a 1 (sincronizado), solo se ejecutará si la sentencia se ha realizado correctamente
+	 * @param id - El id de la sentencia
+	 * @return Devuelve <b>true</b> si el update se ha realizado correctamente y <b>false</b> en caso contrario
+	 */
+	private boolean updateSyncTable(int id) {
+		boolean updated = false;
+		Connection conn = connect();
+		PreparedStatement pstmt = null;
+		String sql = "UPDATE sync SET sincronizado = 1 WHERE ID_sentencia = " + id + ";";
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.executeUpdate();
+			updated = true;
+		} catch (SQLException e) {
+			e.printStackTrace();			
+		} finally {
+			// Muy importante cerrar PreparedStatement
+			if (pstmt != null) {
+				try {
+					pstmt.close();
+				} catch (Exception e2) {
+					e2.printStackTrace();
+				}
+			}
+		}
+		return updated;
+	}
+	
 }

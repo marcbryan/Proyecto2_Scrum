@@ -38,7 +38,6 @@ public interface IScrumConfig {
 	 */
 	public boolean comprobarUsuario(String username);
 	
-	
 	/**
 	 * Inserta un proyecto en la base de datos
 	 * @param proyecto - El proyecto a insertar
@@ -77,7 +76,6 @@ public interface IScrumConfig {
 	 */
 	public List<Proyecto> getProyectos(int id_grupo);
 
-	
 	/**
 	 * Se utiliza para conseguir el nombre y apellido del ScrumMaster o Product Owner pasandole un id de usuario.
 	 * @param id_usuario - El id del Scrum Master o Product Owner
@@ -85,7 +83,6 @@ public interface IScrumConfig {
 	 */
 	public String getNombre(int id_usuario);
 	
-
 	/**
 	 * Este metodo se usa para conseguir el id del Grupo y luego usar ese id para conseguir todos los proyectos de la tabla Proyectos
 	 * @param nombre_usuario - El nombre de usuario (username)
@@ -93,5 +90,9 @@ public interface IScrumConfig {
 	 */
 	public int getIdGrupo(String nombre_usuario);
 
-
+	/**
+	 * Aplicará los cambios que se hayan realizado (si hay cambios) en la base de datos embebida en la remota, en caso contrario, no se hará nada
+	 */
+	public void aplicarCambios();
+	
 }

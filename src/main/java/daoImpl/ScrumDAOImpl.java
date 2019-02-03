@@ -178,65 +178,7 @@ public class ScrumDAOImpl implements IScrumConfig {
 		}
 		return product_owners;
 	}
-
-	// Métodos propios de esta clase
-
-	/**
-	 * Este método solo lo utilizará este otro método
-	 * {@link SQLiteDAOImpl#syncRemotaAlCrearla(String)}
-	 * 
-	 * @return Devuelve los usuarios de la base de datos remota en un list de
-	 *         usuarios
-	 */
-	protected static List<Usuario> getUsuariosFromRemoteDB() {
-		EntityManagerFactory factory = Persistence.createEntityManagerFactory("madali_db");
-		EntityManager entityManager = factory.createEntityManager();
-		List<Usuario> usuarios = new ArrayList<Usuario>();
-		try {
-			String sql = "SELECT u from Usuario u";
-			Query query = entityManager.createQuery(sql);
-			try {
-				usuarios = query.getResultList();
-			} catch (NoResultException noRes) {
-				System.out.println("No hay usuarios en la base de datos");
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			entityManager.close();
-			factory.close();
-		}
-		return usuarios;
-	}
-
-	/**
-	 * Este método solo lo utilizará este otro método
-	 * {@link SQLiteDAOImpl#syncRemotaAlCrearla(String)}
-	 * 
-	 * @return Devuelve los proyectos de la base de datos remota en un list de
-	 *         proyectos
-	 */
-	protected static List<Proyecto> getProyectosFromRemoteDB() {
-		EntityManagerFactory factory = Persistence.createEntityManagerFactory("madali_db");
-		EntityManager entityManager = factory.createEntityManager();
-		List<Proyecto> proyectos = new ArrayList<Proyecto>();
-		try {
-			String sql = "SELECT p from Proyecto p";
-			Query query = entityManager.createQuery(sql);
-			try {
-				proyectos = query.getResultList();
-			} catch (NoResultException noRes) {
-				System.out.println("No hay proyectos en la base de datos");
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			entityManager.close();
-			factory.close();
-		}
-		return proyectos;
-	}
-
+	
 	public List<Proyecto> getProyectos() {
 		EntityManagerFactory factory = Persistence.createEntityManagerFactory("madali_db");
 		EntityManager entityManager = factory.createEntityManager();
@@ -314,5 +256,97 @@ public class ScrumDAOImpl implements IScrumConfig {
 		}
 		return proyectos;
 	}
+	
+	public void aplicarCambios() {
+		SQLiteDAOImpl ac = new SQLiteDAOImpl();
+		ac.syncDBs();
+	}
+	
+	// Métodos propios de esta clase
 
+	/**
+	 * Este método solo lo utilizará este otro método
+	 * {@link SQLiteDAOImpl#syncRemotaAlCrearla(String)}
+	 * 
+	 * @return Devuelve los usuarios de la base de datos remota en un list de
+	 *         usuarios
+	 */
+	protected static List<Usuario> getUsuariosFromRemoteDB() {
+		EntityManagerFactory factory = Persistence.createEntityManagerFactory("madali_db");
+		EntityManager entityManager = factory.createEntityManager();
+		List<Usuario> usuarios = new ArrayList<Usuario>();
+		try {
+			String sql = "SELECT u from Usuario u";
+			Query query = entityManager.createQuery(sql);
+			try {
+				usuarios = query.getResultList();
+			} catch (NoResultException noRes) {
+				System.out.println("No hay usuarios en la base de datos");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			entityManager.close();
+			factory.close();
+		}
+		return usuarios;
+	}
+
+	/**
+	 * Este método solo lo utilizará este otro método
+	 * {@link SQLiteDAOImpl#syncRemotaAlCrearla(String)}
+	 * 
+	 * @return Devuelve los proyectos de la base de datos remota en un list de
+	 *         proyectos
+	 */
+	protected static List<Proyecto> getProyectosFromRemoteDB() {
+		EntityManagerFactory factory = Persistence.createEntityManagerFactory("madali_db");
+		EntityManager entityManager = factory.createEntityManager();
+		List<Proyecto> proyectos = new ArrayList<Proyecto>();
+		try {
+			String sql = "SELECT p from Proyecto p";
+			Query query = entityManager.createQuery(sql);
+			try {
+				proyectos = query.getResultList();
+			} catch (NoResultException noRes) {
+				System.out.println("No hay proyectos en la base de datos");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			entityManager.close();
+			factory.close();
+		}
+		return proyectos;
+	}
+	
+	/**
+	 * Este método ejecutará la sentencia que le pasemos en la base de datos remota.
+	 * Solo lo utilizará el método {@link SQLiteDAOImpl#syncDBs()} para que los cambios que se hicieron en la base de datos embebida se realizen en la remota. 
+	 * @param sentencia - La que queremos ejecutar en la base de datos remota
+	 * @return Devuelve <b>true</b> si la sentencia se ha realizado correctamente y <b>false</b> si no ha funcionado.
+	 */
+	protected static boolean addOfflineChanges(String sentencia) {
+		boolean inserted = false;
+		EntityManagerFactory factory = Persistence.createEntityManagerFactory("madali_db");
+		EntityManager entityManager = factory.createEntityManager();
+		try {
+			entityManager.getTransaction().begin();
+			// Realizamos un insert con la sintaxis de SQL (Native Query) a la base de datos remota
+			Query query = entityManager.createNativeQuery(sentencia);
+			//System.out.println(query.executeUpdate());
+			int status = query.executeUpdate();
+			if (status > 0) {
+				inserted = true;
+			}
+			entityManager.getTransaction().commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			entityManager.close();
+			factory.close();
+		}
+		return inserted;
+	}
+	
 }
