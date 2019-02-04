@@ -458,6 +458,112 @@ public class SQLiteDAOImpl implements IScrumConfig {
 			}
 		}
 	}
+	
+	public List<Especificacion> getEspecificaciones(int id_proyecto) {
+		List<Especificacion> especis = new ArrayList<Especificacion>();
+		Connection conn = connect();
+		String sql = "SELECT * from Especificaciones where id_proyecto=" + id_proyecto;
+		Statement stmt = null;
+		ResultSet rs = null;
+
+		try {
+			stmt = conn.createStatement();
+			rs = stmt.executeQuery(sql);
+			Especificacion ep;
+			while(rs.next()) {
+				ep = new Especificacion(rs.getInt(1),rs.getString(2),rs.getString(3),rs.getString(4),rs.getInt(5),rs.getInt(6),rs.getString(7));
+				especis.add(ep);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if(rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			if(stmt != null) {
+				try {
+					stmt.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return especis;
+	}
+	
+	public int getIdProductOwner(String nombre_usuario) {
+		String sql = "SELECT ID_Usuario from Usuarios WHERE nombre_usuario = '" + nombre_usuario + "';";
+		Connection conn = connect();
+		int id_po = -1;
+		Statement stmt = null;
+		ResultSet rs = null;
+		try {
+			stmt = conn.createStatement();
+			rs = stmt.executeQuery(sql);
+			id_po = rs.getInt(1);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			// Importante cerrar ResultSet y Statement
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			if (stmt != null) {
+				try {
+					stmt.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return id_po;
+	}
+	
+	public List<Proyecto> getProyectosPO(int id_po) {
+		List <Proyecto> lista_proyectos = new ArrayList<Proyecto>();
+		Proyecto proyecto;
+		String sql = "SELECT * from Proyectos WHERE Product_Owner_Proyecto = " + id_po +";";
+		Connection conn = connect();
+		Statement stmt = null;
+		ResultSet rs = null;
+		try {
+			stmt = conn.createStatement();
+			rs = stmt.executeQuery(sql);
+			while (rs.next()) {
+				proyecto = new Proyecto(rs.getInt(1), rs.getString(2), rs.getString(3), null, null, rs.getInt(6),
+						rs.getInt(7), rs.getInt(8));
+				lista_proyectos.add(proyecto);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			// Importante cerrar ResultSet y Statement
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			if (stmt != null) {
+				try {
+					stmt.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		
+		return lista_proyectos;
+	}
 
 	// Métodos de esta clase
 
@@ -596,7 +702,7 @@ public class SQLiteDAOImpl implements IScrumConfig {
 			Connection conn = connect();
 			PreparedStatement pstmt = null;
 			
-			List<Usuario> usuarios = ScrumDAOImpl.getUsuariosFromRemoteDB();
+			List<Usuario> usuarios = RemotaDAOImpl.getUsuariosFromRemoteDB();
 			int numUsuarios = usuarios.size();
 			String sql = "";
 			for (int i = 0; i < numUsuarios; i++) {
@@ -621,7 +727,7 @@ public class SQLiteDAOImpl implements IScrumConfig {
 				}
 			}
 
-			List<Proyecto> proyectos = ScrumDAOImpl.getProyectosFromRemoteDB();
+			List<Proyecto> proyectos = RemotaDAOImpl.getProyectosFromRemoteDB();
 			int numProyectos = proyectos.size();
 			for (int i = 0; i < numProyectos; i++) {
 				sql = "INSERT INTO Proyectos VALUES (null, '" + proyectos.get(i).getNombre_proyecto() + "', '"
@@ -645,7 +751,7 @@ public class SQLiteDAOImpl implements IScrumConfig {
 				}
 			}
 			
-			List<Especificacion> especificaciones = ScrumDAOImpl.getEspecificacionesFromRemoteDB();
+			List<Especificacion> especificaciones = RemotaDAOImpl.getEspecificacionesFromRemoteDB();
 			int numEspec = especificaciones.size();
 			for (int i = 0; i < numEspec; i++) {
 				sql = "INSERT INTO Especificaciones VALUES (null, '" + especificaciones.get(i).getNombre_especificacion() + "', '"
@@ -720,7 +826,7 @@ public class SQLiteDAOImpl implements IScrumConfig {
 	
 	/**
 	 * Comprueba si hay cambios en la base de datos embebida. En ese caso ejecutará las sentencias para que la base de datos remota sea igual que la embebida.
-	 * <br>Este método solo lo utilizará {@link ScrumDAOImpl#aplicarCambios()}</br>
+	 * <br>Este método solo lo utilizará {@link RemotaDAOImpl#aplicarCambios()}</br>
 	 * @return Devuelve <b>true</b> si se han realizado cambios en la base de datos embebida y <b>false</b> si no hay cambios.
 	 */
 	protected boolean syncDBs() {
@@ -736,7 +842,7 @@ public class SQLiteDAOImpl implements IScrumConfig {
 				// Si el campo sincronizado es 0, quiere decir que no está sincronizado
 				if (rs.getInt(3) == 0) {
 					System.out.println(rs.getString(2));
-					succesful = ScrumDAOImpl.addOfflineChanges(rs.getString(2));
+					succesful = RemotaDAOImpl.addOfflineChanges(rs.getString(2));
 					//System.out.println("Succesful: "+succesful);
 					if (succesful == true) {
 						updateSyncTable(rs.getInt(1));
@@ -792,56 +898,6 @@ public class SQLiteDAOImpl implements IScrumConfig {
 			}
 		}
 		return updated;
-	}
-	
-	public List<Especificacion> getEspecificaciones(int id_proyecto) {
-		// TODO Auto-generated method stub
-		
-		List<Especificacion> especis = new ArrayList();
-		Connection conn = connect();
-		String sql = "SELECT * from Especificaciones where id_proyecto=" + id_proyecto;
-		Statement stmt = null;
-		ResultSet rs = null;
-		
-		try {
-			stmt = conn.createStatement();
-			rs = stmt.executeQuery(sql);
-			
-			Especificacion ep;
-			
-			while(rs.next()) {
-				
-				ep = new Especificacion(rs.getInt(1),rs.getString(2),rs.getString(3),rs.getString(4),rs.getInt(5),rs.getInt(6),rs.getString(7));
-				
-				especis.add(ep);
-			}
-			
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-		}finally {
-			if(rs != null) {
-				try {
-					rs.close();
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-			if(stmt != null) {
-				try {
-					stmt.close();
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-			
-		}
-		
-		return especis;
-		
-		
 	}
 	
 }

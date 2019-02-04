@@ -24,7 +24,7 @@ import java.io.File;
 import java.io.IOException;
 
 import daoImpl.SQLiteDAOImpl;
-import daoImpl.ScrumDAOImpl;
+import daoImpl.RemotaDAOImpl;
 import idao.IScrumConfig;
 import model.Usuario;
 
@@ -48,7 +48,7 @@ public class Login extends JInternalFrame {
 	 * @author David
 	 */
 	public Login(FramePrincipal fp) {
-		remotaDAO = new ScrumDAOImpl();
+		remotaDAO = new RemotaDAOImpl();
 		
 		setMaximizable(true);
 		setResizable(true);

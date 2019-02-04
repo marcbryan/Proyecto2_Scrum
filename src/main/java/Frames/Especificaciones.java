@@ -22,7 +22,7 @@ import javax.swing.JButton;
 import javax.swing.LayoutStyle.ComponentPlacement;
 
 import daoImpl.SQLiteDAOImpl;
-import daoImpl.ScrumDAOImpl;
+import daoImpl.RemotaDAOImpl;
 import idao.IScrumConfig;
 import model.Especificacion;
 
@@ -45,7 +45,7 @@ public class Especificaciones extends JInternalFrame {
 	 * @author David
 	 */
 	public Especificaciones(final int id_proyecto, final String nombre_proyecto) {
-		remotaDAO = new ScrumDAOImpl();
+		remotaDAO = new RemotaDAOImpl();
 		embebidaDAO = new SQLiteDAOImpl();
 		setResizable(true);
 		setMaximizable(true);
@@ -85,11 +85,9 @@ public class Especificaciones extends JInternalFrame {
 		btnElimin.setBackground(new Color(255,69,28));
 		btnElimin.setForeground(Color.white);
 		
-		//EspecPanel ePane;
 		panel = new JPanel();
 		
 		JScrollPane scrollPane = new JScrollPane();
-		//panel.setBackground(new Color(33,0,17)); //color anterior
 		panel.setBackground(new Color(90,21,50));
 		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		
@@ -97,21 +95,30 @@ public class Especificaciones extends JInternalFrame {
 		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 		
 		paneles = new ArrayList<EspecPanel>();
+		EspecPanel ePane;
+		int size;
 		
-		EspecPanel ePane ;
-		int espec =4;
-		//JPanel panel = new JPanel();
-		
-		List<Especificacion> especis = embebidaDAO.getEspecificaciones(id_proyecto);//remotaDAO.getEspecificaciones(2);
-
-		for (int i = 0; i < especis.size(); i++) {
-			
-			ePane = new EspecPanel(especis.get(i));
-			paneles.add(ePane);
-			panel.add(ePane);
-			//scrollPane.setViewportView(ePane);
-			
-			
+		// Si la base de datos está OFFLINE nos saltamos el paso de comprobar si la base de datos está online, para acceder más rápido
+		if (Login.statusDB.equals("OFFLINE")) {
+			List<Especificacion> especis = embebidaDAO.getEspecificaciones(id_proyecto);
+			size = especis.size();
+			for (int i = 0; i < size; i++) {
+				ePane = new EspecPanel(especis.get(i));
+				paneles.add(ePane);
+				panel.add(ePane);
+			}
+		}
+		// Comprobamos si está online con la BBDD remota
+		else if (remotaDAO.bd_online()) {
+			List<Especificacion> especis = remotaDAO.getEspecificaciones(id_proyecto);
+			size = especis.size();
+			for (int i = 0; i < size; i++) {
+				ePane = new EspecPanel(especis.get(i));
+				paneles.add(ePane);
+				panel.add(ePane);
+			}
+		} else {
+			System.out.println("Se ha perdido la conexión con la base de datos remota.");
 		}
 		
 		GroupLayout groupLayout = new GroupLayout(getContentPane());

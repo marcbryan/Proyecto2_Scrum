@@ -27,7 +27,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import daoImpl.SQLiteDAOImpl;
-import daoImpl.ScrumDAOImpl;
+import daoImpl.RemotaDAOImpl;
 import idao.IScrumConfig;
 import model.Proyecto;
 
@@ -52,7 +52,7 @@ public class InfoProyectos extends JInternalFrame {
 		setResizable(true);
 		setClosable(true);
 		setMaximizable(true);
-		remotaDAO = new ScrumDAOImpl();
+		remotaDAO = new RemotaDAOImpl();
 		embebidaDAO = new SQLiteDAOImpl();
 
 		setBounds(100, 100, 738, 495);
@@ -79,14 +79,16 @@ public class InfoProyectos extends JInternalFrame {
 		if (Login.statusDB.equals("OFFLINE")) {
 			if (FramePrincipal.lbl_Usuario.getText().contains("Developer")
 					|| FramePrincipal.lbl_Usuario.getText().contains("Product Owner")) {
-				int idgrupo = 0;
-				String[] linea_array = FramePrincipal.lbl_Usuario.getText().split(" ");
-				if (linea_array.length > 4) {
-					idgrupo = embebidaDAO.getIdGrupo(linea_array[1]+linea_array[2]);
+				int idgrupo = 0, id_po = 0;
+				String[] linea_array = FramePrincipal.lbl_Usuario.getText().split(" ");				
+				if (linea_array.length == 4 && FramePrincipal.lbl_Usuario.getText().contains("Product Owner")) {
+					id_po = embebidaDAO.getIdProductOwner(linea_array[1]);
+					lista_Proyectos = embebidaDAO.getProyectosPO(id_po);
 				} else {
 					idgrupo = embebidaDAO.getIdGrupo(linea_array[1]);
+					lista_Proyectos = embebidaDAO.getProyectos(idgrupo);
 				}
-				lista_Proyectos = embebidaDAO.getProyectos(idgrupo);
+				
 				for (int i = 0; i < lista_Proyectos.size(); i++) {
 					model.addElement(lista_Proyectos.get(i).getNombre_proyecto());
 				}
@@ -124,17 +126,17 @@ public class InfoProyectos extends JInternalFrame {
 			}
 		} else {
 			if (remotaDAO.bd_online()) {
-				int idgrupo = 0;
+				int idgrupo = 0, id_po = 0;
 				if (FramePrincipal.lbl_Usuario.getText().contains("Developer")
 						|| FramePrincipal.lbl_Usuario.getText().contains("Product Owner")) {
-					String linea = FramePrincipal.lbl_Usuario.getText();
 					String[] linea_array = FramePrincipal.lbl_Usuario.getText().split(" ");
-					if (linea_array.length > 4) {
-						idgrupo = remotaDAO.getIdGrupo(linea_array[1]+linea_array[2]);
+					if (linea_array.length == 4 && FramePrincipal.lbl_Usuario.getText().contains("Product Owner")) {
+						id_po = remotaDAO.getIdProductOwner(linea_array[1]);
+						lista_Proyectos = remotaDAO.getProyectosPO(id_po);
 					} else {
 						idgrupo = remotaDAO.getIdGrupo(linea_array[1]);
+						lista_Proyectos = remotaDAO.getProyectos(idgrupo);
 					}
-					lista_Proyectos = remotaDAO.getProyectos(idgrupo);
 					for (int i = 0; i < lista_Proyectos.size(); i++) {
 						model.addElement(lista_Proyectos.get(i).getNombre_proyecto());
 					}
@@ -179,7 +181,7 @@ public class InfoProyectos extends JInternalFrame {
 		btn_MostrarEspec.setForeground(Color.white);
 		btn_MostrarEspec.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				//Si no se ha seleccionado nada mostrará un optionpane
+				//Si no se ha seleccionado nada, se mostrará un optionpane
 				if (list.getSelectedIndex() == -1) {
 					JOptionPane.showMessageDialog(InfoProyectos.this, "Selecciona un proyecto para ver sus especificaciones", "Alerta", JOptionPane.WARNING_MESSAGE);
 				} else {

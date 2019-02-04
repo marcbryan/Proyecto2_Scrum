@@ -72,6 +72,13 @@ public interface IScrumConfig {
 	 * @return Devuelve un list de proyectos que sean del id de grupo que se haya pasado
 	 */
 	public List<Proyecto> getProyectos(int id_grupo);
+	
+	/**
+	 * Método para conseguir los proyectos cuando los veamos con un Product Owner en el InternalFrame de ver proyectos
+	 * @param id_po - El id del Product Owner
+	 * @return Devuelve un list de proyectos en los que el Product Owner sea él
+	 */
+	public List<Proyecto> getProyectosPO(int id_po);
 
 	/**
 	 * Se utiliza para conseguir el nombre y apellido del ScrumMaster o Product Owner pasandole un id de usuario.
@@ -86,6 +93,13 @@ public interface IScrumConfig {
 	 * @return Devuelve el id de grupo del usuario
 	 */
 	public int getIdGrupo(String nombre_usuario);
+	
+	/**
+	 * Sirve para saber el id del Product Owner y luego utilizarlo en el método {@link IScrumConfig#getProyectosPO(int)}
+	 * @param nombre_usuario - El nombre de usuario del Product Owner
+	 * @return Devuelve el id del Product Owner
+	 */
+	public int getIdProductOwner(String nombre_usuario);
 
 	/**
 	 * Aplicará los cambios que se hayan realizado (si hay cambios) en la base de datos embebida en la remota, en caso contrario, no se hará nada
@@ -98,8 +112,11 @@ public interface IScrumConfig {
 	 */
 	public void insertarEspecificacion(Especificacion espec);
 	
-	
-	
+	/**
+	 * Se utiliza para conseguir las especificaciones de un proyecto que estan almacenadas en la base de datos
+	 * @param id_proyecto - El id del proyecto del que queremos las especificaciones
+	 * @return Devuelve un list con las especificaciones de un proyecto
+	 */
 	public List<Especificacion> getEspecificaciones(int id_proyecto);
 	
 }

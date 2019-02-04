@@ -22,6 +22,15 @@ SET time_zone = "+00:00";
 -- Base de datos: `madali_bd`
 --
 
+DELIMITER $$
+--
+-- Procedimientos
+--
+CREATE DEFINER=`root`@`localhost` PROCEDURE `crear_usuarios` (IN `nombre_usuario` VARCHAR(30), IN `password_usuario` VARCHAR(50), IN `nombre_apellidos` VARCHAR(100), IN `tipo_usuario` VARCHAR(30), IN `correo_usuario` VARCHAR(50), IN `id_grupo` INT)  NO SQL
+INSERT INTO usuarios VALUES (NULL, nombre_usuario, password_usuario, nombre_apellidos, tipo_usuario, correo_usuario, id_grupo)$$
+
+DELIMITER ;
+
 -- --------------------------------------------------------
 
 --

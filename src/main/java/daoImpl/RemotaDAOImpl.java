@@ -14,7 +14,7 @@ import model.Especificacion;
 import model.Proyecto;
 import model.Usuario;
 
-public class ScrumDAOImpl implements IScrumConfig {
+public class RemotaDAOImpl implements IScrumConfig {
 
 	public boolean bd_online() {
 		try {
@@ -247,7 +247,7 @@ public class ScrumDAOImpl implements IScrumConfig {
 			try {
 				proyectos = query.getResultList();
 			} catch (NoResultException noRes) {
-				System.out.println("No hay proyectos en la base de datos");
+				//System.out.println("Este grupo no tiene proyectos");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -277,6 +277,60 @@ public class ScrumDAOImpl implements IScrumConfig {
 			entityManager.close();
 			factory.close();
 		}
+	}
+	
+	public List<Especificacion> getEspecificaciones(int id_proyecto) {
+		List<Especificacion> especis = new ArrayList();
+		EntityManagerFactory factory = Persistence.createEntityManagerFactory("madali_db");
+		EntityManager entityManager = factory.createEntityManager();
+		try {
+			entityManager.getTransaction().begin();
+			Query query = entityManager
+					.createQuery("SELECT e FROM Especificacion e WHERE e.id_proyecto = :id_proyecto");
+			query.setParameter("id_proyecto", id_proyecto);
+			especis = (List<Especificacion>) query.getResultList();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		entityManager.getTransaction().commit();
+		return especis;
+	}
+	
+	public int getIdProductOwner(String nombre_usuario) {
+		EntityManagerFactory factory = Persistence.createEntityManagerFactory("madali_db");
+		EntityManager entityManager = factory.createEntityManager();
+		int id_po = 0;
+		try {
+			String sql = "SELECT u.id_usuario from Usuario u where u.nombre_usuario=:nom_usr";
+			Query query = entityManager.createQuery(sql);
+			query.setParameter("nom_usr", nombre_usuario);
+			id_po = (Integer) query.getSingleResult();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return id_po;
+	}
+	
+	public List<Proyecto> getProyectosPO(int id_po) {
+		EntityManagerFactory factory = Persistence.createEntityManagerFactory("madali_db");
+		EntityManager entityManager = factory.createEntityManager();
+		List<Proyecto> proyectos = new ArrayList<Proyecto>();
+		try {
+			String sql = "SELECT p from Proyecto p where p.product_owner_proyecto = :id";
+			Query query = entityManager.createQuery(sql);
+			query.setParameter("id", id_po);
+			try {
+				proyectos = query.getResultList();
+			} catch (NoResultException noRes) {
+				//System.out.println("El product owner no tiene proyectos");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			entityManager.close();
+			factory.close();
+		}
+		return proyectos;
 	}
 	
 	// Métodos propios de esta clase
@@ -393,29 +447,5 @@ public class ScrumDAOImpl implements IScrumConfig {
 		}
 		return inserted;
 	}
-	
-	
-	//Metodo para acceder a las especificaciones en la base de datos
-		public List<Especificacion> getEspecificaciones(int id_proyecto) {
-			// TODO Auto-generated method stub
-			
-			List<Especificacion> especis = new ArrayList();
-			EntityManagerFactory factory = Persistence.createEntityManagerFactory("madali_db");
-			EntityManager entityManager = factory.createEntityManager();
-			
-			try {
-				entityManager.getTransaction().begin();
-			Query query = entityManager.createQuery("SELECT e FROM Especificacion e WHERE e.id_proyecto = :id_proyecto");
-			
-			query.setParameter("id_proyecto", id_proyecto);
-			especis = (List<Especificacion>) query.getResultList(); 
-			}catch(Exception e) {
-				e.printStackTrace();
-			}
-			
-			entityManager.getTransaction().commit();
-			
-			return especis;
-		}
 	
 }

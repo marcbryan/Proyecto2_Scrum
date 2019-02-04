@@ -35,7 +35,7 @@ import javax.swing.event.InternalFrameAdapter;
 import javax.swing.event.InternalFrameEvent;
 
 import daoImpl.SQLiteDAOImpl;
-import daoImpl.ScrumDAOImpl;
+import daoImpl.RemotaDAOImpl;
 import idao.IScrumConfig;
 import model.Especificacion;
 
@@ -57,7 +57,7 @@ public class AddEspecificacion extends JInternalFrame {
 	 * @param especIntFrame - El InternalFrame donde se ven las especificaciones (para añadir la especificación a este InternalFrame, si se crea)
 	 */
 	public AddEspecificacion(String nombre_proyecto, final int id_proyecto, final Especificaciones especIntFrame) {
-		remotaDAO = new ScrumDAOImpl();
+		remotaDAO = new RemotaDAOImpl();
 		embebidaDAO = new SQLiteDAOImpl();
 		
 		setClosable(true);

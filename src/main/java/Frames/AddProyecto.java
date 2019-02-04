@@ -25,7 +25,7 @@ import javax.swing.JTextField;
 import javax.swing.LayoutStyle.ComponentPlacement;
 
 import daoImpl.SQLiteDAOImpl;
-import daoImpl.ScrumDAOImpl;
+import daoImpl.RemotaDAOImpl;
 import idao.IScrumConfig;
 import model.Proyecto;
 import model.Usuario;
@@ -53,7 +53,7 @@ public class AddProyecto extends JInternalFrame {
 	 * @author Ali
 	 */
 	public AddProyecto() {
-		remotaDAO = new ScrumDAOImpl();
+		remotaDAO = new RemotaDAOImpl();
 		embebidaDAO = new SQLiteDAOImpl();
 		
 		setTitle("Nuevo Proyecto");
