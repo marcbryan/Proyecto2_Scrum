@@ -98,4 +98,8 @@ public interface IScrumConfig {
 	 */
 	public void insertarEspecificacion(Especificacion espec);
 	
+	
+	
+	public List<Especificacion> getEspecificaciones(int id_proyecto);
+	
 }

@@ -1,8 +1,13 @@
 package Frames;
 
 import java.awt.Color;
+import java.awt.Cursor;
+import java.awt.Image;
+import java.awt.Point;
+import java.awt.Toolkit;
 
 import javax.swing.JInternalFrame;
+import javax.imageio.ImageIO;
 import javax.swing.DefaultListModel;
 import javax.swing.GroupLayout;
 import javax.swing.ImageIcon;
@@ -13,6 +18,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.awt.event.ActionEvent;
 import javax.swing.JLabel;
@@ -51,6 +57,9 @@ public class InfoProyectos extends JInternalFrame {
 
 		setBounds(100, 100, 738, 495);
 		setBackground(new Color(90, 21, 50));
+		
+		// Metodo para poner el cursor personalizado con una imagen nuestra
+		cambiarCursor();
 		
 		//Asignamos esta imagen como icono del Internal Frame
 		ImageIcon img = new ImageIcon("src"+File.separator+"main"+File.separator+"resources"+File.separator+"iconoInternalFrames.png");
@@ -252,5 +261,21 @@ public class InfoProyectos extends JInternalFrame {
 				.addGap(26).addComponent(btn_MostrarEspec).addContainerGap(39, Short.MAX_VALUE)));
 		getContentPane().setLayout(groupLayout);
 
+	}
+	
+	/** 
+	 * Método para poner el cursor personalizado con una imagen nuestra 
+	 * @author David 
+	 */
+	public void cambiarCursor() {
+		Image customimage;
+        Cursor customCursor;
+		try {
+			customimage = ImageIO.read(new File("src"+File.separator+"main"+File.separator+"resources"+File.separator+"cursor2.png"));
+			customCursor = Toolkit.getDefaultToolkit().createCustomCursor(customimage, new Point(0, 0), "customCursor");
+			this.setCursor(customCursor);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }

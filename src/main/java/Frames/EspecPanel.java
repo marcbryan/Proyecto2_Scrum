@@ -9,17 +9,22 @@ import javax.swing.GroupLayout.Alignment;
 import javax.swing.JTextArea;
 import javax.swing.JScrollPane;
 import javax.swing.LayoutStyle.ComponentPlacement;
+
+import model.Especificacion;
+
 import javax.swing.JCheckBox;
 import javax.swing.JButton;
+import javax.swing.ScrollPaneConstants;
 
 public class EspecPanel extends JPanel {
 
 	/**
 	 * Create the panel.
 	 */
-	public EspecPanel() {
+	public EspecPanel(Especificacion e) {
 		
 		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		
 		JCheckBox chckbxMarcar = new JCheckBox("Marcar");
 		chckbxMarcar.setBackground(new Color(90,21,50));
@@ -30,7 +35,12 @@ public class EspecPanel extends JPanel {
 		btnGuardarCambios.setForeground(Color.white);
 		
 		JTextArea textArea = new JTextArea();
+		
+		textArea.setLineWrap(true);
+		textArea.setWrapStyleWord(true);
 		scrollPane.setViewportView(textArea);
+		
+		textArea.setText(e.getDescricion_especificacion());
 		
 		setBackground(new Color(90,21,50));
 		

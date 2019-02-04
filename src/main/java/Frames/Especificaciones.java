@@ -1,9 +1,14 @@
 package Frames;
 
 import java.awt.Color;
+import java.awt.Cursor;
+import java.awt.Image;
+import java.awt.Point;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,6 +20,13 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JButton;
 import javax.swing.LayoutStyle.ComponentPlacement;
+
+import daoImpl.SQLiteDAOImpl;
+import daoImpl.ScrumDAOImpl;
+import idao.IScrumConfig;
+import model.Especificacion;
+
+import javax.imageio.ImageIO;
 import javax.swing.BoxLayout;
 import javax.swing.ScrollPaneConstants;
 
@@ -22,6 +34,9 @@ public class Especificaciones extends JInternalFrame {
 	
 	List <EspecPanel> paneles;
 	JPanel panel;
+	
+	private IScrumConfig remotaDAO;
+	private IScrumConfig embebidaDAO;
 
 	/**
 	 * Crea el JIntenalFrame de las especificaciones.
@@ -30,12 +45,17 @@ public class Especificaciones extends JInternalFrame {
 	 * @author David
 	 */
 	public Especificaciones(final int id_proyecto, final String nombre_proyecto) {
+		remotaDAO = new ScrumDAOImpl();
+		embebidaDAO = new SQLiteDAOImpl();
 		setResizable(true);
 		setMaximizable(true);
 		setClosable(true);
 		setTitle("Especificaciones "+nombre_proyecto);
 		setBounds(150, 150, 494, 324);
 		setBackground(new Color(90,21,50));
+		
+		// Metodo para poner el cursor personalizado con una imagen nuestra
+		cambiarCursor();
 		
 		//Asignamos esta imagen como icono del Internal Frame
 		ImageIcon img = new ImageIcon("src"+File.separator+"main"+File.separator+"resources"+File.separator+"iconoInternalFrames.png");
@@ -77,13 +97,22 @@ public class Especificaciones extends JInternalFrame {
 		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 		
 		paneles = new ArrayList<EspecPanel>();
-		/*
-		for (int i = 0; i < 10; i++) {
-			ePane = new EspecPanel();
-			panel.add(ePane);
+		
+		EspecPanel ePane ;
+		int espec =4;
+		//JPanel panel = new JPanel();
+		
+		List<Especificacion> especis = embebidaDAO.getEspecificaciones(id_proyecto);//remotaDAO.getEspecificaciones(2);
+
+		for (int i = 0; i < especis.size(); i++) {
+			
+			ePane = new EspecPanel(especis.get(i));
 			paneles.add(ePane);
+			panel.add(ePane);
 			//scrollPane.setViewportView(ePane);
-		}*/
+			
+			
+		}
 		
 		GroupLayout groupLayout = new GroupLayout(getContentPane());
 		groupLayout.setHorizontalGroup(
@@ -113,5 +142,21 @@ public class Especificaciones extends JInternalFrame {
 		
 		getContentPane().setLayout(groupLayout);
 		
+	}
+	
+	/** 
+	 * Método para poner el cursor personalizado con una imagen nuestra 
+	 * @author David 
+	 */
+	public void cambiarCursor() {
+		Image customimage;
+        Cursor customCursor;
+		try {
+			customimage = ImageIO.read(new File("src"+File.separator+"main"+File.separator+"resources"+File.separator+"cursor2.png"));
+			customCursor = Toolkit.getDefaultToolkit().createCustomCursor(customimage, new Point(0, 0), "customCursor");
+			this.setCursor(customCursor);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }

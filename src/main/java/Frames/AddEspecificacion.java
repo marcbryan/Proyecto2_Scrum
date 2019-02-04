@@ -185,7 +185,7 @@ public class AddEspecificacion extends JInternalFrame {
 						embebidaDAO.insertarEspecificacion(espec);
 						
 						//Añadir especificación al panel
-						EspecPanel newEPanel = new EspecPanel(); 
+						EspecPanel newEPanel = new EspecPanel(espec); 
 						especIntFrame.paneles.add(newEPanel);
 						especIntFrame.panel.add(newEPanel);
 						
@@ -206,7 +206,7 @@ public class AddEspecificacion extends JInternalFrame {
 						embebidaDAO.insertarEspecificacion(espec);
 						
 						//Añadir especificación al panel
-						EspecPanel newEPanel = new EspecPanel(); 
+						EspecPanel newEPanel = new EspecPanel(espec); 
 						especIntFrame.paneles.add(newEPanel);
 						especIntFrame.panel.add(newEPanel);
 						

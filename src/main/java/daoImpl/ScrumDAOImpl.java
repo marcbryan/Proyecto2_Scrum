@@ -394,4 +394,28 @@ public class ScrumDAOImpl implements IScrumConfig {
 		return inserted;
 	}
 	
+	
+	//Metodo para acceder a las especificaciones en la base de datos
+		public List<Especificacion> getEspecificaciones(int id_proyecto) {
+			// TODO Auto-generated method stub
+			
+			List<Especificacion> especis = new ArrayList();
+			EntityManagerFactory factory = Persistence.createEntityManagerFactory("madali_db");
+			EntityManager entityManager = factory.createEntityManager();
+			
+			try {
+				entityManager.getTransaction().begin();
+			Query query = entityManager.createQuery("SELECT e FROM Especificacion e WHERE e.id_proyecto = :id_proyecto");
+			
+			query.setParameter("id_proyecto", id_proyecto);
+			especis = (List<Especificacion>) query.getResultList(); 
+			}catch(Exception e) {
+				e.printStackTrace();
+			}
+			
+			entityManager.getTransaction().commit();
+			
+			return especis;
+		}
+	
 }

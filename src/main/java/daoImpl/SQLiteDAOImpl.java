@@ -794,4 +794,54 @@ public class SQLiteDAOImpl implements IScrumConfig {
 		return updated;
 	}
 	
+	public List<Especificacion> getEspecificaciones(int id_proyecto) {
+		// TODO Auto-generated method stub
+		
+		List<Especificacion> especis = new ArrayList();
+		Connection conn = connect();
+		String sql = "SELECT * from Especificaciones where id_proyecto=" + id_proyecto;
+		Statement stmt = null;
+		ResultSet rs = null;
+		
+		try {
+			stmt = conn.createStatement();
+			rs = stmt.executeQuery(sql);
+			
+			Especificacion ep;
+			
+			while(rs.next()) {
+				
+				ep = new Especificacion(rs.getInt(1),rs.getString(2),rs.getString(3),rs.getString(4),rs.getInt(5),rs.getInt(6),rs.getString(7));
+				
+				especis.add(ep);
+			}
+			
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			if(rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			if(stmt != null) {
+				try {
+					stmt.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			
+		}
+		
+		return especis;
+		
+		
+	}
+	
 }
