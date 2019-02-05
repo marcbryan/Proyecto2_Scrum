@@ -6,8 +6,10 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.NoResultException;
+import javax.persistence.ParameterMode;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
+import javax.persistence.StoredProcedureQuery;
 
 import idao.IScrumConfig;
 import model.Especificacion;
@@ -66,10 +68,26 @@ public class RemotaDAOImpl implements IScrumConfig {
 		EntityManagerFactory factory = Persistence.createEntityManagerFactory("madali_db");
 		EntityManager entityManager = factory.createEntityManager();
 		try {
+			// Comenzar la transaction
 			entityManager.getTransaction().begin();
-			entityManager.persist(usuario);
+			// Llamar al Stored Procedure
+			StoredProcedureQuery storedProcedure = entityManager.createStoredProcedureQuery("crear_usuarios");
+			// Set parameters
+			storedProcedure.registerStoredProcedureParameter(1, String.class, ParameterMode.IN);
+			storedProcedure.registerStoredProcedureParameter(2, String.class, ParameterMode.IN);
+			storedProcedure.registerStoredProcedureParameter(3, String.class, ParameterMode.IN);
+			storedProcedure.registerStoredProcedureParameter(4, String.class, ParameterMode.IN);
+			storedProcedure.registerStoredProcedureParameter(5, String.class, ParameterMode.IN);
+			storedProcedure.registerStoredProcedureParameter(6, Integer.class, ParameterMode.IN);
+			storedProcedure.setParameter(1, usuario.getNombre_usuario());
+			storedProcedure.setParameter(2, usuario.getPassword_usuario());
+			storedProcedure.setParameter(3, usuario.getNombre_apellidos());
+			storedProcedure.setParameter(4, usuario.getTipo_usuario());
+			storedProcedure.setParameter(5, usuario.getCorreo_usuario());
+			storedProcedure.setParameter(6, usuario.getId_grupo());
+			storedProcedure.execute();
+			//Confirmarla
 			entityManager.getTransaction().commit();
-			// System.out.println("Usuario insertado!");
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
