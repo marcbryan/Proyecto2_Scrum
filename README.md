@@ -34,3 +34,15 @@ Proyecto gestor de Scrum (16/01/2019) - Grupo compuesto por Ali, David y Marc
     <li>nombre_usuario: marcb</li>
     <li>password: 1234</li>
   </ul>
+  
+<b>Sprint 3 (30/01/2019 - 06/01/2019)</b>
+<p>Volver a crear la estructura de la base de datos remota en phpmyadmin copiando el contenido del fichero en la ruta: <b>src/main/resources/madali_db.sql</b>
+<br>Se tiene que volver a hacer porque hay cambios en la estructura, nuevos inserts en las tablas y la creación del stored procedure para crear usuarios.</br></p>
+<p>Los cambios que se hagan en la base de datos embebida se guardan en una tabla. Se aplicarán los cambios en la remota cuando se vuelva a iniciar la aplicación y haya conexión con la remota.</p>
+<ul>
+  <li>Usuario necesario para crear especificaciones:</li>
+  <ul>
+    <li>nombre_usuario: amurtaza</li>
+    <li>password: 1234</li>
+  </ul>
+</ul>
